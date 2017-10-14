@@ -5,10 +5,12 @@
  */
 package requetepoolthreads;
 
+import java.net.Socket;
+
 /**
  *
  * @author Philippe
  */
 public interface Requete {
-    
+    public Runnable createRunnable(Socket s, ConsoleServeur cs);
 }

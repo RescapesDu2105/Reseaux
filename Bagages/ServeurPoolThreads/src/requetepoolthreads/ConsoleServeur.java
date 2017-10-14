@@ -10,5 +10,5 @@ package requetepoolthreads;
  * @author Philippe
  */
 public interface ConsoleServeur {
-    
+    public void TraceEvenements(String log);
 }

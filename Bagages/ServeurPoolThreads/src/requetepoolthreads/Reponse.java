@@ -10,5 +10,5 @@ package requetepoolthreads;
  * @author Philippe
  */
 public interface Reponse {
-    
+    public int getCode();
 }

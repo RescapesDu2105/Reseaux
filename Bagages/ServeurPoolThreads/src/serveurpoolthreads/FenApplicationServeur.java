@@ -5,17 +5,27 @@
  */
 package serveurpoolthreads;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import requetepoolthreads.ConsoleServeur;
+
 /**
  *
  * @author Philippe
  */
-public class FenApplicationServeur extends javax.swing.JFrame {
-
+public class FenApplicationServeur extends javax.swing.JFrame implements ConsoleServeur {
+    private boolean Started = false;
     /**
      * Creates new form FenApplicationServeur
      */
     public FenApplicationServeur() {
         initComponents();
+        setLocationRelativeTo(null); 
+        TraceEvenements("serveur#initialisation#main");
     }
 
     /**
@@ -27,21 +37,72 @@ public class FenApplicationServeur extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButtonStart = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableauEvenements = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButtonStart.setText("Start");
+        jButtonStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartActionPerformed(evt);
+            }
+        });
+
+        TableauEvenements.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(TableauEvenements);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(jButtonStart)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonStart)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
+        int Port, MaxClients;
+        Properties prop = new Properties();
+        String PropertiesFileName = "config.properties";
+        InputStream is = getClass().getClassLoader().getResourceAsStream(PropertiesFileName);
+        
+        if (is != null) {
+            Port = Integer.parseInt(prop.getProperty("PORT_BAGAGES"));
+            MaxClients = Integer.parseInt(prop.getProperty("MAX_CLIENTS"));
+            ThreadServeur ts = new ThreadServeur(Port, MaxClients, new ListeTaches(), this);
+            ts.start();
+            Started = true;
+        }
+        else {
+            TraceEvenements("serveur#initialisation#can't read properties file");
+        }
+    }//GEN-LAST:event_jButtonStartActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,6 +139,22 @@ public class FenApplicationServeur extends javax.swing.JFrame {
         });
     }
 
+    @Override
+    public void TraceEvenements(String log) {
+        ArrayList list = new ArrayList();
+        StringTokenizer parser = new StringTokenizer(log, "#");
+        while(parser.hasMoreTokens()){
+            list.add(parser.nextToken());
+        }
+        DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();
+        for (int i = 0 ; i < list.size() ; i++) {
+            dtm.addRow((Object[]) list.get(i));
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TableauEvenements;
+    private javax.swing.JButton jButtonStart;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
