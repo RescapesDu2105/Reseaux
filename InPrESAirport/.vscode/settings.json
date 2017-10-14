@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "utilcsv.h": "c",
+        "stdio.h": "c",
+        "fcntl.h": "c",
+        "stdlib.h": "c"
+    }
+}
