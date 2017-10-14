@@ -9,6 +9,6 @@ package requetepoolthreads;
  *
  * @author Philippe
  */
-public class Requete {
+public interface Requete {
     
 }

@@ -9,6 +9,6 @@ package requetepoolthreads;
  *
  * @author Philippe
  */
-public interface Reponse {
+public interface ConsoleServeur {
     
 }
