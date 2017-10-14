@@ -4,6 +4,9 @@ GRANT UNLIMITED TABLESPACE TO BD_JournalDeBord;
 grant all privileges to BD_JournalDeBord; 
 --Apres il faut se connecter avec sur SQL dev avec les meme param que pour la 12C
 
+DROP TABLE INTERVENANTS;
+DROP TABLE ACTIVITES;
+
 CREATE TABLE INTERVENANTS(
     IdIntervenant NUMBER PRIMARY KEY,
     Nom varchar2(25),

@@ -31,16 +31,16 @@ INSERT INTO Billets VALUES ('8','000-3589748-01','Bruce','Wayne','Premiere','0',
 INSERT INTO Billets VALUES ('9','000-6559595-01','Miyazaki','Hayao','Economique','5','9');
 INSERT INTO Billets VALUES ('10','000-2554235-01','Elvis','Romeo','Premiere','10','6');
 
-INSERT INTO Bagages VALUES ('1','Coffre','69','1');
+INSERT INTO Bagages VALUES ('1','PasValise','69','1');
 INSERT INTO Bagages VALUES ('2','Valise','10','2');
 INSERT INTO Bagages VALUES ('3','Valise','10','10');
 INSERT INTO Bagages VALUES ('4','Valise','12','8');
-INSERT INTO Bagages VALUES ('5','Coffre','54','7');
+INSERT INTO Bagages VALUES ('5','PasValise','54','7');
 INSERT INTO Bagages VALUES ('6','Valise','24','4');
-INSERT INTO Bagages VALUES ('7','Coffre','12','4');
-INSERT INTO Bagages VALUES ('8','Coffre','16','3');
+INSERT INTO Bagages VALUES ('7','PasValise','12','4');
+INSERT INTO Bagages VALUES ('8','PasValise','16','3');
 INSERT INTO Bagages VALUES ('9','Valise','89','8');
-INSERT INTO Bagages VALUES ('10','Coffre','23','10');
+INSERT INTO Bagages VALUES ('10','PasValise','23','10');
 
 INSERT INTO Agents VALUES ('1','Marshall','Matthers','1972-10-17','Directeur');
 INSERT INTO Agents VALUES ('2','Loxley','Swing','1995-09-07','Bagagistes');
@@ -52,3 +52,6 @@ INSERT INTO Agents VALUES ('7','Poule','Cotcotcot','1997-10-17','Directeur');
 INSERT INTO Agents VALUES ('8','Vache','Meuuuuuuuuuuh','1989-04-28','Bagagistes');
 INSERT INTO Agents VALUES ('9','Poussin','QuiQui','1978-01-07','Hotesse');
 INSERT INTO Agents VALUES ('10','Sonnerie','DingDong','1977-01-07','Pilote');
+
+INSERT INTO Comptes VALUES ('1','Zeydax','123','6');
+INSERT INTO Comptes VALUES ('2','Doublon','123','5');

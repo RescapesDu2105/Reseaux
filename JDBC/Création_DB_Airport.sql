@@ -1,3 +1,4 @@
+DROP SCHEMA `bd_airport` ;
 CREATE SCHEMA `bd_airport` ;
 
 CREATE TABLE `bd_airport`.`vols` (
@@ -38,7 +39,7 @@ CREATE TABLE `bd_airport`.`billets` (
 
 CREATE TABLE `bd_airport`.`bagages` (
   `IdBagage` INT NOT NULL,
-  `TypeBagage` VARCHAR(7) NOT NULL,
+  `TypeBagage` VARCHAR(9) NOT NULL,
   `Poids` INT NOT NULL,
   `Billet` INT NOT NULL,
   PRIMARY KEY (`IdBagage`),
@@ -46,14 +47,24 @@ CREATE TABLE `bd_airport`.`bagages` (
   CONSTRAINT `Billet`
     FOREIGN KEY (`Billet`)
     REFERENCES `bd_airport`.`billets` (`IdBillet`),
-   CONSTRAINT TypeBagage_CK CHECK(TypeBagage IN('Valise','Coffre')),
+   CONSTRAINT TypeBagage_CK CHECK(TypeBagage IN('Valise','PasValise')),
    CONSTRAINT Poids_CK CHECK(Poids>=0));
 
 CREATE TABLE `bd_airport`.`agents` (
-  `IdAgents` INT NOT NULL,
+  `IdAgent` INT NOT NULL,
   `NomAgent` VARCHAR(25) NOT NULL,
   `PrenomAgent` VARCHAR(25) NOT NULL,
-  `DateNaiss` DATE NOT NULL,
+  `DateNaissance` DATE NOT NULL,
   `Poste` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`IdAgents`));
+  PRIMARY KEY (`IdAgent`));
    
+CREATE TABLE `bd_airport`.`comptes`(
+  `IdCompte` INT NOT NULL,
+  `Login` VARCHAR(25) NOT NULL,
+  `Password` VARCHAR(25) NOT NULL,
+  `IdAgent`INT NOT NULL,
+  PRIMARY KEY(`IdCompte`),
+  INDEX `Compte_idx` (`IdAgent` ASC),
+  CONSTRAINT `IdAgent` FOREIGN KEY (`IdAgent`) REFERENCES `bd_airport`.`agents` (`IdAgent`),
+  CONSTRAINT `LoginUnique` UNIQUE(`Login`)
+);
