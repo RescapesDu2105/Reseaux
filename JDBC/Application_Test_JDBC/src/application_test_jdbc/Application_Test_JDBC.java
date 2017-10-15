@@ -360,7 +360,7 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                 RS.last();
                 int MaxLignes = RS.getRow() - Temp + 1;
                 Vector ligne = new Vector();
-                DefaultTableModel dtm = new DefaultTableModel(NomColonnes, MaxColonnes);
+                DefaultTableModel dtm = new DefaultTableModel(NomColonnes, 0);
                 
                 RS.beforeFirst();
                 nCol = 1;

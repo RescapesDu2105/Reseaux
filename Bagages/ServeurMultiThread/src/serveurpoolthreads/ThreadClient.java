@@ -5,9 +5,6 @@
  */
 package serveurpoolthreads;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Philippe
@@ -27,13 +24,13 @@ public class ThreadClient extends Thread {
     public void run(){
         while (!isInterrupted()){
             try {
-                System.out.println("Thread client avant get");
+                System.out.println(getNom() + " avant get");
                 TacheEnCours = TachesAFaire.getTache();
             } 
             catch (InterruptedException ex) {
-                System.out.println("Interruption : " + ex.getMessage());
+                System.out.println(getNom() + "Interruption : " + ex.getMessage());
             }
-            System.out.println("run de taches en cours");
+            System.out.println(getNom() + "run de taches en cours");
             TacheEnCours.run();
         }
     }
@@ -61,6 +58,4 @@ public class ThreadClient extends Thread {
     public void setTacheEnCours(Runnable TacheEnCours) {
         this.TacheEnCours = TacheEnCours;
     }
-   
-    
 }

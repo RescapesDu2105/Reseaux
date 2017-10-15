@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import requetepoolthreads.ConsoleServeur;
@@ -32,6 +33,25 @@ import requetepoolthreads.Requete;
 public class RequeteLUGAP implements Requete, Serializable{
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_TEMPORARY_KEY = 2;
+    
+    /* TEST */
+    public static int REQUEST_E_MAIL = 3;
+    public static Hashtable tableMails = new Hashtable();
+    static
+    {
+        tableMails.put("Vilvens", "claude.vilvens@prov-liege.be");
+        tableMails.put("Charlet", "christophe.charlet@prov-liege.be");
+        tableMails.put("Madani", "mounawar.madani@prov-liege.be");
+        tableMails.put("Wagner", "jean-marc.wagner@prov-liege.be");
+    }
+    public static Hashtable tablePwdNoms = new Hashtable();
+    static
+    {
+        tablePwdNoms.put("GrosZZ", "Vilvens");
+        tablePwdNoms.put("GrosRouteur", "Charlet");
+        tablePwdNoms.put("GrosseVoiture", "Madani");
+        tablePwdNoms.put("GrosCerveau", "Wagner");
+    }
     
     private int Type;
     private String chargeUtile;
@@ -52,8 +72,16 @@ public class RequeteLUGAP implements Requete, Serializable{
     
     @Override
     public Runnable createRunnable(final Socket s, final ConsoleServeur cs) {
-        switch(getType())
+        /*switch(getType())
         {
+            case REQUEST_E_MAIL:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteEMail(s, cs);
+                    }            
+                };
             case REQUEST_LOGIN_PORTER:
                 return new Runnable() 
                 {
@@ -71,8 +99,61 @@ public class RequeteLUGAP implements Requete, Serializable{
                     }            
                 };
             default : return null;
+        }*/
+        
+        if (getType() == REQUEST_E_MAIL) {
+            return new Runnable()
+            {
+                public void run()
+                {
+                    traiteRequeteEMail(s, cs);
+                }
+            };
         }
-    }    
+        else if (getType()==REQUEST_TEMPORARY_KEY) {
+            return new Runnable()
+            {
+                public void run()
+                {
+                    traiteRequeteKey(s, cs);
+                }
+            };
+        }
+        else 
+            return null;
+}    
+    
+    private void traiteRequeteEMail(Socket sock, ConsoleServeur cs)
+    {
+        // Affichage des informations
+        String adresseDistante = sock.getRemoteSocketAddress().toString();
+        System.out.println("Début de traiteRequete : adresse distante = " + adresseDistante);
+        // la charge utile est le nom du client
+        String eMail = (String)tableMails.get(getChargeUtile());
+        cs.TraceEvenements(adresseDistante+"#Mail de "+getChargeUtile()+"#"+Thread.currentThread().getName());
+
+        if (eMail != null)
+            System.out.println("E-Mail trouvé pour " + getChargeUtile());
+        else
+        {
+            System.out.println("E-Mailnon trouvé pour " + getChargeUtile() + " : " + eMail);
+            eMail="?@?";
+        }
+        // Construction d'une réponse
+        ReponseLUGAP rep = new ReponseLUGAP(ReponseLUGAP.EMAIL_OK, getChargeUtile() +
+        " : " + eMail);
+        ObjectOutputStream oos;
+        try
+        {
+            oos = new ObjectOutputStream(sock.getOutputStream());
+            oos.writeObject(rep); oos.flush();
+            oos.close();
+        }
+        catch (IOException e)
+        {
+            System.err.println("Erreur réseau ? [" + e.getMessage() + "]");
+        }
+    }
 
     private void traiteRequeteLoginPorter(Socket s, ConsoleServeur cs) {
         String adresseDistante = s.getRemoteSocketAddress().toString();        
@@ -115,7 +196,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 
     }
     
-    private void traiterRequeteKey(Socket s, ConsoleServeur cs) {
+    private void traiteRequeteKey(Socket s, ConsoleServeur cs) {
         
     }
     

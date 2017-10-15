@@ -15,6 +15,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import requetepoolthreads.ConsoleServeur;
 
@@ -47,6 +49,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         TableauEvenements = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Application_Bagages - Serveur");
 
         jButtonStart.setText("Start");
         jButtonStart.addActionListener(new java.awt.event.ActionListener() {
@@ -60,7 +63,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Origine", "Requête", "Thread"
             }
         ));
         jScrollPane1.setViewportView(TableauEvenements);
@@ -69,14 +72,14 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
+                .addGap(272, 272, 272)
                 .addComponent(jButtonStart)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,30 +95,43 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
-        int Port, MaxClients;
-        Properties prop = new Properties();
-        String PropertiesFileName = "E:\\Dropbox\\B3\\Réseaux\\2017-2018\\Reseaux\\Bagages\\ServeurPoolThreads\\src\\config.properties";
-        FileInputStream fis = null;
-        
-        try {
-            fis = new FileInputStream(PropertiesFileName);
-            prop.load(fis);
-            fis.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+        if (!Started) {
+            int Port, MaxClients;            
+            Properties Prop = new Properties();
+            FileInputStream fis = null;
+            String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
+            
+            /*JOptionPane jop1; 
+            //Boîte du message d'information
+            jop1 = new JOptionPane();
+            jop1.showMessageDialog(null, System.getProperty("user.dir"), "Information", JOptionPane.INFORMATION_MESSAGE);*/
+            
+            try {
+                fis = new FileInputStream(nomFichier);
+                Prop.load(fis);
+                fis.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if (fis != null) {
+                Port = Integer.parseInt(Prop.getProperty("PORT_BAGAGES"));
+                MaxClients = Integer.parseInt(Prop.getProperty("MAX_CLIENTS"));
+                TraceEvenements("serveur#acquisition du port#main");
+                ThreadServeur ts = new ThreadServeur(Port, MaxClients, new ListeTaches(), this);
+                ts.start();
+                Started = true;
+                jButtonStart.setText("Stop");
+            }
+            else {
+                TraceEvenements("serveur#initialisation#fail to read properties file");
+            }
         }
-        
-        if (fis != null) {
-            Port = Integer.parseInt(prop.getProperty("PORT_BAGAGES"));
-            MaxClients = Integer.parseInt(prop.getProperty("MAX_CLIENTS"));
-            ThreadServeur ts = new ThreadServeur(Port, MaxClients, new ListeTaches(), this);
-            ts.start();
-            Started = true;
-        }
-        else {
-            TraceEvenements("serveur#initialisation#can't read properties file");
+        else {   
+            Started = false;
+            jButtonStart.setText("Stop");
         }
     }//GEN-LAST:event_jButtonStartActionPerformed
 
@@ -159,13 +175,19 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         Vector Ligne = new Vector();
         StringTokenizer parser = new StringTokenizer(log, "#");
         
-        while(parser.hasMoreTokens()){
-            Ligne.add(parser.nextToken());
+        while(parser.hasMoreTokens()){ 
+            String Token = parser.nextToken();
+            //System.out.println("Token : " + Token);
+            if (Token != null)
+                Ligne.add(Token);  
+            //System.out.println("Ligne : " + Ligne.toString());
         }
-        DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();
-        for (int i = 0 ; i < Ligne.size() ; i++) {
-            dtm.insertRow(dtm.getRowCount(), Ligne);
-        }
+        
+        DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();        
+        dtm.insertRow(dtm.getRowCount(), Ligne);
+        
+        //System.out.println("RowCount : " + dtm.getRowCount());
+        TableauEvenements.setModel(dtm);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

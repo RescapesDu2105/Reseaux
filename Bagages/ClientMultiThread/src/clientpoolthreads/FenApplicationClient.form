@@ -34,8 +34,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTF_PWD" max="32767" attributes="0"/>
                           <Component id="jTF_Login" max="32767" attributes="0"/>
+                          <Component id="jPasswordField" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -62,7 +62,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelPWD" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTF_PWD" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jPasswordField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -111,7 +111,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTF_Login">
     </Component>
-    <Component class="javax.swing.JTextField" name="jTF_PWD">
+    <Component class="javax.swing.JPasswordField" name="jPasswordField">
     </Component>
   </SubComponents>
 </Form>

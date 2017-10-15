@@ -7,6 +7,8 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -48,7 +50,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
         jButton_Effacer = new javax.swing.JButton();
         jButton_Quitter = new javax.swing.JButton();
         jTF_Login = new javax.swing.JTextField();
-        jTF_PWD = new javax.swing.JTextField();
+        jPasswordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Application_Bagages - Connexion");
@@ -91,8 +93,8 @@ public class FenApplicationClient extends javax.swing.JFrame {
                             .addComponent(jLabelPWD))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTF_PWD)
-                            .addComponent(jTF_Login)))
+                            .addComponent(jTF_Login)
+                            .addComponent(jPasswordField)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 10, Short.MAX_VALUE)
                         .addComponent(jButton_Connexion)
@@ -112,7 +114,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPWD)
-                    .addComponent(jTF_PWD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Connexion)
@@ -125,7 +127,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
 
     private void jButton_EffacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EffacerActionPerformed
         jTF_Login.setText("");
-        jTF_PWD.setText("");
+        jPasswordField.setText("");
     }//GEN-LAST:event_jButton_EffacerActionPerformed
 
     private void jButton_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_QuitterActionPerformed
@@ -133,39 +135,54 @@ public class FenApplicationClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_QuitterActionPerformed
 
     private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
-        String ChargeUtile = jTF_Login.getText();
+        String ChargeUtile = jTF_Login.getText() + jPasswordField.getPassword();
         RequeteLUGAP req = null;
         req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
         
         //Connexion au serveur
         int Port = -1;
         String AdresseIP = null;
-        Properties prop = new Properties();
-        String PropertiesFileName = "E:\\Dropbox\\B3\\Réseaux\\2017-2018\\Reseaux\\Bagages\\ServeurPoolThreads\\src\\config.properties";
-        InputStream is = getClass().getClassLoader().getResourceAsStream(PropertiesFileName);
-        
-        if (is != null) {
-            Port = Integer.parseInt(prop.getProperty("PORT_BAGAGES"));
-            AdresseIP = prop.getProperty("ADRESSEIP");            
+        Properties Prop = new Properties();
+        FileInputStream fis = null;
+        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
+            
+        try {
+            fis = new FileInputStream(nomFichier);
+            Prop.load(fis);
+            fis.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        if (fis != null) {
+            Port = Integer.parseInt(Prop.getProperty("PORT_BAGAGES"));
+            AdresseIP = Prop.getProperty("ADRESSEIP");  
+            System.out.println("Port : " + Port);
+            System.out.println("IP : " + AdresseIP);
         }
         else {
+            System.out.println("FUCKED UP 3");
             System.exit(1);
         }
         
         try {
             cliSocket = new Socket(AdresseIP, Port);
-            System.out.println(cliSocket.getInetAddress().toString());
+            System.out.println("cliSocket : " + cliSocket.getInetAddress().toString());
         } 
         catch (IOException ex) {
             Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("FUCKED UP 4");
         }
-        
+                
         try {
             oos = new ObjectOutputStream(cliSocket.getOutputStream());
             oos.writeObject(req);
             oos.flush();
         } catch (IOException ex) {
             Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("FUCKED UP 5");
         }
         
         ReponseLUGAP rep = null;
@@ -175,9 +192,11 @@ public class FenApplicationClient extends javax.swing.JFrame {
             rep = (ReponseLUGAP)ois.readObject();
             System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);            
+            System.out.println("FUCKED UP 6");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("FUCKED UP 7");
         }
         // TraiterReponse
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
@@ -261,7 +280,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
     private javax.swing.JButton jButton_Quitter;
     private javax.swing.JLabel jLabelLogin;
     private javax.swing.JLabel jLabelPWD;
+    private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JTextField jTF_Login;
-    private javax.swing.JTextField jTF_PWD;
     // End of variables declaration//GEN-END:variables
 }

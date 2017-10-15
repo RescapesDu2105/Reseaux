@@ -7,7 +7,6 @@ package serveurpoolthreads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import static java.lang.System.getProperties;
 import java.net.ServerSocket;
 import java.net.Socket;
 import requetepoolthreads.ConsoleServeur;
@@ -43,7 +42,8 @@ public class ThreadServeur extends Thread{
             System.exit(1);
         }
         
-        for (int i = 0 ; i < getMaxClients() ; i++) {
+        System.out.println("MaxClients : " + getMaxClients());
+        for (int i = 1 ; i <= getMaxClients() ; i++) {
             ThreadClient thr = new ThreadClient(getTachesAFaire(), "Thread du pool n°" + String.valueOf(i));
             thr.start();
         }
