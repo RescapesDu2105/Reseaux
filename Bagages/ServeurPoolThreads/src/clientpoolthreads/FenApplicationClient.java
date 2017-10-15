@@ -5,12 +5,26 @@
  */
 package clientpoolthreads;
 
+import ProtocoleLUGAP.ReponseLUGAP;
+import ProtocoleLUGAP.RequeteLUGAP;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Philippe
  */
 public class FenApplicationClient extends javax.swing.JFrame {
     private String Login, Pwd;
+    private ObjectInputStream ois = null;
+    private ObjectOutputStream oos = null;
+    private Socket cliSocket = null;
     /**
      * Creates new form Login_GUI
      */
@@ -30,11 +44,11 @@ public class FenApplicationClient extends javax.swing.JFrame {
 
         jLabelLogin = new javax.swing.JLabel();
         jLabelPWD = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButton_Connexion = new javax.swing.JButton();
+        jButton_Effacer = new javax.swing.JButton();
+        jButton_Quitter = new javax.swing.JButton();
         jTF_Login = new javax.swing.JTextField();
-        JTF_PWD = new javax.swing.JTextField();
+        jTF_PWD = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Application_Bagages - Connexion");
@@ -43,11 +57,26 @@ public class FenApplicationClient extends javax.swing.JFrame {
 
         jLabelPWD.setText("Mot de passe");
 
-        jButton1.setText("Connexion");
+        jButton_Connexion.setText("Connexion");
+        jButton_Connexion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ConnexionActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Effacer");
+        jButton_Effacer.setText("Effacer");
+        jButton_Effacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_EffacerActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Quitter");
+        jButton_Quitter.setText("Quitter");
+        jButton_Quitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_QuitterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,15 +91,15 @@ public class FenApplicationClient extends javax.swing.JFrame {
                             .addComponent(jLabelPWD))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JTF_PWD)
+                            .addComponent(jTF_PWD)
                             .addComponent(jTF_Login)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 10, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(jButton_Connexion)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(jButton_Effacer)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(jButton_Quitter)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -83,16 +112,75 @@ public class FenApplicationClient extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPWD)
-                    .addComponent(JTF_PWD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTF_PWD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(jButton_Connexion)
+                    .addComponent(jButton_Effacer)
+                    .addComponent(jButton_Quitter)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton_EffacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EffacerActionPerformed
+        jTF_Login.setText("");
+        jTF_PWD.setText("");
+    }//GEN-LAST:event_jButton_EffacerActionPerformed
+
+    private void jButton_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_QuitterActionPerformed
+        System.exit(1);
+    }//GEN-LAST:event_jButton_QuitterActionPerformed
+
+    private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
+        String ChargeUtile = jTF_Login.getText();
+        RequeteLUGAP req = null;
+        req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
+        
+        //Connexion au serveur
+        int Port = -1;
+        String AdresseIP = null;
+        Properties prop = new Properties();
+        String PropertiesFileName = "E:\\Dropbox\\B3\\Réseaux\\2017-2018\\Reseaux\\Bagages\\ServeurPoolThreads\\src\\config.properties";
+        InputStream is = getClass().getClassLoader().getResourceAsStream(PropertiesFileName);
+        
+        if (is != null) {
+            Port = Integer.parseInt(prop.getProperty("PORT_BAGAGES"));
+            AdresseIP = prop.getProperty("ADRESSEIP");            
+        }
+        else {
+            System.exit(1);
+        }
+        
+        try {
+            cliSocket = new Socket(AdresseIP, Port);
+            System.out.println(cliSocket.getInetAddress().toString());
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            oos = new ObjectOutputStream(cliSocket.getOutputStream());
+            oos.writeObject(req);
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ReponseLUGAP rep = null;
+        
+        try {
+            ois = new ObjectInputStream(cliSocket.getInputStream());
+            rep = (ReponseLUGAP)ois.readObject();
+            System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
+        } catch (IOException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // TraiterReponse
+    }//GEN-LAST:event_jButton_ConnexionActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -141,64 +229,39 @@ public class FenApplicationClient extends javax.swing.JFrame {
 
     public void setPwd(String Pwd) {
         this.Pwd = Pwd;
+    }    
+
+    public ObjectInputStream getOis() {
+        return ois;
+    }
+
+    public void setOis(ObjectInputStream ois) {
+        this.ois = ois;
+    }
+
+    public ObjectOutputStream getOss() {
+        return oos;
+    }
+
+    public void setOss(ObjectOutputStream oss) {
+        this.oos = oss;
+    }
+
+    public Socket getCliSocket() {
+        return cliSocket;
+    }
+
+    public void setCliSocket(Socket cliSocket) {
+        this.cliSocket = cliSocket;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField JTF_PWD;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton_Connexion;
+    private javax.swing.JButton jButton_Effacer;
+    private javax.swing.JButton jButton_Quitter;
     private javax.swing.JLabel jLabelLogin;
     private javax.swing.JLabel jLabelPWD;
     private javax.swing.JTextField jTF_Login;
+    private javax.swing.JTextField jTF_PWD;
     // End of variables declaration//GEN-END:variables
 }

@@ -82,15 +82,7 @@ public class ThreadServeur extends Thread{
         else {
             System.out.println("Pas de mise en file !");
         }
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        
-    }
-    
+    }    
 
     public int getMaxClients() {
         return MaxClients;

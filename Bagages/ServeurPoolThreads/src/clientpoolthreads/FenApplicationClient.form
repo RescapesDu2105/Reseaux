@@ -34,17 +34,17 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="JTF_PWD" max="32767" attributes="0"/>
+                          <Component id="jTF_PWD" max="32767" attributes="0"/>
                           <Component id="jTF_Login" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton_Connexion" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton_Effacer" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton_Quitter" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -62,13 +62,13 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelPWD" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="JTF_PWD" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTF_PWD" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_Connexion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_Effacer" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton_Quitter" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -85,24 +85,33 @@
         <Property name="text" type="java.lang.String" value="Mot de passe"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="jButton_Connexion">
       <Properties>
         <Property name="text" type="java.lang.String" value="Connexion"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_ConnexionActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="jButton_Effacer">
       <Properties>
         <Property name="text" type="java.lang.String" value="Effacer"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_EffacerActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="jButton_Quitter">
       <Properties>
         <Property name="text" type="java.lang.String" value="Quitter"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_QuitterActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTF_Login">
     </Component>
-    <Component class="javax.swing.JTextField" name="JTF_PWD">
+    <Component class="javax.swing.JTextField" name="jTF_PWD">
     </Component>
   </SubComponents>
 </Form>

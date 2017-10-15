@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.security.MessageDigest;
@@ -99,11 +100,18 @@ public class RequeteLUGAP implements Requete, Serializable{
             
             // JBDC
             String reponse = ChercheMotdePasse(user, temps, alea, longueur, msgD);
+            ReponseLUGAP rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK, getChargeUtile() + " : " + user);
             
+            ObjectOutputStream oos;
+            
+            oos = new ObjectOutputStream(s.getOutputStream());
+            oos.writeObject(rep); 
+            oos.flush();
+            oos.close();
         } 
         catch (IOException ex) {            
                 System.err.println("Erreur de flux !");
-        }
+        }    
                 
     }
     
@@ -133,10 +141,10 @@ public class RequeteLUGAP implements Requete, Serializable{
                 byte[] msgDLocal = md.digest();
                 
                 if (MessageDigest.isEqual(msgD, msgDLocal)) {
-                    // connected
+                    reponse = new String("OK - vous êtes connecté au serveur !");
                 }
                 else {
-                    // not connected
+                    reponse = new String("Désolé - votre demande de connexion est refusée !");
                 }
             }            
         } catch (SQLException ex) {

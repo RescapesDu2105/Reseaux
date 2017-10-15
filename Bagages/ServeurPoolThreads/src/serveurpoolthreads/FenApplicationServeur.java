@@ -5,11 +5,16 @@
  */
 package serveurpoolthreads;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import requetepoolthreads.ConsoleServeur;
 
@@ -89,10 +94,20 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         int Port, MaxClients;
         Properties prop = new Properties();
-        String PropertiesFileName = "config.properties";
-        InputStream is = getClass().getClassLoader().getResourceAsStream(PropertiesFileName);
+        String PropertiesFileName = "E:\\Dropbox\\B3\\Réseaux\\2017-2018\\Reseaux\\Bagages\\ServeurPoolThreads\\src\\config.properties";
+        FileInputStream fis = null;
         
-        if (is != null) {
+        try {
+            fis = new FileInputStream(PropertiesFileName);
+            prop.load(fis);
+            fis.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (fis != null) {
             Port = Integer.parseInt(prop.getProperty("PORT_BAGAGES"));
             MaxClients = Integer.parseInt(prop.getProperty("MAX_CLIENTS"));
             ThreadServeur ts = new ThreadServeur(Port, MaxClients, new ListeTaches(), this);
@@ -141,14 +156,15 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
 
     @Override
     public void TraceEvenements(String log) {
-        ArrayList list = new ArrayList();
+        Vector Ligne = new Vector();
         StringTokenizer parser = new StringTokenizer(log, "#");
+        
         while(parser.hasMoreTokens()){
-            list.add(parser.nextToken());
+            Ligne.add(parser.nextToken());
         }
         DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();
-        for (int i = 0 ; i < list.size() ; i++) {
-            dtm.addRow((Object[]) list.get(i));
+        for (int i = 0 ; i < Ligne.size() ; i++) {
+            dtm.insertRow(dtm.getRowCount(), Ligne);
         }
     }
 
