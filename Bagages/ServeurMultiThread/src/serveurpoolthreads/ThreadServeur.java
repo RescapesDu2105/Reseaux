@@ -7,6 +7,7 @@ package serveurpoolthreads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import requetepoolthreads.ConsoleServeur;
@@ -35,7 +36,9 @@ public class ThreadServeur extends Thread{
     @Override
     public void run() {
         try {
+            System.out.println("Port : " + getPort());
             SSocket = new ServerSocket(getPort());
+            System.out.println("FDP : " + SSocket.getInetAddress());
         } 
         catch (IOException ex) {
             System.err.println("Erreur de port d'écoute ! [" + ex + "]");
@@ -52,8 +55,9 @@ public class ThreadServeur extends Thread{
         
         while(!isInterrupted()) {
             try {
-            System.out.println("********** Serveur en attente");
+                System.out.println("********** Serveur en attente");
                 CSocket = SSocket.accept();
+                System.out.println("********** Serveur après accept()");                
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#accept#thread serveur");
             } catch (IOException ex) {
                 System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
@@ -122,7 +126,5 @@ public class ThreadServeur extends Thread{
 
     public void setSSocket(ServerSocket SSocket) {
         this.SSocket = SSocket;
-    }
-    
-    
+    } 
 }

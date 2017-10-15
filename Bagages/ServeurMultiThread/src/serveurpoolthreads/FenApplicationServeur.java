@@ -126,7 +126,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
                 jButtonStart.setText("Stop");
             }
             else {
-                TraceEvenements("serveur#initialisation#fail to read properties file");
+                TraceEvenements("serveur#initialisation#failed to read properties file");
             }
         }
         else {   
