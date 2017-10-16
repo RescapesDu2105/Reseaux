@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,15 +23,12 @@ import java.util.logging.Logger;
  *
  * @author Philippe
  */
-public class FenApplicationClient extends javax.swing.JFrame {
-    private String Login, Pwd;
-    private ObjectInputStream ois = null;
-    private ObjectOutputStream oos = null;
-    private Socket cliSocket = null;
+public class FenAuthentification extends javax.swing.JFrame {
+    private Client Client = new Client();
     /**
      * Creates new form Login_GUI
      */
-    public FenApplicationClient() {
+    public FenAuthentification() {
         initComponents();
         setLocationRelativeTo(null); 
     }
@@ -151,14 +149,18 @@ public class FenApplicationClient extends javax.swing.JFrame {
             Prop.load(fis);
             fis.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
         }
             
         if (fis != null) {
-            Port = Integer.parseInt(Prop.getProperty("PORT_BAGAGES"));
-            AdresseIP = Prop.getProperty("ADRESSEIP");  
+            Client.setPort(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
+            try {  
+                Client.setIP(InetAddress.getByName(Prop.getProperty("ADRESSEIP")));
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
+            }
             System.out.println("Port : " + Port);
             System.out.println("IP : " + AdresseIP);
         }
@@ -168,35 +170,35 @@ public class FenApplicationClient extends javax.swing.JFrame {
         }
         
         try {
-            cliSocket = new Socket(InetAddress.getByName("127.0.0.1"), Port);
-            System.out.println("cliSocket : " + cliSocket.getInetAddress().toString());
+            Client.setCliSocket(new Socket(InetAddress.getByName("127.0.0.1"), Client.getPort()));
+            System.out.println("cliSocket : " + Client.getCliSocket().getInetAddress().toString());
         } 
         catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 4");
         }
                 
         jButton_Connexion.setText("Déconnexion");
         try {
-            oos = new ObjectOutputStream(cliSocket.getOutputStream());
-            oos.writeObject(req);
-            oos.flush();
+            Client.setOos(new ObjectOutputStream(Client.getCliSocket().getOutputStream()));
+            Client.getOos().writeObject(req);
+            Client.getOos().flush();
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 5");
         }
         
         ReponseLUGAP rep = null;
         
         try {
-            ois = new ObjectInputStream(cliSocket.getInputStream());
-            rep = (ReponseLUGAP)ois.readObject();
+            Client.setOis(new ObjectInputStream(Client.getCliSocket().getInputStream()));
+            rep = (ReponseLUGAP)Client.getOis().readObject();
             System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);            
             System.out.println("FUCKED UP 6");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 7");
         }
         String reponse = rep.getChargeUtile();
@@ -217,64 +219,35 @@ public class FenApplicationClient extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FenApplicationClient().setVisible(true);
+                new FenAuthentification().setVisible(true);
             }
         });
     }
 
-    public String getLogin() {
-        return Login;
+    public Client getClient() {
+        return Client;
     }
 
-    public void setLogin(String Login) {
-        this.Login = Login;
+    public void setClient(Client Client) {
+        this.Client = Client;
     }
 
-    public String getPwd() {
-        return Pwd;
-    }
-
-    public void setPwd(String Pwd) {
-        this.Pwd = Pwd;
-    }    
-
-    public ObjectInputStream getOis() {
-        return ois;
-    }
-
-    public void setOis(ObjectInputStream ois) {
-        this.ois = ois;
-    }
-
-    public ObjectOutputStream getOss() {
-        return oos;
-    }
-
-    public void setOss(ObjectOutputStream oss) {
-        this.oos = oss;
-    }
-
-    public Socket getCliSocket() {
-        return cliSocket;
-    }
-
-    public void setCliSocket(Socket cliSocket) {
-        this.cliSocket = cliSocket;
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Connexion;
