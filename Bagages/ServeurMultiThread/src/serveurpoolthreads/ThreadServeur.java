@@ -38,7 +38,6 @@ public class ThreadServeur extends Thread{
         try {
             System.out.println("Port : " + getPort());
             SSocket = new ServerSocket(getPort());
-            System.out.println("FDP : " + SSocket.getInetAddress());
         } 
         catch (IOException ex) {
             System.err.println("Erreur de port d'écoute ! [" + ex + "]");

@@ -8,15 +8,12 @@ package serveurpoolthreads;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import requetepoolthreads.ConsoleServeur;
 
@@ -100,12 +97,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
             Properties Prop = new Properties();
             FileInputStream fis = null;
             String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-            
-            /*JOptionPane jop1; 
-            //Boîte du message d'information
-            jop1 = new JOptionPane();
-            jop1.showMessageDialog(null, System.getProperty("user.dir"), "Information", JOptionPane.INFORMATION_MESSAGE);*/
-            
+                        
             try {
                 fis = new FileInputStream(nomFichier);
                 Prop.load(fis);
@@ -172,7 +164,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
 
     @Override
     public void TraceEvenements(String log) {
-        Vector Ligne = new Vector();
+        ArrayList<String> Ligne = new ArrayList<>();
         StringTokenizer parser = new StringTokenizer(log, "#");
         
         while(parser.hasMoreTokens()){ 
@@ -184,7 +176,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         }
         
         DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();        
-        dtm.insertRow(dtm.getRowCount(), Ligne);
+        dtm.insertRow(dtm.getRowCount(), Ligne.toArray());
         
         //System.out.println("RowCount : " + dtm.getRowCount());
         TableauEvenements.setModel(dtm);

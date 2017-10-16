@@ -35,7 +35,7 @@ abstract public class Bean_DB_Access implements Serializable {
     }
     
     /* Connexion - Deconnexion */
-    abstract public void Connexion() throws SQLException;//,ClassNotFoundException;    
+    abstract public String Connexion();//SQLException, ClassNotFoundException, SQLRecoverableException;  
     public void Deconnexion() throws SQLException {
         if (Statement != null) {
             Statement.close();

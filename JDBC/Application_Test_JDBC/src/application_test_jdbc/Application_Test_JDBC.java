@@ -15,7 +15,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -201,24 +200,22 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
         BeanAccess = new Bean_DB_Access_Oracle("localhost", "1521", "BD_JournalDeBord", "Soleil123");
         
         if (jButtonConnectOracle.getText().equals("Connexion à Oracle")) {
-            try {
-                BeanAccess.Connexion();
-            } 
-            catch (SQLException ex) {
-                Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
+            
+            String Error = BeanAccess.Connexion();
+            if (Error != null) {
                 jTA_Error.setEnabled(true);
-                jTA_Error.setText(ex.getMessage());
+                jTA_Error.setText(Error);
             }
-                
-            jButtonConnectMySQL.setEnabled(false);
-            jButtonConnectOracle.setText("Déconnexion");
-            setEnabledQuery(true);
+            else {
+                jButtonConnectOracle.setEnabled(false);
+                jButtonConnectMySQL.setText("Déconnexion");
+                setEnabledQuery(true);
+            }
         }
         else {
             try {
                 BeanAccess.Deconnexion();
             } catch (SQLException ex) {
-                Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
                 jTA_Error.setEnabled(true);
                 jTA_Error.setText(ex.getMessage());
             }
@@ -233,16 +230,17 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
         BeanAccess = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
         
         if (jButtonConnectMySQL.getText().equals("Connexion à MySQL")) {
-            try {
-                BeanAccess.Connexion();
-            } catch (SQLException ex) {
-                Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
+            
+            String Error = BeanAccess.Connexion();
+            if (Error != null) {
                 jTA_Error.setEnabled(true);
-                jTA_Error.setText(ex.getMessage());
+                jTA_Error.setText(Error);
             }
-            jButtonConnectOracle.setEnabled(false);
-            jButtonConnectMySQL.setText("Déconnexion");
-            setEnabledQuery(true);
+            else {
+                jButtonConnectOracle.setEnabled(false);
+                jButtonConnectMySQL.setText("Déconnexion");
+                setEnabledQuery(true);
+            }
         }
         else {
             try {
@@ -298,6 +296,10 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                 
                 if (RS != null)
                     AfficherResultSet(RS);
+                else {
+                    jTA_Error.setEnabled(true);
+                    jTA_Error.setText("Aucun résultat à afficher !");
+                }
             }
             else {     
                 int Ok;
@@ -346,36 +348,40 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     
     private void AfficherResultSet(ResultSet RS) throws SQLException {        
         try {
-            int Cpt = 1, nCol, MaxColonnes = RS.getMetaData().getColumnCount();
-            Vector NomColonnes = new Vector();        
+            int Cpt = 0, nCol, MaxColonnes = RS.getMetaData().getColumnCount();
+            String[] NomColonnes = new String [MaxColonnes];        
             String[] TypeColonnes = new String [MaxColonnes];
             
             if (RS.next()) {                
                 for (nCol = 1 ; nCol <= MaxColonnes ; nCol++) {
-                    NomColonnes.add(RS.getMetaData().getColumnName(nCol));
+                    NomColonnes[nCol - 1] = RS.getMetaData().getColumnName(nCol);
                     TypeColonnes[nCol - 1] = RS.getMetaData().getColumnTypeName(nCol);
                 }
                 
                 int Temp = RS.getRow();
                 RS.last();
                 int MaxLignes = RS.getRow() - Temp + 1;
-                Vector ligne = new Vector();
+                //Vector ligne = new Vector();
                 DefaultTableModel dtm = new DefaultTableModel(NomColonnes, 0);
                 
                 RS.beforeFirst();
                 nCol = 1;
                 while(RS.next()) {
                     nCol = 1;
-                    ligne = new Vector();
+                    //ligne = new Vector();
+                    String[] ligne = new String[MaxLignes];
+                    
                     while (nCol <= MaxColonnes) {
                         System.out.println(RS.getMetaData().getColumnTypeName(nCol));
                         switch (TypeColonnes[nCol - 1]) {
                             case "LONG":
-                                ligne.add(String.valueOf(RS.getLong(nCol)));
+                                //ligne.add(String.valueOf(RS.getLong(nCol)));
+                                ligne[nCol - 1] = String.valueOf(RS.getLong(nCol));
                                 break;
                             case "VARCHAR":
                             case "VARCHAR2":
-                                ligne.add(String.valueOf(RS.getString(nCol)));
+                                //ligne.add(String.valueOf(RS.getString(nCol)));
+                                ligne[nCol - 1] = String.valueOf(RS.getString(nCol));
                                 break;
                             case "DATE":
                                 Date d = RS.getDate(nCol);
@@ -383,20 +389,22 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                                 gc.setTime(d);
                                 String strDate = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(d);
                                 //System.out.println(d.toString());
-                                ligne.add(strDate);
+                                //ligne.add(strDate);
+                                ligne[nCol - 1] = strDate;
                                 break;
                             case "NUMBER":
                             case "INT":                                
                                 //System.out.println(RS.getInt(nCol));
-                                ligne.add(String.valueOf(RS.getInt(nCol)));
+                                //ligne.add(String.valueOf(RS.getInt(nCol)));
+                                ligne[nCol - 1] = String.valueOf(RS.getInt(nCol));
                                 break;
                             default : 
                                 break;
                         }                        
                         nCol++;
                     }
-                    System.out.println(ligne);
-                    dtm.insertRow(Cpt - 1, ligne);
+                    //System.out.println(ligne);
+                    dtm.insertRow(Cpt, ligne);
                     Cpt++;
                 }
                 RS.close();

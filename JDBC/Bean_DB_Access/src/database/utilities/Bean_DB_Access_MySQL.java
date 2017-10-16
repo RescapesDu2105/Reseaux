@@ -25,7 +25,7 @@ public class Bean_DB_Access_MySQL extends Bean_DB_Access {
    }
 
     @Override
-    public void Connexion() throws SQLException {
+    public String Connexion() {
         String URL = "jdbc:mysql://" + getHost() + ":" + getPort() + "/" + getSchema();
         
         try
@@ -38,9 +38,12 @@ public class Bean_DB_Access_MySQL extends Bean_DB_Access {
         catch (SQLException Ex)
         {
             System.out.println("Code SQL : " + Ex.getErrorCode() + " - Erreur SQL : " + Ex.getMessage());
+            return Ex.getMessage();
         } 
         catch (ClassNotFoundException ex) {
             Logger.getLogger(Bean_DB_Access_Oracle.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return null;
     }
 }

@@ -22,11 +22,10 @@ public class Bean_DB_Access_Oracle extends Bean_DB_Access {
     }
 
     @Override
-    public void Connexion() throws SQLException {
+    public String Connexion() { //SQLException, ClassNotFoundException, SQLRecoverableException {
         String URL = "jdbc:oracle:thin:@localhost:" + getPort() + "/orcl";
         
-        try
-        {
+        try {
             Class.forName(getDriver());
                     
             setConnection(DriverManager.getConnection(URL, getLogin(), getPassword()));
@@ -35,8 +34,12 @@ public class Bean_DB_Access_Oracle extends Bean_DB_Access {
         catch (SQLException Ex)
         {
             System.out.println("Code SQL : " + Ex.getErrorCode() + " - Erreur SQL : " + Ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Bean_DB_Access_Oracle.class.getName()).log(Level.SEVERE, null, ex);
+            return Ex.getMessage();
+            
+        } catch (ClassNotFoundException Ex) {
+            Logger.getLogger(Bean_DB_Access_Oracle.class.getName()).log(Level.SEVERE, null, Ex);
+            return Ex.getMessage();
         }
+        return null;
     }       
 }

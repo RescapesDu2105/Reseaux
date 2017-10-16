@@ -10,9 +10,9 @@ import ProtocoleLUGAP.RequeteLUGAP;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -168,7 +168,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
         }
         
         try {
-            cliSocket = new Socket(AdresseIP, Port);
+            cliSocket = new Socket(InetAddress.getByName("127.0.0.1"), Port);
             System.out.println("cliSocket : " + cliSocket.getInetAddress().toString());
         } 
         catch (IOException ex) {
@@ -176,6 +176,7 @@ public class FenApplicationClient extends javax.swing.JFrame {
             System.out.println("FUCKED UP 4");
         }
                 
+        jButton_Connexion.setText("Déconnexion");
         try {
             oos = new ObjectOutputStream(cliSocket.getOutputStream());
             oos.writeObject(req);
@@ -198,7 +199,8 @@ public class FenApplicationClient extends javax.swing.JFrame {
             Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 7");
         }
-        // TraiterReponse
+        String reponse = rep.getChargeUtile();
+        System.out.println("Réponse : " + reponse);
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
 
     public static void main(String args[]) {
