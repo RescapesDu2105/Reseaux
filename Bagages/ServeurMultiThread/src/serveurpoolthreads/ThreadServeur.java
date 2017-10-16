@@ -52,7 +52,8 @@ public class ThreadServeur extends Thread{
         
         Socket CSocket = null;
         
-        while(!isInterrupted()) {
+        while (!isInterrupted())
+        {
             try {
                 System.out.println("********** Serveur en attente");
                 CSocket = SSocket.accept();
@@ -62,28 +63,28 @@ public class ThreadServeur extends Thread{
                 System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
                 System.exit(1);
             }
-        }
-        
-        ObjectInputStream ois = null;
-        Requete req = null;
-        
-        try {
-            ois = new ObjectInputStream(CSocket.getInputStream());
-            req = (Requete)ois.readObject();
-            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());
-        } catch (IOException ex) {
-            System.err.println("Erreur ! [" + ex.getMessage() + "]");
-        } catch (ClassNotFoundException ex) {
-            System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
-        }
-        
-        Runnable travail = req.createRunnable(CSocket, GUIApplication);
-        if(travail != null){
-            TachesAFaire.recordTache(travail);
-            System.out.println("Travail mis dans la file");
-        }
-        else {
-            System.out.println("Pas de mise en file !");
+            
+            ObjectInputStream ois = null;
+            Requete req = null;
+
+            try {
+                ois = new ObjectInputStream(CSocket.getInputStream());
+                req = (Requete)ois.readObject();
+                System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());
+            } catch (IOException ex) {
+                System.err.println("Erreur ! [" + ex.getMessage() + "]");
+            } catch (ClassNotFoundException ex) {
+                System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
+            }
+
+            Runnable travail = req.createRunnable(CSocket, GUIApplication);
+            if(travail != null){
+                TachesAFaire.recordTache(travail);
+                System.out.println("Travail mis dans la file");
+            }
+            else {
+                System.out.println("Pas de mise en file !");
+            }
         }
     }    
 
