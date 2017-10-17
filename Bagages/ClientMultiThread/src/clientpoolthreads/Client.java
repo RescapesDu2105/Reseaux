@@ -83,12 +83,12 @@ public class Client {
             try {        
             System.out.println("Création des flux");
                 setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
-            System.out.println("fflush");
+            //System.out.println("fflush");
                 getOos().flush();
-            System.out.println("Avant OIS");
+            //System.out.println("Avant OIS");
                 setOis(new ObjectInputStream(getCliSocket().getInputStream()));
-            System.out.println("Apres OIS");
-            System.out.println("Fin création du flux OOS");
+            //System.out.println("Apres OIS");
+            System.out.println("Fin de la création des flux");
             }
             catch(IOException ex) {
                 System.out.println(ex.getMessage());
