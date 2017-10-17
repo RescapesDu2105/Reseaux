@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +22,11 @@ import requetepoolthreads.ConsoleServeur;
  */
 public class FenApplicationServeur extends javax.swing.JFrame implements ConsoleServeur {
     private boolean Started = false;
+    private int Port_CheckIN;
+    private int Port_Bagages;
+    private int Max_Clients;
+    private Thread ts_Bagages;
+    private Thread ts_CheckIN;
     /**
      * Creates new form FenApplicationServeur
      */
@@ -60,7 +64,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
 
             },
             new String [] {
-                "Origine", "Requête", "Thread"
+                "Origine", "Requête", "Title 3"
             }
         ));
         jScrollPane1.setViewportView(TableauEvenements);
@@ -92,8 +96,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
-        if (!Started) {
-            int Port, MaxClients;            
+        if (!isStarted()) {     
             Properties Prop = new Properties();
             FileInputStream fis = null;
             String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
@@ -109,12 +112,14 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
             }
             
             if (fis != null) {
-                Port = Integer.parseInt(Prop.getProperty("PORT_BAGAGES"));
-                MaxClients = Integer.parseInt(Prop.getProperty("MAX_CLIENTS"));
+                setPort_CheckIN(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
+                setMax_Clients(Integer.parseInt(Prop.getProperty("MAX_CLIENTS")));
                 TraceEvenements("serveur#acquisition du port#main");
-                ThreadServeur ts = new ThreadServeur(Port, MaxClients, new ListeTaches(), this);
-                ts.start();
-                Started = true;
+                setTs_Bagages(new ThreadServeur(getPort_Bagages(), getMax_Clients(), new ListeTaches(), this));
+                getTs_Bagages().start();
+                //setTs_CheckIN(ThreadServeur(getPort_CheckIN(), getMax_Clients(), new ListeTaches(), this));
+                //getTs_CheckIN().start();
+                setStarted(true);
                 jButtonStart.setText("Stop");
             }
             else {
@@ -122,8 +127,10 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
             }
         }
         else {   
-            Started = false;
-            jButtonStart.setText("Stop");
+            getTs_Bagages().interrupt();
+            //getTs_CheckIN().interrupt();
+            setStarted(false);
+            jButtonStart.setText("Start");
         }
     }//GEN-LAST:event_jButtonStartActionPerformed
 
@@ -180,6 +187,54 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         
         //System.out.println("RowCount : " + dtm.getRowCount());
         TableauEvenements.setModel(dtm);
+    }
+
+    public boolean isStarted() {
+        return Started;
+    }
+
+    public void setStarted(boolean Started) {
+        this.Started = Started;
+    }
+
+    public int getPort_CheckIN() {
+        return Port_CheckIN;
+    }
+
+    public void setPort_CheckIN(int Port_CheckIN) {
+        this.Port_CheckIN = Port_CheckIN;
+    }
+
+    public int getPort_Bagages() {
+        return Port_Bagages;
+    }
+
+    public void setPort_Bagages(int Port_Bagages) {
+        this.Port_Bagages = Port_Bagages;
+    }
+
+    public int getMax_Clients() {
+        return Max_Clients;
+    }
+
+    public void setMax_Clients(int Max_Clients) {
+        this.Max_Clients = Max_Clients;
+    }
+
+    public Thread getTs_Bagages() {
+        return ts_Bagages;
+    }
+
+    public void setTs_Bagages(Thread ts_Bagages) {
+        this.ts_Bagages = ts_Bagages;
+    }
+
+    public Thread getTs_CheckIN() {
+        return ts_CheckIN;
+    }
+
+    public void setTs_CheckIN(Thread ts_CheckIN) {
+        this.ts_CheckIN = ts_CheckIN;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

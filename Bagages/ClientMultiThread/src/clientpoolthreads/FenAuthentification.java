@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,15 +23,13 @@ import java.util.logging.Logger;
  *
  * @author Philippe
  */
-public class FenApplicationClient extends javax.swing.JFrame {
-    private String Login, Pwd;
-    private ObjectInputStream ois = null;
-    private ObjectOutputStream oos = null;
-    private Socket cliSocket = null;
+public class FenAuthentification extends javax.swing.JFrame {
+    private Client Client;
     /**
      * Creates new form Login_GUI
      */
-    public FenApplicationClient() {
+    public FenAuthentification() {
+        setClient(new Client());
         initComponents();
         setLocationRelativeTo(null); 
     }
@@ -140,63 +139,27 @@ public class FenApplicationClient extends javax.swing.JFrame {
         req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
         
         //Connexion au serveur
-        int Port = -1;
-        String AdresseIP = null;
-        Properties Prop = new Properties();
-        FileInputStream fis = null;
-        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-            
-        try {
-            fis = new FileInputStream(nomFichier);
-            Prop.load(fis);
-            fis.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-        if (fis != null) {
-            Port = Integer.parseInt(Prop.getProperty("PORT_BAGAGES"));
-            AdresseIP = Prop.getProperty("ADRESSEIP");  
-            System.out.println("Port : " + Port);
-            System.out.println("IP : " + AdresseIP);
-        }
-        else {
-            System.out.println("FUCKED UP 3");
-            System.exit(1);
-        }
+        Client.Connexion();
         
-        try {
-            cliSocket = new Socket(InetAddress.getByName("127.0.0.1"), Port);
-            System.out.println("cliSocket : " + cliSocket.getInetAddress().toString());
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FUCKED UP 4");
-        }
-                
         jButton_Connexion.setText("Déconnexion");
         try {
-            oos = new ObjectOutputStream(cliSocket.getOutputStream());
-            oos.writeObject(req);
-            oos.flush();
+            Client.getOos().writeObject(req);
+            Client.getOos().flush();
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 5");
         }
         
         ReponseLUGAP rep = null;
         
         try {
-            ois = new ObjectInputStream(cliSocket.getInputStream());
-            rep = (ReponseLUGAP)ois.readObject();
+            rep = (ReponseLUGAP)Client.getOis().readObject();
             System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
         } catch (IOException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);            
             System.out.println("FUCKED UP 6");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FenApplicationClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 7");
         }
         String reponse = rep.getChargeUtile();
@@ -217,64 +180,35 @@ public class FenApplicationClient extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FenApplicationClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FenApplicationClient().setVisible(true);
+                new FenAuthentification().setVisible(true);
             }
         });
     }
 
-    public String getLogin() {
-        return Login;
+    public Client getClient() {
+        return Client;
     }
 
-    public void setLogin(String Login) {
-        this.Login = Login;
+    public void setClient(Client Client) {
+        this.Client = Client;
     }
 
-    public String getPwd() {
-        return Pwd;
-    }
-
-    public void setPwd(String Pwd) {
-        this.Pwd = Pwd;
-    }    
-
-    public ObjectInputStream getOis() {
-        return ois;
-    }
-
-    public void setOis(ObjectInputStream ois) {
-        this.ois = ois;
-    }
-
-    public ObjectOutputStream getOss() {
-        return oos;
-    }
-
-    public void setOss(ObjectOutputStream oss) {
-        this.oos = oss;
-    }
-
-    public Socket getCliSocket() {
-        return cliSocket;
-    }
-
-    public void setCliSocket(Socket cliSocket) {
-        this.cliSocket = cliSocket;
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Connexion;
