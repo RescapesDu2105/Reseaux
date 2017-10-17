@@ -7,6 +7,7 @@ package serveurpoolthreads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import requetepoolthreads.ConsoleServeur;
@@ -67,6 +68,9 @@ public class ThreadServeur extends Thread{
             Requete req = null;
 
             try {
+                ObjectOutputStream TEST = new ObjectOutputStream(CSocket.getOutputStream());
+                TEST.writeUTF("PROUT");
+                TEST.flush();
                 ois = new ObjectInputStream(CSocket.getInputStream());
                 System.out.println("OIS : " + ois.available());
                 req = (Requete)ois.readObject();
