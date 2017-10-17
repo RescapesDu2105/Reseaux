@@ -32,7 +32,7 @@ import requetepoolthreads.Requete;
 public class RequeteLUGAP implements Requete, Serializable{
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_TEMPORARY_KEY = 2;
-    
+        
     private int Type;
     private String chargeUtile;
     private Socket SocketClient;
