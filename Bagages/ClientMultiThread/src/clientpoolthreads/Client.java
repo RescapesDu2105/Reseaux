@@ -72,7 +72,7 @@ public class Client {
     public void Connexion()
     {
         try {
-            setCliSocket(new Socket(InetAddress.getByName("localhost"), getPort()));
+            setCliSocket(new Socket("192.168.0.3", 30042));
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

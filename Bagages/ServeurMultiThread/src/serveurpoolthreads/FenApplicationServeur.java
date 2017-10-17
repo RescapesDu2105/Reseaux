@@ -100,7 +100,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
             Properties Prop = new Properties();
             FileInputStream fis = null;
             String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-                        
+            
             try {
                 fis = new FileInputStream(nomFichier);
                 Prop.load(fis);
@@ -112,7 +112,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
             }
             
             if (fis != null) {
-                setPort_CheckIN(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
+                setPort_Bagages(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
                 setMax_Clients(Integer.parseInt(Prop.getProperty("MAX_CLIENTS")));
                 TraceEvenements("serveur#acquisition du port#main");
                 setTs_Bagages(new ThreadServeur(getPort_Bagages(), getMax_Clients(), new ListeTaches(), this));
