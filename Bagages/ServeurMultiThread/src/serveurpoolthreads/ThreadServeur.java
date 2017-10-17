@@ -7,7 +7,6 @@ package serveurpoolthreads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import requetepoolthreads.ConsoleServeur;
@@ -69,21 +68,22 @@ public class ThreadServeur extends Thread{
 
             try {
                 ois = new ObjectInputStream(CSocket.getInputStream());
+                System.out.println("OIS : " + ois.available());
                 req = (Requete)ois.readObject();
                 System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());
+                
+                Runnable travail = req.createRunnable(CSocket, GUIApplication);
+                if(travail != null){
+                    TachesAFaire.recordTache(travail);
+                    System.out.println("Travail mis dans la file");
+                }
+                else {
+                    System.out.println("Pas de mise en file !");
+                }
             } catch (IOException ex) {
                 System.err.println("Erreur ! [" + ex.getMessage() + "]");
             } catch (ClassNotFoundException ex) {
                 System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
-            }
-
-            Runnable travail = req.createRunnable(CSocket, GUIApplication);
-            if(travail != null){
-                TachesAFaire.recordTache(travail);
-                System.out.println("Travail mis dans la file");
-            }
-            else {
-                System.out.println("Pas de mise en file !");
             }
         }
     }    

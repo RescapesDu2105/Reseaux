@@ -7,11 +7,15 @@ package clientpoolthreads;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,16 +30,71 @@ public class Client {
     
     protected ObjectInputStream ois = null;
     protected ObjectOutputStream oos = null;
+    
+    protected Properties Prop = new Properties();
+    
+    
+    public void Client() {
+        LireProperties();
+    }
+    
+    
+    public void LireProperties() {
+        FileInputStream fis = null;
+        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
+            
+        try {
+            fis = new FileInputStream(nomFichier);
+            getProp().load(fis);
+            fis.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("FILS DE PUTE");
+        if (fis != null) {
+            setPort(Integer.parseInt(getProp().getProperty("PORT_BAGAGES")));
+            System.out.println(getPort());
+            try {
+                setIP(InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
+                System.out.println("IP : " + InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Port : " + getPort());
+            System.out.println("IP : " + getIP());
+        }
+        else {
+            System.out.println("FUCKED UP 3");
+            System.exit(1);
+        }
         
-    public void Connexion() throws IOException
+    }
+    
+    public void Connexion()
     {
-        setCliSocket(new Socket(getIP(), getPort()));
-        System.out.println("Connexion établie");
+        try {
+            setCliSocket(new Socket(getIP(), getPort()));
+        } catch (IOException ex) {
+            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Connexion OK");
         System.out.println("Création des flux");
-        setOos(new ObjectOutputStream(new BufferedOutputStream(cliSocket.getOutputStream())));
-        getOos().flush();
-        setOis(new ObjectInputStream(new BufferedInputStream(cliSocket.getInputStream())));
-        System.out.println("Client opérationnel");
+        
+        try {
+            setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
+        System.out.println("fflush");
+            getOos().flush();
+        System.out.println("Avant OIS");
+            setOis(new ObjectInputStream(getCliSocket().getInputStream()));
+        System.out.println("Apres OIS");
+        System.out.println("Fin création du flux OOS");
+        }
+        catch(IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        System.out.println("Client prêt");
     }
 
     public void Deconnexion() {
@@ -46,6 +105,7 @@ public class Client {
             System.exit(1);
         }
     }
+   
     
     // Getters - Setters
     public ObjectInputStream getOis() {
@@ -86,6 +146,14 @@ public class Client {
 
     public void setCliSocket(Socket cliSocket) {
         this.cliSocket = cliSocket;
+    }
+
+    public Properties getProp() {
+        return Prop;
+    }
+
+    public void setProp(Properties Prop) {
+        this.Prop = Prop;
     }
     
     

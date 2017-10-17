@@ -24,11 +24,12 @@ import java.util.logging.Logger;
  * @author Philippe
  */
 public class FenAuthentification extends javax.swing.JFrame {
-    private Client Client = new Client();
+    private Client Client;
     /**
      * Creates new form Login_GUI
      */
     public FenAuthentification() {
+        setClient(new Client());
         initComponents();
         setLocationRelativeTo(null); 
     }
@@ -138,49 +139,10 @@ public class FenAuthentification extends javax.swing.JFrame {
         req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
         
         //Connexion au serveur
-        int Port = -1;
-        String AdresseIP = null;
-        Properties Prop = new Properties();
-        FileInputStream fis = null;
-        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-            
-        try {
-            fis = new FileInputStream(nomFichier);
-            Prop.load(fis);
-            fis.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-        if (fis != null) {
-            Client.setPort(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
-            try {  
-                Client.setIP(InetAddress.getByName(Prop.getProperty("ADRESSEIP")));
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("Port : " + Port);
-            System.out.println("IP : " + AdresseIP);
-        }
-        else {
-            System.out.println("FUCKED UP 3");
-            System.exit(1);
-        }
+        Client.Connexion();
         
-        try {
-            Client.setCliSocket(new Socket(InetAddress.getByName("127.0.0.1"), Client.getPort()));
-            System.out.println("cliSocket : " + Client.getCliSocket().getInetAddress().toString());
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FUCKED UP 4");
-        }
-                
         jButton_Connexion.setText("Déconnexion");
         try {
-            Client.setOos(new ObjectOutputStream(Client.getCliSocket().getOutputStream()));
             Client.getOos().writeObject(req);
             Client.getOos().flush();
         } catch (IOException ex) {
@@ -191,7 +153,6 @@ public class FenAuthentification extends javax.swing.JFrame {
         ReponseLUGAP rep = null;
         
         try {
-            Client.setOis(new ObjectInputStream(Client.getCliSocket().getInputStream()));
             rep = (ReponseLUGAP)Client.getOis().readObject();
             System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
         } catch (IOException ex) {
