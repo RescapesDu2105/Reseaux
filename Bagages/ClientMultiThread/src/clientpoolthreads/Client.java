@@ -5,8 +5,6 @@
  */
 package clientpoolthreads;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +32,7 @@ public class Client {
     protected Properties Prop = new Properties();
     
     
-    public void Client() {
+    public Client() {
         LireProperties();
     }
     
@@ -52,16 +50,15 @@ public class Client {
         } catch (IOException ex) {
             Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("FILS DE PUTE");
+        //System.out.println("FILS DE PUTE");
         if (fis != null) {
             setPort(Integer.parseInt(getProp().getProperty("PORT_BAGAGES")));
-            System.out.println(getPort());
             try {
                 setIP(InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
-                System.out.println("IP : " + InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
             } catch (UnknownHostException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             System.out.println("Port : " + getPort());
             System.out.println("IP : " + getIP());
         }
@@ -75,13 +72,14 @@ public class Client {
     public void Connexion()
     {
         try {
-            setCliSocket(new Socket(getIP(), getPort()));
+            setCliSocket(new Socket(InetAddress.getByName("localhost"), getPort()));
         } catch (IOException ex) {
-            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Connexion OK");
         System.out.println("Création des flux");
         
+            System.out.println(getCliSocket().isConnected());
         try {
             setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
         System.out.println("fflush");
