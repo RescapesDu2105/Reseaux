@@ -72,27 +72,32 @@ public class Client {
     public void Connexion()
     {
         try {
-            setCliSocket(new Socket("192.168.0.3", 30042));
+            setCliSocket(new Socket(getIP(), getPort()));
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Connexion OK");
-        System.out.println("Création des flux");
         
-            System.out.println(getCliSocket().isConnected());
-        try {
-            setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
-        System.out.println("fflush");
-            getOos().flush();
-        System.out.println("Avant OIS");
-            setOis(new ObjectInputStream(getCliSocket().getInputStream()));
-        System.out.println("Apres OIS");
-        System.out.println("Fin création du flux OOS");
+        if (getCliSocket().isConnected()) {
+            System.out.println("Connexion OK");
+            
+            try {        
+            System.out.println("Création des flux");
+                setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
+            System.out.println("fflush");
+                getOos().flush();
+            System.out.println("Avant OIS");
+                setOis(new ObjectInputStream(getCliSocket().getInputStream()));
+            System.out.println("Apres OIS");
+            System.out.println("Fin création du flux OOS");
+            }
+            catch(IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            System.out.println("Client prêt");
         }
-        catch(IOException ex) {
-            System.out.println(ex.getMessage());
+        else {            
+            System.out.println("Client pas prêt !");
         }
-        System.out.println("Client prêt");
     }
 
     public void Deconnexion() {

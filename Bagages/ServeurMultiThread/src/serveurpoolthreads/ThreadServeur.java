@@ -69,7 +69,7 @@ public class ThreadServeur extends Thread{
 
             try {
                 ObjectOutputStream TEST = new ObjectOutputStream(CSocket.getOutputStream());
-                TEST.writeUTF("PROUT");
+                TEST.writeUTF("Connexion OK");
                 TEST.flush();
                 ois = new ObjectInputStream(CSocket.getInputStream());
                 System.out.println("OIS : " + ois.available());
