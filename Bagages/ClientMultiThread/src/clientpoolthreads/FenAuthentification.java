@@ -128,8 +128,7 @@ public class FenAuthentification extends javax.swing.JFrame {
 
     private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
         String ChargeUtile = jTF_Login.getText() + jPasswordField.getPassword();
-        RequeteLUGAP req = null;
-        req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
+        RequeteLUGAP req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
         
         //Connexion au serveur
         Client.Connexion();

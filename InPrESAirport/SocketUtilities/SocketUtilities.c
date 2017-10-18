@@ -93,7 +93,7 @@ void EnvoyerMessage(int hSocket, char *Msg)
 
 	sprintf(MsgSocket, "%d%s%s", strlen(Msg), SEPARATOR, Msg);
 
-	if (send(hSocket, MsgSocket, TAILLE_MAX_TRAME, 0) == -1)
+	if (send(hSocket, MsgSocket, strlen(MsgSocket), 0) == -1)
 	{
 		printf("Erreur sur le send de la socket %d\n", errno);
 		FermerConnexion(hSocket);

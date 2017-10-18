@@ -10,8 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
 
@@ -27,7 +25,6 @@ public class ThreadClient extends Thread {
     
     private ObjectInputStream ois;
     private ObjectOutputStream oos = null;
-    private Requete req = null;
     
     private Runnable TacheEnCours;
 
@@ -35,13 +32,13 @@ public class ThreadClient extends Thread {
         System.out.println("Test 1");
         this.ois = null;
         this.oos = null;
-        this.req = null;
         this.Nom = Nom;
         this.SSocket = SSocket;
         this.GUIApplication = GUIApplication;
         System.out.println("Test 2");
     }
-
+    
+    
     @Override
     public void run(){  
         while(!isInterrupted()) 
@@ -63,7 +60,7 @@ public class ThreadClient extends Thread {
 
             while (!getCSocket().isClosed())
             {     
-                try 
+                /*try 
                 {
                     ois = new ObjectInputStream(CSocket.getInputStream());
                     req = (Requete)ois.readObject();
@@ -95,10 +92,65 @@ public class ThreadClient extends Thread {
                     {
                         System.err.println("Erreur ! [" + ex.getMessage() + "]");
                     }
+                }*/
+                
+                Requete req = RecevoirRequete();
+                if (req != null)
+                {
+                    this.TacheEnCours = req.createRunnable(CSocket, GUIApplication);
+                    this.TacheEnCours.run();  
                 }
+                
+                
             }
         }
     }
+    
+    public Requete RecevoirRequete()
+    {        
+        Requete req = null;
+        
+        try 
+        {
+            ois = new ObjectInputStream(CSocket.getInputStream());
+            req = (Requete)ois.readObject();
+            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
+        } 
+        catch (IOException ex) 
+        {
+            System.err.println("Erreur ! [" + ex.getMessage() + "]");
+            try 
+            {
+                CSocket.close();
+            } 
+            catch (IOException ex1) 
+            {
+                System.err.println("Erreur ! [" + ex.getMessage() + "]");
+            }
+            return null;
+        } 
+        catch (ClassNotFoundException ex) 
+        {
+            System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
+            try 
+            {
+                CSocket.close();
+            } 
+            catch (IOException ex1) 
+            {
+                System.err.println("Erreur ! [" + ex.getMessage() + "]");
+            }
+            return null;
+        }
+        
+        return req;
+    }
+    
+    public void EnvoyerRequete() 
+    {
+        
+    }
+    
 
     public ConsoleServeur getGUIApplication() {
         return GUIApplication;
@@ -146,17 +198,7 @@ public class ThreadClient extends Thread {
 
     public void setOos(ObjectOutputStream oos) {
         this.oos = oos;
-    }
-
-    public Requete getReq() {
-        return req;
-    }
-
-    public void setReq(Requete req) {
-        this.req = req;
-    }
-    
-    
+    }    
 
     public Runnable getTacheEnCours() {
         return TacheEnCours;
