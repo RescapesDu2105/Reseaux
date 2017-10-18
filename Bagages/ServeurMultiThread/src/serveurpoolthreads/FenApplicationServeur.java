@@ -25,8 +25,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     private int Port_CheckIN;
     private int Port_Bagages;
     private int Max_Clients;
-    private Thread ts_Bagages;
-    private Thread ts_CheckIN;
+    private Serveur Server = null;
     /**
      * Creates new form FenApplicationServeur
      */
@@ -64,7 +63,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
 
             },
             new String [] {
-                "Origine", "Requête", "Title 3"
+                "Origine", "Requête", "Thread"
             }
         ));
         jScrollPane1.setViewportView(TableauEvenements);
@@ -96,38 +95,27 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
-        if (!isStarted()) {     
-            Properties Prop = new Properties();
-            FileInputStream fis = null;
-            String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-            
-            try {
-                fis = new FileInputStream(nomFichier);
-                Prop.load(fis);
-                fis.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(FenApplicationServeur.class.getName()).log(Level.SEVERE, null, ex);
+        if (!isStarted()) {
+            setServer(new Serveur(this));
+            try 
+            {
+                getServer().Init();
+            } 
+            catch (IOException ex) 
+            {
+                System.err.println("Erreur de port d'écoute ! [" + ex + "]");
+                System.exit(1);
+            }
+            catch (Exception ex) 
+            {
+                ex.printStackTrace();
             }
             
-            if (fis != null) {
-                setPort_Bagages(Integer.parseInt(Prop.getProperty("PORT_BAGAGES")));
-                setMax_Clients(Integer.parseInt(Prop.getProperty("MAX_CLIENTS")));
-                TraceEvenements("serveur#acquisition du port#main");
-                setTs_Bagages(new ThreadServeur(getPort_Bagages(), getMax_Clients(), new ListeTaches(), this));
-                getTs_Bagages().start();
-                //setTs_CheckIN(ThreadServeur(getPort_CheckIN(), getMax_Clients(), new ListeTaches(), this));
-                //getTs_CheckIN().start();
-                setStarted(true);
-                jButtonStart.setText("Stop");
-            }
-            else {
-                TraceEvenements("serveur#initialisation#failed to read properties file");
-            }
+            setStarted(true);
+            jButtonStart.setText("Stop");
         }
         else {   
-            getTs_Bagages().interrupt();
+            getServer().Stop();
             //getTs_CheckIN().interrupt();
             setStarted(false);
             jButtonStart.setText("Start");
@@ -189,6 +177,8 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         TableauEvenements.setModel(dtm);
     }
 
+    
+    
     public boolean isStarted() {
         return Started;
     }
@@ -221,20 +211,12 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         this.Max_Clients = Max_Clients;
     }
 
-    public Thread getTs_Bagages() {
-        return ts_Bagages;
+    public Serveur getServer() {
+        return Server;
     }
 
-    public void setTs_Bagages(Thread ts_Bagages) {
-        this.ts_Bagages = ts_Bagages;
-    }
-
-    public Thread getTs_CheckIN() {
-        return ts_CheckIN;
-    }
-
-    public void setTs_CheckIN(Thread ts_CheckIN) {
-        this.ts_CheckIN = ts_CheckIN;
+    public void setServer(Serveur Server) {
+        this.Server = Server;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

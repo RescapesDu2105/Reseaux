@@ -66,44 +66,53 @@ public class Client {
             System.out.println("FUCKED UP 3");
             System.exit(1);
         }
-        
-    }
+}
     
     public void Connexion()
     {
-        try {
+        try 
+        {
             setCliSocket(new Socket(getIP(), getPort()));
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) 
+        {
+            System.exit(1);
         }
         
-        if (getCliSocket().isConnected()) {
+        if (getCliSocket().isConnected()) 
+        {
             System.out.println("Connexion OK");
             
-            try {        
+            try 
+            {        
             System.out.println("Création des flux");
                 setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
             //System.out.println("fflush");
                 getOos().flush();
             //System.out.println("Avant OIS");
-                setOis(new ObjectInputStream(getCliSocket().getInputStream()));
+            //setOis(new ObjectInputStream(getCliSocket().getInputStream());
             //System.out.println("Apres OIS");
             System.out.println("Fin de la création des flux");
             }
-            catch(IOException ex) {
+            catch(IOException ex) 
+            {
                 System.out.println(ex.getMessage());
             }
             System.out.println("Client prêt");
         }
-        else {            
+        else 
+        {            
             System.out.println("Client pas prêt !");
         }
     }
 
     public void Deconnexion() {
-        try {
+        try 
+        {
             getCliSocket().close();
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }

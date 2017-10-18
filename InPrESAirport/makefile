@@ -12,7 +12,6 @@ all: Client Serveur
 
 Client: $(CHKIN)/Client.o $(LIBNET)/SocketUtilities.o $(LIBCSV)/CSV.o $(LIBUTILE)/FctUtile.o $(ABB)/AccessBilBag.o $(LIBCONFIG)/Config.o
 		echo creation de l\'executable Client
-		@rm -f 362_22082017_lug.csv
 		gcc -m64 -o Client $(CHKIN)/Client.o $(LIBNET)/SocketUtilities.o $(LIBCSV)/CSV.o $(LIBUTILE)/FctUtile.o $(ABB)/AccessBilBag.o $(LIBCONFIG)/Config.o -lm
 
 Serveur: $(CHKIN)/Serveur.o $(LIBNET)/SocketUtilities.o $(LIBCSV)/CSV.o $(LIBUTILE)/FctUtile.o $(ABB)/AccessBilBag.o $(LIBCONFIG)/Config.o
@@ -48,7 +47,7 @@ $(LIBCONFIG)/Config.o : $(LIBCONFIG)/Config.c $(LIBCONFIG)/Config.h
 		$(CC) -o $(LIBCONFIG)/Config.o $(LIBCONFIG)/Config.c
 
 clean:
-	@rm -f $(CHKIN)/Client.o $(CHKIN)/Serveur.o $(LIBPROT)/Protocoles.o $(LIBNET)/SocketUtilities.o $(LIBCSV)/CSV.o $(LIBUTILE)/FctUtile.o $(ABB)/AccessBilBag.o $(LIBCONFIG)/Config.o core
-
+	@rm -f $(CHKIN)/Client.o $(CHKIN)/Serveur.o $(LIBPROT)/Protocoles.o $(LIBNET)/SocketUtilities.o $(LIBCSV)/CSV.o $(LIBUTILE)/FctUtile.o $(ABB)/AccessBilBag.o $(LIBCONFIG)/Config.o 362_22082017_lug.csv core
+	
 clobber: clean
 	@rm -f Client Serveur

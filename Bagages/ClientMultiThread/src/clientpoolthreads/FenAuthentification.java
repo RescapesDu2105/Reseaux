@@ -8,6 +8,7 @@ package clientpoolthreads;
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -134,26 +135,36 @@ public class FenAuthentification extends javax.swing.JFrame {
         Client.Connexion();
         
         jButton_Connexion.setText("Déconnexion");
-        try {
+        try 
+        {
             Client.getOos().writeObject(req);
             Client.getOos().flush();
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 5");
         }
         
         ReponseLUGAP rep = null;
         
-        try {
+        try 
+        {
+            Client.setOis(new ObjectInputStream(Client.getCliSocket().getInputStream()));
             rep = (ReponseLUGAP)Client.getOis().readObject();
             System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);            
             System.out.println("FUCKED UP 6");
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) 
+        {
             Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FUCKED UP 7");
         }
+        
         String reponse = rep.getChargeUtile();
         System.out.println("Réponse : " + reponse);
     }//GEN-LAST:event_jButton_ConnexionActionPerformed

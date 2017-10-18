@@ -70,7 +70,7 @@
               <Table columnCount="3" rowCount="0">
                 <Column editable="true" title="Origine" type="java.lang.Object"/>
                 <Column editable="true" title="Requ&#xea;te" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
+                <Column editable="true" title="Thread" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
