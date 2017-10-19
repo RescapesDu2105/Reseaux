@@ -44,6 +44,8 @@ public class Client {
     
     private Properties Prop = new Properties();
     
+    private String NomUtilisateur;
+    
     public Client() {
         LireProperties();
     }
@@ -249,6 +251,14 @@ public class Client {
 
     public void setProp(Properties Prop) {
         this.Prop = Prop;
+    }
+
+    public String getNomUtilisateur() {
+        return NomUtilisateur;
+    }
+
+    public void setNomUtilisateur(String NomUtilisateur) {
+        this.NomUtilisateur = NomUtilisateur;
     }
     
     
