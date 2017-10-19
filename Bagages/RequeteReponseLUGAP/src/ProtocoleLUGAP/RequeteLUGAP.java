@@ -18,10 +18,13 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Security;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
 
@@ -34,21 +37,25 @@ public class RequeteLUGAP implements Requete, Serializable{
     public final static int REQUEST_TEMPORARY_KEY = 2;
         
     private int Type;
-    private String chargeUtile;
+    private HashMap<String, Object> chargeUtile = null;
     private Socket SocketClient;
 
     
-    public RequeteLUGAP(int Type, String chargeUtile, Socket SocketClient) {
+    public RequeteLUGAP(int Type, HashMap chargeUtile, Socket SocketClient) {
         this.Type = Type;
         this.chargeUtile = chargeUtile;
         this.SocketClient = SocketClient;
     }
 
-    public RequeteLUGAP(int Type, String chargeUtile) {
+    public RequeteLUGAP(int Type, HashMap chargeUtile) {
         this.Type = Type;
         this.chargeUtile = chargeUtile;
     }
-       
+    
+    public RequeteLUGAP(int Type) {
+        this.Type = Type;
+        this.chargeUtile = new HashMap<>();
+    }
     
     @Override
     public Runnable createRunnable(final Socket s, final ConsoleServeur cs) {
@@ -62,52 +69,83 @@ public class RequeteLUGAP implements Requete, Serializable{
                         traiteRequeteLoginPorter(s, cs);
                     }            
                 };
-            case REQUEST_TEMPORARY_KEY:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteKey(s, cs);
-                    }            
-                };
+            
             default : return null;
         }
     }    
     
     private void traiteRequeteLoginPorter(Socket s, ConsoleServeur cs) {
         String adresseDistante = s.getRemoteSocketAddress().toString();        
-        System.out.println("Debut de traiteRequete : adresse distante = " + adresseDistante);
+        System.out.println("Debut de traiteRequeteLoginPorter : adresse distante = " + adresseDistante);
         byte b;
         DataInputStream dis = null;
         DataOutputStream dos = null;
+        ReponseLUGAP Rep = null;
         
-        try {
+        try 
+        {
             dis = new DataInputStream(new BufferedInputStream(s.getInputStream()));
             dos = new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
             if (dis == null || dos == null)
                 System.err.println("Erreur : dis et/ou dos est/sont null !");
             
-            String user = dis.readUTF();
+            String user = getChargeUtile().get("Login").toString();
             System.out.println("Utilisateur = " + user);
-            long temps = dis.readLong();
-            System.out.println("temps = " + temps);
-            double alea = dis.readDouble();
-            System.out.println("Nombre aléatoire = " + alea);
-            int longueur = dis.readInt();
-            System.out.println("Longueur = " + longueur);
-            byte[] msgD = new byte[longueur];
-            dis.readFully(msgD);
+            long Temps = (long) getChargeUtile().get("Temps");
+            System.out.println("temps = " + Temps);
+            double Random = (double) getChargeUtile().get("Random");
+            System.out.println("Nombre aléatoire = " + Random);
+            byte[] msgD = (byte[]) getChargeUtile().get("Digest");
             
             // JBDC
-            String reponse = ChercheMotdePasse(user, temps, alea, longueur, msgD);
-            ReponseLUGAP rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK, getChargeUtile() + " : " + user);
+            String Password = ChercheMotdePasse(user);
+            if (Password != null) {
+                MessageDigest md = null;
+                try 
+                {
+                    Security.addProvider(new BouncyCastleProvider());   
+                    
+                    md = MessageDigest.getInstance("SHA-256", "BC");                    
+                    md.update(user.getBytes());
+                    md.update(Password.getBytes());
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    DataOutputStream bdos = new DataOutputStream(baos);
+                    bdos.writeLong(Temps);
+                    bdos.writeDouble(Random);
+                    md.update(baos.toByteArray());
+                    byte[] msgDLocal = md.digest();
+
+                    if (MessageDigest.isEqual(msgD, msgDLocal)) 
+                    {
+                        Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+                        Rep.getChargeUtile().put("Message", "OK - vous êtes connecté au serveur !");
+                        System.out.println("OK - vous êtes connecté au serveur !");
+                    }
+                    else 
+                    {
+                        Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+                        Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+                        System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
+                    }
+                } 
+                catch (NoSuchAlgorithmException | NoSuchProviderException ex) 
+                {
+                    Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
+                }; 
+            }       
+            else
+            {
+                /*Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);*/
+                
+                Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+                System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
+            }
             
-            ObjectOutputStream oos;
-            
-            oos = new ObjectOutputStream(s.getOutputStream());
-            oos.writeObject(rep); 
-            oos.flush();
-            oos.close();
+            EnvoyerReponse(s, Rep);
+            cs.TraceEvenements(s.getRemoteSocketAddress().toString() + "#Envoi de la réponse#" + "Thread client/RequeteLUGAP");
         } 
         catch (IOException ex) {            
             System.err.println("Erreur de flux !");
@@ -115,50 +153,44 @@ public class RequeteLUGAP implements Requete, Serializable{
                 
     }
     
-    private void traiteRequeteKey(Socket s, ConsoleServeur cs) {
-        
-    }
-    
-    
-    private String ChercheMotdePasse(String user, long temps, double alea, int longueur, byte[] msgD) {        
-        Bean_DB_Access_MySQL BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+    private String ChercheMotdePasse(String user) {        
+        Bean_DB_Access_MySQL BD_airport = null;
         ResultSet RS;
-        String reponse = null;
+        String Password = null;
         
-        try {
-            BD_airport.Connexion();
+        try {  
+            BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+        }
+        catch (Exception ex){
+           ex.printStackTrace();
+        }
+            
+        try {                        
+            BD_airport.Connexion(); // try catch
             RS = BD_airport.Select("SELECT Password FROM bd_airport.Comptes WHERE Login = \"" + user + "\"");
             if (RS != null) {
-                MessageDigest md = MessageDigest.getInstance("MD5", "BC");
-                RS.next();
-                md.update(user.getBytes());
-                md.update(RS.getBytes("Password"));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                DataOutputStream bdos = new DataOutputStream(baos);
-                bdos.writeLong(temps);
-                bdos.writeDouble(alea);
-                md.update(baos.toByteArray());
-                byte[] msgDLocal = md.digest();
-                
-                if (MessageDigest.isEqual(msgD, msgDLocal)) {
-                    reponse = new String("OK - vous êtes connecté au serveur !");
-                }
-                else {
-                    reponse = new String("Désolé - votre demande de connexion est refusée !");
-                }
+                if(RS.next())
+                    Password = RS.getString("Password");                    
             }            
         } catch (SQLException ex) {
             Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex) {
-            Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        return Password;
+    }
+    
+    public void EnvoyerReponse(Socket s, ReponseLUGAP Rep)
+    {
+        ObjectOutputStream oos = null;
+        
+        try {            
+            oos = new ObjectOutputStream(s.getOutputStream());
+            oos.writeObject(Rep); 
+            oos.flush();
+            //oos.close()
         } catch (IOException ex) {
             Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        return reponse;
     }
     
     //Getters - Setters
@@ -170,11 +202,11 @@ public class RequeteLUGAP implements Requete, Serializable{
         this.Type = Type;
     }
 
-    public String getChargeUtile() {
+    public HashMap getChargeUtile() {
         return chargeUtile;
     }
 
-    public void setChargeUtile(String chargeUtile) {
+    public void setChargeUtile(HashMap chargeUtile) {
         this.chargeUtile = chargeUtile;
     }
 

@@ -28,19 +28,19 @@ public class ThreadClient extends Thread {
     
     private Runnable TacheEnCours;
 
-    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication) {
-        System.out.println("Test 1");
+    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication) 
+    {
         this.ois = null;
         this.oos = null;
         this.Nom = Nom;
         this.SSocket = SSocket;
         this.GUIApplication = GUIApplication;
-        System.out.println("Test 2");
     }
     
     
     @Override
-    public void run(){  
+    public void run()
+    {  
         while(!isInterrupted()) 
         {
             System.out.println(getNom() + " avant get");
@@ -59,42 +59,9 @@ public class ThreadClient extends Thread {
             }
 
             while (!getCSocket().isClosed())
-            {     
-                /*try 
-                {
-                    ois = new ObjectInputStream(CSocket.getInputStream());
-                    req = (Requete)ois.readObject();
-                    System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());                     
-                    
-                    this.TacheEnCours = req.createRunnable(CSocket, GUIApplication);
-                    this.TacheEnCours.run();      
-                } 
-                catch (IOException ex) 
-                {
-                    System.err.println("Erreur ! [" + ex.getMessage() + "]");
-                    try 
-                    {
-                        CSocket.close();
-                    } 
-                    catch (IOException ex1) 
-                    {
-                        System.err.println("Erreur ! [" + ex.getMessage() + "]");
-                    }
-                } 
-                catch (ClassNotFoundException ex) 
-                {
-                    System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
-                    try 
-                    {
-                        CSocket.close();
-                    } 
-                    catch (IOException ex1) 
-                    {
-                        System.err.println("Erreur ! [" + ex.getMessage() + "]");
-                    }
-                }*/
+            {  
+                Requete req = RecevoirRequete();  
                 
-                Requete req = RecevoirRequete();
                 if (req != null)
                 {
                     this.TacheEnCours = req.createRunnable(CSocket, GUIApplication);
@@ -132,6 +99,7 @@ public class ThreadClient extends Thread {
         catch (ClassNotFoundException ex) 
         {
             System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
+            ex.printStackTrace();
             try 
             {
                 CSocket.close();
@@ -144,12 +112,7 @@ public class ThreadClient extends Thread {
         }
         
         return req;
-    }
-    
-    public void EnvoyerRequete() 
-    {
-        
-    }
+    }   
     
 
     public ConsoleServeur getGUIApplication() {

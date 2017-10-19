@@ -6,6 +6,7 @@
 package ProtocoleLUGAP;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import requetepoolthreads.Reponse;
 
 /**
@@ -13,31 +14,38 @@ import requetepoolthreads.Reponse;
  * @author Philippe
  */
 public class ReponseLUGAP implements Reponse, Serializable {
-    public final static int LOGIN_OK = 1;
-    public final static int LOGIN_KO = 2;
-    //public final static int KEY_GENERATED = 3;
-    public static int EMAIL_OK = 201;
-    public static int EMAIL_NOT_FOUND = 501;
-    public static int KEY_GENERATED = 202;
-    public static int WRONG_PASSWORD = 401;
+    public final static int STATUS_OK = 200;    
+    public final static int WRONG_USER_PASSWORD = 401;
+    public final static int INTERNAL_SERVER_ERROR = 500;
+    
+    public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect. Veuillez essayer de vous reconnecter à nouveau !";
+    public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";
+    
     
     private int CodeRetour;
-    private String ChargeUtile;
+    private HashMap<String, Object> ChargeUtile;
 
     
-    public ReponseLUGAP(int CodeRetour, String ChargeUtile) {
+    public ReponseLUGAP(int CodeRetour, HashMap ChargeUtile) 
+    {
         setCodeRetour(CodeRetour);
         setChargeUtile(ChargeUtile);
+    }
+    
+    public ReponseLUGAP(int CodeRetour) 
+    {
+        setCodeRetour(CodeRetour);
+        setChargeUtile(new HashMap<>());
     }
     
     @Override
     public int getCode() {
         return this.CodeRetour;
     }    
-    public String getChargeUtile() {
+    public HashMap getChargeUtile() {
         return this.ChargeUtile;
     }    
-    public void setChargeUtile(String ChargeUtile) {
+    public void setChargeUtile(HashMap ChargeUtile) {
         this.ChargeUtile = ChargeUtile;
     }
     private void setCodeRetour(int CodeRetour) {

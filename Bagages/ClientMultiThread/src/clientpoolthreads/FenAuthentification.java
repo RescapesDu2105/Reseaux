@@ -7,10 +7,21 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Security;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -123,49 +134,31 @@ public class FenAuthentification extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_EffacerActionPerformed
 
     private void jButton_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_QuitterActionPerformed
+        Client.Deconnexion();
         System.exit(1);
     }//GEN-LAST:event_jButton_QuitterActionPerformed
 
     private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
-        String ChargeUtile = jTF_Login.getText() + jPasswordField.getPassword();
-        RequeteLUGAP req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER, ChargeUtile);
+        String ChargeUtile;
+        RequeteLUGAP req;
+        DataOutputStream dos=null;
+        DataInputStream dis=null;
         
         //Connexion au serveur
         Client.Connexion();
         
-        jButton_Connexion.setText("Déconnexion");
-        try 
+        ReponseLUGAP Rep = Client.Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
+        
+        if (Rep != null && Rep.getCode() == ReponseLUGAP.STATUS_OK)
         {
-            Client.getOos().writeObject(req);
-            Client.getOos().flush();
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FUCKED UP 5");
+            //this.dispose();
         }
-        
-        ReponseLUGAP rep = null;
-        
-        try 
+        else
         {
-            Client.setOis(new ObjectInputStream(Client.getCliSocket().getInputStream()));
-            rep = (ReponseLUGAP)Client.getOis().readObject();
-            System.out.println("*** Reponse reçue : " + rep.getChargeUtile());
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);            
-            System.out.println("FUCKED UP 6");
-        } 
-        catch (ClassNotFoundException ex) 
-        {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FUCKED UP 7");
+            JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
+            jPasswordField.setText("");
+            Client.Deconnexion();
         }
-        
-        String reponse = rep.getChargeUtile();
-        System.out.println("Réponse : " + reponse);
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
 
     public static void main(String args[]) {

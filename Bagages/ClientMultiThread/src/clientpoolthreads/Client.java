@@ -5,6 +5,10 @@
  */
 package clientpoolthreads;
 
+import ProtocoleLUGAP.ReponseLUGAP;
+import ProtocoleLUGAP.RequeteLUGAP;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,24 +17,32 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Security;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import requetepoolthreads.Reponse;
+import requetepoolthreads.Requete;
 
 /**
  *
  * @author Philippe
  */
 public class Client {    
-    protected int Port;
-    protected InetAddress IP;
-    protected Socket cliSocket = null;
+    private int Port;
+    private InetAddress IP;
+    private Socket cliSocket = null;
     
-    protected ObjectInputStream ois = null;
-    protected ObjectOutputStream oos = null;
+    private ObjectInputStream ois = null;
+    private ObjectOutputStream oos = null;
     
-    protected Properties Prop = new Properties();
-    
+    private Properties Prop = new Properties();
     
     public Client() {
         LireProperties();
@@ -85,13 +97,12 @@ public class Client {
             
             try 
             {        
-            System.out.println("Création des flux");
+                System.out.println("Création des flux");
                 setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
-            //System.out.println("fflush");
                 getOos().flush();
-            //System.out.println("Avant OIS");
-            //setOis(new ObjectInputStream(getCliSocket().getInputStream());
-            //System.out.println("Apres OIS");
+                //System.out.println("Avant OIS");
+                //setOis(new ObjectInputStream(getCliSocket().getInputStream());
+                //System.out.println("Apres OIS");
             System.out.println("Fin de la création des flux");
             }
             catch(IOException ex) 
@@ -106,7 +117,8 @@ public class Client {
         }
     }
 
-    public void Deconnexion() {
+    public void Deconnexion() 
+    {
         try 
         {
             getCliSocket().close();
@@ -118,7 +130,78 @@ public class Client {
         }
     }
    
+    public ReponseLUGAP Authenfication(String Login, String Password) 
+    {
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER);
+        ReponseLUGAP Rep = null;
+        
+        try 
+        {
+            Security.addProvider(new BouncyCastleProvider());
+            
+            System.out.println("Instanciation du message digest");
+            
+            Req.getChargeUtile().put("Login", Login);
+            
+            MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");
+            
+            md.update(Login.getBytes());
+            md.update(Password.getBytes()); 
+            
+            long Temps = (new Date()).getTime();
+            double Random = Math.random();
+            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            DataOutputStream bdos = new DataOutputStream(baos);
+            bdos.writeLong(Temps); bdos.writeDouble(Random);
+            md.update(baos.toByteArray());
+            byte[] msgD = md.digest();
+            
+            Req.getChargeUtile().put("Temps", Temps);
+            Req.getChargeUtile().put("Random", Random);
+            Req.getChargeUtile().put("Digest", msgD); 
+        } 
+        catch (IOException | NoSuchAlgorithmException | NoSuchProviderException ex) 
+        {
+            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("FUCKED UP 5");
+            System.exit(0);
+        }
+        
+        EnvoyerRequete(Req);
+        Rep = RecevoirReponse();
+        
+        return Rep;
+    }
     
+    public void EnvoyerRequete(RequeteLUGAP Req)
+    {
+        try {
+            oos.writeObject(Req);
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ReponseLUGAP RecevoirReponse()
+    {
+        ReponseLUGAP Rep = null;
+        
+        try {
+            if (getOis() == null)
+                setOis(new ObjectInputStream(getCliSocket().getInputStream()));
+            
+            System.out.println("OIS : " + getOis());
+            Rep = (ReponseLUGAP) ois.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return Rep;
+    }
+                
+        
     // Getters - Setters
     public ObjectInputStream getOis() {
         return ois;
