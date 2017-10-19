@@ -14,12 +14,10 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
-        initComponents();
-    }
 
-    MainFrame(String nomUtilisateur) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    MainFrame(String nomUtilisateur) {        
+        initComponents();
+        this.setTitle(nomUtilisateur);
     }
 
     /**
@@ -77,7 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new MainFrame(null).setVisible(true);
             }
         });
     }
