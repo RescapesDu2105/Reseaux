@@ -1,24 +1,37 @@
 DROP SCHEMA `bd_airport` ;
 CREATE SCHEMA `bd_airport` ;
 
+CREATE TABLE `bd_airport`.`compagnies`(
+	`IdCompagnie` INT NOT NULL,
+    `Nom` VARCHAR(45) NOT NULL,
+    CONSTRAINT IdCompagnie_PK PRIMARY KEY (`IdCompagnie`),
+    CONSTRAINT NomUNIQUE UNIQUE(`Nom`)
+);
+
 CREATE TABLE `bd_airport`.`vols` (
-  `IdVol` INT NOT NULL,
-  `Destination` VARCHAR(45) NOT NULL,
-  `HeureDepart` DATETIME NOT NULL,
-  `HeureArrive` DATETIME NOT NULL,
-	CONSTRAINT IdVol_PK PRIMARY KEY (`IdVol`));
+	`IdVol` INT NOT NULL,
+	`Destination` VARCHAR(45) NOT NULL,
+	`HeureDepart` DATETIME NOT NULL,
+	`HeureArrive` DATETIME NOT NULL,
+	CONSTRAINT IdVol_PK PRIMARY KEY (`IdVol`)
+);
 
 CREATE TABLE `bd_airport`.`avions` (
-  `IdAvion` INT NOT NULL,
-  `NomAvion` VARCHAR(15) NOT NULL,
-  `Modele` VARCHAR(25) NULL,
-  `NbPlace` INT NULL,
-  `Vol` INT NULL,
-  PRIMARY KEY (`IdAvion`),
-  INDEX `Vol_idx` (`Vol` ASC),
-  CONSTRAINT `Vol`
-    FOREIGN KEY (`Vol`)
-    REFERENCES `bd_airport`.`vols` (`IdVol`));
+	`IdAvion` INT NOT NULL,
+	`NomAvion` VARCHAR(15) NOT NULL,
+	`Modele` VARCHAR(25) NULL,
+	`NbPlace` INT NULL,
+	`Compagnie` INT NOT NULL,    
+	`Vol` INT NULL,
+	PRIMARY KEY (`IdAvion`),
+	INDEX `Vol_idx` (`Vol` ASC),
+	CONSTRAINT `Vol`
+		FOREIGN KEY (`Vol`)
+		REFERENCES `bd_airport`.`vols` (`IdVol`),
+	CONSTRAINT `Compagnie` 
+		FOREIGN KEY (`Compagnie`)
+		REFERENCES `bd_airport`.`compagnies` (`IdCompagnie`)
+);
 
 CREATE TABLE `bd_airport`.`billets` (
   `IdBillet` INT NOT NULL,

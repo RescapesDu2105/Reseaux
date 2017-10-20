@@ -1,4 +1,9 @@
-INSERT INTO Vols VALUES ('1','EVS','2015-08-03 13:30:00','2015-08-03 14:30:00');
+INSERT INTO Compagnies VALUES ('1', 'WALABIES-AIRLINES');
+INSERT INTO Compagnies VALUES ('2', 'POWDER-AIRLINES');
+INSERT INTO Compagnies VALUES ('3', 'AIR FRANCE CANAILLE');
+/*INSERT INTO Compagnies VALUES ('4', 'LUTHANSA NE CRASH PAS');*/
+
+/*INSERT INTO Vols VALUES ('1', 'EVS','2015-08-03 13:30:00','2015-08-03 14:30:00');
 INSERT INTO Vols VALUES ('2','Tokyo','2015-12-24 15:10:00','2015-12-25 00:10:00');
 INSERT INTO Vols VALUES ('3','Bruxelles','2016-01-07 21:50:00','2016-01-07 23:14:00');
 INSERT INTO Vols VALUES ('4','Berlin','2016-04-28 04:25:00','2016-04-28 17:35:00');
@@ -7,29 +12,32 @@ INSERT INTO Vols VALUES ('6','Seoul','2017-08-03 13:30:00','2017-08-03 14:30:00'
 INSERT INTO Vols VALUES ('7','Tatouine','2017-09-07 8:45:00','2017-08-03 10:30:00');
 INSERT INTO Vols VALUES ('8','INPRES','2015-08-03 13:30:00','2015-08-03 14:30:00');
 INSERT INTO Vols VALUES ('9','Silicon Valley','2017-08-03 13:30:00','2017-08-03 14:30:00');
-INSERT INTO Vols VALUES ('10','Azeroth','2015-08-03 13:30:00','2015-08-03 14:30:00');
+INSERT INTO Vols VALUES ('10','Azeroth','2015-08-03 13:30:00','2015-08-03 14:30:00');*/
+INSERT INTO Vols VALUES ('714', 'Sydney', '2017-10-20 05:30:00', '2017-10-21 01:00:00');
+INSERT INTO Vols VALUES ('362', 'Peshawar', '2017-10-20 06:30:00', '2017-10-20 22:00:00');
+INSERT INTO Vols VALUES ('152', 'Paris', '2017-10-20 07:20:00', '2017-10-20 08:20:00');
 
-INSERT INTO Avions VALUES ('1','Sully','Airbus A320','30','7');
-INSERT INTO Avions VALUES ('2','Albatross','Airbus A330','24','8');
-INSERT INTO Avions VALUES ('3','Alizé','DC-8','69','4');
-INSERT INTO Avions VALUES ('4','Atlas','Boeing 777','20','3');
-INSERT INTO Avions VALUES ('5','Anaconda','Douglas DC-3','13','6');
-INSERT INTO Avions VALUES ('6','Baby Clipper','Lockheed L-049','26','8');
-INSERT INTO Avions VALUES ('7','Demon','Lockeed L-1011','12','9');
-INSERT INTO Avions VALUES ('8','Duck','MD-90','24','3');
-INSERT INTO Avions VALUES ('9','Neptune','Douglas DC-4A','42','4');
-INSERT INTO Avions VALUES ('10','BatWing','Boeing 747','1','7');
+INSERT INTO Avions VALUES ('1','Sully','Airbus A320','30','3','152');
+/*INSERT INTO Avions VALUES ('2','Albatross','Airbus A330','24','3','152');
+INSERT INTO Avions VALUES ('3','Alizé','DC-8','69','3','714');*/
+INSERT INTO Avions VALUES ('4','Atlas','Boeing 777','20','2','362');
+INSERT INTO Avions VALUES ('5','Anaconda','Douglas DC-3','13','3','714');
+/*INSERT INTO Avions VALUES ('6','Baby Clipper','Lockheed L-049','26','3','362');
+INSERT INTO Avions VALUES ('7','Demon','Lockeed L-1011','12','3','362');
+INSERT INTO Avions VALUES ('8','Duck','MD-90','24','3','152');
+INSERT INTO Avions VALUES ('9','Neptune','Douglas DC-4A','42','3','152');
+INSERT INTO Avions VALUES ('10','BatWing','Boeing 747','1','1','714');*/
 
-INSERT INTO Billets VALUES ('1','000-0709199-01','Tusset','Quentin','Premiere','0','7');
-INSERT INTO Billets VALUES ('2','000-5902781-01','Dimartino','Philippe','Economique','8','4');
-INSERT INTO Billets VALUES ('3','000-5687686-01','Verwimp','Jim','Economique','3','6');
-INSERT INTO Billets VALUES ('4','000-9343373-01','Fourgon','Maxime','Economique','1','8');
-INSERT INTO Billets VALUES ('5','000-5902781-01','Vilvens','Claude','Premiere','9','6');
-INSERT INTO Billets VALUES ('6','000-9878897-01','Hugh','Laurie','Premiere','7','9');
-INSERT INTO Billets VALUES ('7','000-4649878-01','Murdock','Matthew','Economique','2','3');
-INSERT INTO Billets VALUES ('8','000-3589748-01','Bruce','Wayne','Premiere','0','7');
-INSERT INTO Billets VALUES ('9','000-6559595-01','Miyazaki','Hayao','Economique','5','9');
-INSERT INTO Billets VALUES ('10','000-2554235-01','Elvis','Romeo','Premiere','10','6');
+INSERT INTO Billets VALUES ('1','000-0709199-01','Tusset','Quentin','Premiere','0','714');
+INSERT INTO Billets VALUES ('2','000-5902781-01','Dimartino','Philippe','Economique','8','714');
+INSERT INTO Billets VALUES ('3','000-5687686-01','Verwimp','Jim','Economique','3','362');
+INSERT INTO Billets VALUES ('4','000-9343373-01','Fourgon','Maxime','Economique','1','362');
+INSERT INTO Billets VALUES ('5','000-5902781-01','Vilvens','Claude','Premiere','9','152');
+INSERT INTO Billets VALUES ('6','000-9878897-01','Hugh','Laurie','Premiere','7','152');
+INSERT INTO Billets VALUES ('7','000-4649878-01','Murdock','Matthew','Economique','2','152');
+INSERT INTO Billets VALUES ('8','000-3589748-01','Bruce','Wayne','Premiere','0','714');
+INSERT INTO Billets VALUES ('9','000-6559595-01','Miyazaki','Hayao','Economique','5','362');
+INSERT INTO Billets VALUES ('10','000-2554235-01','Elvis','Romeo','Premiere','10','362');
 
 INSERT INTO Bagages VALUES ('1','PasValise','69','1');
 INSERT INTO Bagages VALUES ('2','Valise','10','2');

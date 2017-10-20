@@ -33,8 +33,9 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
+    public final static int REQUEST_TEMPORARY_KEY = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
-    public final static int REQUEST_TEMPORARY_KEY = 2;
+    public final static int REQUEST_LOAD_FLIGHTS = 2;
         
     private int Type;
     private HashMap<String, Object> chargeUtile = null;
@@ -69,6 +70,16 @@ public class RequeteLUGAP implements Requete, Serializable{
                         traiteRequeteLoginPorter(s, cs);
                     }            
                 };
+            
+            case REQUEST_LOAD_FLIGHTS:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteLoadFlights(s, cs);
+                    }            
+                };
+            
             
             default : return null;
         }
@@ -178,6 +189,49 @@ public class RequeteLUGAP implements Requete, Serializable{
                 
         return Password;
     }
+    
+    
+    private void traiteRequeteLoadFlights(Socket s, ConsoleServeur cs)
+    {
+        Bean_DB_Access_MySQL BD_airport = null;
+        ResultSet RS;
+        
+        try 
+        {  
+            BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+        }
+        catch (Exception ex)
+        {
+           ex.printStackTrace();
+        }
+        
+        try 
+        {                        
+            BD_airport.Connexion(); // try catch
+            /* 
+            SELECT DISTINCT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart 
+            FROM bd_airport.vols INNER JOIN avions
+            ON bd_airport.vols.IdVol = bd_airport.avions.Vol 
+            INNER JOIN bd_airport.compagnies
+            ON bd_airport.avions.Compagnie = bd_airport.compagnies.IdCompagnie
+            ORDER BY bd_airport.vols.HeureDepart;
+            */
+            RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies");
+            if (RS != null) 
+            {
+                if(RS.next())
+                {
+                    
+                }
+        
+            }
+        }
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     public void EnvoyerReponse(Socket s, ReponseLUGAP Rep)
     {

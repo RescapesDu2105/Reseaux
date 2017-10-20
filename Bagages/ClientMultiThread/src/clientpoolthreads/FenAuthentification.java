@@ -127,11 +127,6 @@ public class FenAuthentification extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_QuitterActionPerformed
 
     private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
-        String ChargeUtile;
-        RequeteLUGAP req;
-        DataOutputStream dos=null;
-        DataInputStream dis=null;
-        
         //Connexion au serveur
         Client.Connexion();
         
@@ -139,10 +134,11 @@ public class FenAuthentification extends javax.swing.JFrame {
         
         if (Rep != null && Rep.getCode() == ReponseLUGAP.STATUS_OK)
         {
+            getClient().setNomUtilisateur(jTF_Login.getText());
             this.dispose();
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    new MainFrame(getClient().getNomUtilisateur()).setVisible(true);
+                    new MainFrame(getClient()).setVisible(true);
                 }
             });
         }

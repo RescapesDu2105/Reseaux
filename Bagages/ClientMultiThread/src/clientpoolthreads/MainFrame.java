@@ -5,19 +5,27 @@
  */
 package clientpoolthreads;
 
+import ProtocoleLUGAP.ReponseLUGAP;
+import ProtocoleLUGAP.RequeteLUGAP;
+import java.util.HashMap;
+
 /**
  *
  * @author Philippe
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    private final Client Client;
     /**
      * Creates new form MainFrame
      */
 
-    MainFrame(String nomUtilisateur) {        
-        initComponents();
-        this.setTitle(nomUtilisateur);
+    MainFrame(Client c) { 
+        this.Client = c;
+        this.setTitle("Bagagiste : " + this.Client.getNomUtilisateur());
+        initComponents();        
+        setLocationRelativeTo(null); 
+        
+        ChargerVols();
     }
 
     /**
@@ -29,17 +37,51 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Numéro Vol", "Compagnie", "Destination", "Heure de départ"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -80,6 +122,22 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
+    private void ChargerVols() {
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_FLIGHTS);
+        
+        this.Client.EnvoyerRequete(Req);
+       
+        ReponseLUGAP Rep = Rep = this.Client.RecevoirReponse();
+        
+        if (Rep != null)
+        {
+            HashMap<String, Object> Vols = Rep.getChargeUtile();
+        }
+    }
+
+                
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
