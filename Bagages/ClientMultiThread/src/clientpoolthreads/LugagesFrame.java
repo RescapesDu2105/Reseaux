@@ -5,9 +5,10 @@
  */
 package clientpoolthreads;
 
-import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import ProtocoleLUGAP.ReponseLUGAP;
+import ProtocoleLUGAP.RequeteLUGAP;
+import java.awt.Frame;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,20 +20,24 @@ public class LugagesFrame extends javax.swing.JFrame {
     private final String NomCompagnie;
     private final String Destination;
     private final String HeureDepart;
+    private final Frame FenAuthentification;
+    private final Client Client;
     
     /**
      * Creates new form LugagesFrame
      */
-    LugagesFrame(int IdVol, String NomCompagnie, String Destination, String HeureDepart) {   
+    LugagesFrame(Frame FenAuthentification, Client Client, int IdVol, String NomCompagnie, String Destination, String HeureDepart) {   
         this.IdVol = IdVol;
         this.NomCompagnie = NomCompagnie;
         this.Destination = Destination;
         this.HeureDepart = HeureDepart;
+        this.FenAuthentification = FenAuthentification;
+        this.Client = Client;
         
         setTitle("Bagages de : " + this.toString());     
         setLocationRelativeTo(null);           
         initComponents();
-        
+        initTableauBagages();
     }
 
     /**
@@ -44,21 +49,85 @@ public class LugagesFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableBagages = new javax.swing.JTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jTableBagages.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Identifiant", "Poids", "Type", "Réceptionné (O/N)", "Chargé en soute (O/N)", "Vérifié par la douane (O/N)", "Remarques"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTableBagages);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void initTableauBagages() {
+        HashMap <String, Object> hm = new HashMap<>();
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_LUGAGES);
+        DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
+        
+        hm.put("IdVol", getIdVol());
+        hm.put("NomCompagnie", getNomCompagnie());
+        hm.put("Destination", getDestination());
+        hm.put("HureDepart", getHeureDepart());        
+        Req.setChargeUtile(hm);
+        
+        getClient().EnvoyerRequete(Req);       
+        //ReponseLUGAP Rep = getClient().RecevoirReponse();
+    }
+    
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        boolean Fini = true;//false;
+        
+        if (Fini)
+        {
+            Client.Deconnexion();
+            FenAuthentification.setVisible(true);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     public int getIdVol() {
         return IdVol;
@@ -75,12 +144,23 @@ public class LugagesFrame extends javax.swing.JFrame {
     public String getHeureDepart() {
         return HeureDepart;
     }
-  
+
+    public Frame getFenAuthentification() {
+        return FenAuthentification;
+    }
+
+    public Client getClient() {
+        return Client;
+    }
+    
     @Override
     public String toString()
     {
         return "VOL " + getIdVol() + " " + getNomCompagnie() + " - " + getDestination() + " " + getHeureDepart();
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableBagages;
     // End of variables declaration//GEN-END:variables
 }

@@ -33,9 +33,10 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
-    public final static int REQUEST_TEMPORARY_KEY = 0;
+    //public final static int REQUEST_TEMPORARY_KEY = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
+    public final static int REQUEST_LOAD_LUGAGES = 3;
         
     private int Type;
     private HashMap<String, Object> chargeUtile = null;
@@ -210,9 +211,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                     String NomCompagnie = RS.getString("Nom");
                     String Destination = RS.getString("Destination");
                     Timestamp DateHeureDepart = RS.getTimestamp("HeureDepart");
-                    //System.out.println("DateHeureDepart = " + DateHeureDepart.toString());
                     String HeureDepart = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(DateHeureDepart);
-                    //System.out.println("HeureDepart = " + HeureDepart);
                     
                     HashMap<String, Object> hm = new HashMap<>();
                     hm.put("IdVol", IdVol);

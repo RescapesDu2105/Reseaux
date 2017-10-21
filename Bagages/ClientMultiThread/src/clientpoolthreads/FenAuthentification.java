@@ -37,12 +37,11 @@ public class FenAuthentification extends javax.swing.JFrame {
         jLabelPWD = new javax.swing.JLabel();
         jButton_Connexion = new javax.swing.JButton();
         jButton_Effacer = new javax.swing.JButton();
-        jButton_Quitter = new javax.swing.JButton();
         jTF_Login = new javax.swing.JTextField();
         jPasswordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Application_Bagages - Connexion");
+        setTitle("Connexion");
 
         jLabelLogin.setText("Nom d'utilisateur");
 
@@ -62,13 +61,6 @@ public class FenAuthentification extends javax.swing.JFrame {
             }
         });
 
-        jButton_Quitter.setText("Quitter");
-        jButton_Quitter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_QuitterActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,12 +77,11 @@ public class FenAuthentification extends javax.swing.JFrame {
                             .addComponent(jTF_Login)
                             .addComponent(jPasswordField)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 10, Short.MAX_VALUE)
+                        .addGap(0, 70, Short.MAX_VALUE)
                         .addComponent(jButton_Connexion)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_Effacer)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_Quitter)))
+                        .addGap(60, 60, 60)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -107,8 +98,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Connexion)
-                    .addComponent(jButton_Effacer)
-                    .addComponent(jButton_Quitter)))
+                    .addComponent(jButton_Effacer)))
         );
 
         pack();
@@ -119,11 +109,6 @@ public class FenAuthentification extends javax.swing.JFrame {
         jPasswordField.setText("");
     }//GEN-LAST:event_jButton_EffacerActionPerformed
 
-    private void jButton_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_QuitterActionPerformed
-        Client.Deconnexion();
-        System.exit(1);
-    }//GEN-LAST:event_jButton_QuitterActionPerformed
-
     private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
         if (jTF_Login.getText().isEmpty() || jPasswordField.getPassword().length == 0)
         {
@@ -132,9 +117,8 @@ public class FenAuthentification extends javax.swing.JFrame {
         }
         else
         {
-            ReponseLUGAP Rep = Client.Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
+            ReponseLUGAP Rep = getClient().Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
             //ReponseLUGAP Rep = Client.Authenfication("Zeydax", "123");
-
 
             if (Rep != null && Rep.getCode() == ReponseLUGAP.STATUS_OK)
             {
@@ -155,7 +139,7 @@ public class FenAuthentification extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
                 jPasswordField.setText("");
-                Client.Deconnexion();
+                getClient().Deconnexion();
             }
         }
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
@@ -193,9 +177,6 @@ public class FenAuthentification extends javax.swing.JFrame {
                 new FenAuthentification().setVisible(true);
             }
         });
-        /*FenAuthentification fa = new FenAuthentification();
-        fa.setVisible(true);*/
-        System.out.println("ARGH");
     }
     
     public Client getClient() {
@@ -210,7 +191,6 @@ public class FenAuthentification extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Connexion;
     private javax.swing.JButton jButton_Effacer;
-    private javax.swing.JButton jButton_Quitter;
     private javax.swing.JLabel jLabelLogin;
     private javax.swing.JLabel jLabelPWD;
     private javax.swing.JPasswordField jPasswordField;

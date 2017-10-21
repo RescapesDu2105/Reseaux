@@ -109,10 +109,10 @@ public class MainFrame extends javax.swing.JFrame {
           
         if (Choix == 0)
         {
-            Client.Deconnexion();
+            getClient().Deconnexion();
 
-            this.setVisible(false);
-            FenAuthentification.setVisible(true);
+            this.dispose();
+            getFenAuthentification().setVisible(true);
             //this.dispose();
         }
     }//GEN-LAST:event_formWindowClosing
@@ -122,19 +122,15 @@ public class MainFrame extends javax.swing.JFrame {
         {
             DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
             
-            //this.dispose();
-            this.setVisible(false);
-            /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            new LugagesFrame((int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString()).setVisible(true);
-            }
-            });*/
-            LugagesFrame Test = new LugagesFrame((int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString());
-            Test.setVisible(true);
-        }
-        System.out.print("Test 1");
-        
-
+            this.dispose();
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new LugagesFrame(getFenAuthentification(), getClient(), (int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString()).setVisible(true);
+                }
+            });
+            /*LugagesFrame Test = new LugagesFrame(FenAuthentification, Client, (int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString());
+            Test.setVisible(true);*/
+        }      
     }//GEN-LAST:event_jTableVolsMouseClicked
 
     private void ChargerVols() 
@@ -142,9 +138,8 @@ public class MainFrame extends javax.swing.JFrame {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_FLIGHTS);
         DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
         
-        this.Client.EnvoyerRequete(Req);
-       
-        ReponseLUGAP Rep = this.Client.RecevoirReponse();
+        getClient().EnvoyerRequete(Req);       
+        ReponseLUGAP Rep = getClient().RecevoirReponse();
         
         if (Rep != null)
         {
@@ -163,7 +158,14 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-                
+    public FenAuthentification getFenAuthentification() {
+        return FenAuthentification;
+    }
+
+    public Client getClient() {
+        return Client;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVols;

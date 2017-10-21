@@ -102,9 +102,6 @@ public class Client {
                 System.out.println("Création des flux");
                 setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
                 getOos().flush();
-                //System.out.println("Avant OIS");
-                //setOis(new ObjectInputStream(getCliSocket().getInputStream());
-                //System.out.println("Apres OIS");
             System.out.println("Fin de la création des flux");
             }
             catch(IOException ex) 
