@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import requetepoolthreads.ConsoleServeur;
-import requetepoolthreads.Requete;
 
 /**
  *
