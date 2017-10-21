@@ -112,6 +112,7 @@ public class Client {
                 System.out.println(ex.getMessage());
             }
             System.out.println("Client prêt");
+            System.out.println("Connected = " + getCliSocket().isConnected());
         }
         else 
         {            
@@ -123,7 +124,13 @@ public class Client {
     {
         try 
         {
+            getOis().close();
+            setOis(null);
+            getOos().close();
+            setOos(null);
             getCliSocket().close();
+            setCliSocket(null);            
+            setNomUtilisateur("");
         } 
         catch (IOException ex) 
         {
@@ -136,6 +143,8 @@ public class Client {
     {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER);
         ReponseLUGAP Rep = null;
+        
+        Connexion();
         
         try 
         {
@@ -178,10 +187,13 @@ public class Client {
     
     public void EnvoyerRequete(RequeteLUGAP Req)
     {
-        try {
-            oos.writeObject(Req);
-            oos.flush();
-        } catch (IOException ex) {
+        try 
+        {            
+            getOos().writeObject(Req);
+            getOos().flush();
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -190,13 +202,15 @@ public class Client {
     {
         ReponseLUGAP Rep = null;
         
-        try {
+        try 
+        {
             if (getOis() == null)
                 setOis(new ObjectInputStream(getCliSocket().getInputStream()));
             
-            System.out.println("OIS : " + getOis());
-            Rep = (ReponseLUGAP) ois.readObject();
-        } catch (IOException | ClassNotFoundException ex) {
+            Rep = (ReponseLUGAP) getOis().readObject();
+        } 
+        catch (IOException | ClassNotFoundException ex) 
+        {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         

@@ -28,6 +28,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         initComponents();
         setLocationRelativeTo(null); 
         TraceEvenements("serveur#initialisation#main");
+        this.jButtonStartActionPerformed(null);
     }
 
     /**

@@ -5,14 +5,12 @@
         <group>
             <file>file:/E:/Dropbox/B3/Réseaux/2017-2018/JDBC/Application_Test_JDBC/src/application_test_jdbc/Application_Test_JDBC.java</file>
         </group>
-        <group name="Réseaux - ClientServeurBagages">
-            <file>file:/E:/Dropbox/B3/Réseaux/2017-2018/Reseaux/JDBC/Application_Test_JDBC/src/application_test_jdbc/Application_Test_JDBC.java</file>
-        </group>
         <group name="JDBC">
             <file>file:/E:/Dropbox/B3/Réseaux/2017-2018/Reseaux/JDBC/Application_Test_JDBC/src/application_test_jdbc/Application_Test_JDBC.java</file>
         </group>
         <group name="Réseaux - JDBC">
             <file>file:/E:/Dropbox/B3/Réseaux/2017-2018/Reseaux/JDBC/Application_Test_JDBC/src/application_test_jdbc/Application_Test_JDBC.java</file>
         </group>
+        <group name="Réseaux - ClientServeurBagages"/>
     </open-files>
 </project-private>

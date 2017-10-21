@@ -385,8 +385,6 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                                 break;
                             case "DATE":
                                 Date d = RS.getDate(nCol);
-                                GregorianCalendar gc = new GregorianCalendar();
-                                gc.setTime(d);
                                 String strDate = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(d);
                                 //System.out.println(d.toString());
                                 //ligne.add(strDate);

@@ -8,22 +8,27 @@ package clientpoolthreads;
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Philippe
  */
 public class MainFrame extends javax.swing.JFrame {
+    private final FenAuthentification FenAuthentification;
     private final Client Client;
     /**
      * Creates new form MainFrame
      */
 
-    MainFrame(Client c) { 
+    MainFrame(FenAuthentification f, Client c) { 
+        this.FenAuthentification = f;
         this.Client = c;
+        //this.FenAuthentification = f;
         this.setTitle("Bagagiste : " + this.Client.getNomUtilisateur());
-        initComponents();        
         setLocationRelativeTo(null); 
+        initComponents();        
         
         ChargerVols();
     }
@@ -38,11 +43,16 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableVols = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableVols.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -65,7 +75,13 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jTableVols.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableVols.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVolsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableVols);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -73,8 +89,8 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,57 +103,69 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        String[] options = new String[] {"Oui", "Annuler"};
+        int Choix = JOptionPane.showOptionDialog(null, "Êtes-vous sûr de vouloir vous déconnecter ?", "Déconnexion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+          
+        if (Choix == 0)
+        {
+            Client.Deconnexion();
+
+            this.setVisible(false);
+            FenAuthentification.setVisible(true);
+            //this.dispose();
         }
-        //</editor-fold>
+    }//GEN-LAST:event_formWindowClosing
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    private void jTableVolsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVolsMouseClicked
+        if (evt.getClickCount() == 2 && !evt.isConsumed()) 
+        {
+            DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
+            
+            //this.dispose();
+            this.setVisible(false);
+            /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame(null).setVisible(true);
+            new LugagesFrame((int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString()).setVisible(true);
             }
-        });
-    }
+            });*/
+            LugagesFrame Test = new LugagesFrame((int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString());
+            Test.setVisible(true);
+        }
+        System.out.print("Test 1");
+        
 
-    private void ChargerVols() {
+    }//GEN-LAST:event_jTableVolsMouseClicked
+
+    private void ChargerVols() 
+    {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_FLIGHTS);
+        DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
         
         this.Client.EnvoyerRequete(Req);
        
-        ReponseLUGAP Rep = Rep = this.Client.RecevoirReponse();
+        ReponseLUGAP Rep = this.Client.RecevoirReponse();
         
         if (Rep != null)
         {
             HashMap<String, Object> Vols = Rep.getChargeUtile();
+            Object[] ligne = new Object[4];
+            
+            for (int Cpt = 1 ; Cpt <= Vols.size() ; Cpt++) 
+            {
+                HashMap<String, Object> hm = (HashMap) Vols.get(Integer.toString(Cpt));
+                ligne[0] = hm.get("IdVol");
+                ligne[1] = hm.get("NomCompagnie");
+                ligne[2] = hm.get("Destination");
+                ligne[3] = hm.get("HeureDepart");              
+                dtm.insertRow(Cpt - 1, ligne);
+            }            
         }
     }
 
                 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableVols;
     // End of variables declaration//GEN-END:variables
 }
