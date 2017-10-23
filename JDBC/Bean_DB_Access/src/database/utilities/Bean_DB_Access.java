@@ -60,7 +60,11 @@ abstract public class Bean_DB_Access implements Serializable {
     public synchronized int Update(String Requete) throws SQLException{
         try
         {
-            return Statement.executeUpdate(Requete);
+            int ret = Statement.executeUpdate(Requete);
+            if(!getAutoCommit())
+                Commit();
+            
+            return ret;
         }
         catch (SQLException Ex)
         {
@@ -84,8 +88,8 @@ abstract public class Bean_DB_Access implements Serializable {
             System.out.println("Erreur SQL : " + Ex.getMessage());
         }
     }
-    public void getAutoCommit() throws SQLException {
-        boolean bool;
+    public boolean getAutoCommit() throws SQLException {
+        boolean bool = false;
         
         try
         {
@@ -97,6 +101,8 @@ abstract public class Bean_DB_Access implements Serializable {
                 Rollback();
             System.out.println("Erreur SQL : " + Ex.getMessage());
         }
+        
+        return bool;
     }
     public void Commit() throws SQLException {
         try{

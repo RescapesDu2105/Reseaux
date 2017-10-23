@@ -37,7 +37,7 @@ public class LugagesFrame extends javax.swing.JFrame {
         this.Client = Client;
         
         setTitle("Bagages de : " + this.toString());     
-        setLocationRelativeTo(null);           
+        this.setLocation(400, 400);           
         initComponents();
         initTableauBagages();
         /*TableModel model = jTableBagages.getModel();
@@ -92,6 +92,8 @@ public class LugagesFrame extends javax.swing.JFrame {
                         aValue = "N";
                         javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
+                    else
+                    aValue = aValue.toString().toUpperCase();
                     break;
                     case 4:
                     if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N") && !aValue.toString().toUpperCase().equals("R"))
@@ -99,6 +101,8 @@ public class LugagesFrame extends javax.swing.JFrame {
                         aValue = "N";
                         javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"R\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
+                    else
+                    aValue = aValue.toString().toUpperCase();
                     break;
                     case 6:
                     if (aValue.toString().equals(""))
@@ -109,35 +113,12 @@ public class LugagesFrame extends javax.swing.JFrame {
                     default:
                     break;
                 }
-                super.setValueAt(aValue.toString().toUpperCase(), row, column);
+                super.setValueAt(aValue, row, column);
             }
         }
     );
     jTableBagages.setRowSelectionAllowed(false);
     jScrollPane1.setViewportView(jTableBagages);
-    if (jTableBagages.getColumnModel().getColumnCount() > 0) {
-        jTableBagages.getColumnModel().getColumn(0).setMinWidth(250);
-        jTableBagages.getColumnModel().getColumn(0).setPreferredWidth(250);
-        jTableBagages.getColumnModel().getColumn(0).setMaxWidth(250);
-        jTableBagages.getColumnModel().getColumn(1).setMinWidth(50);
-        jTableBagages.getColumnModel().getColumn(1).setPreferredWidth(50);
-        jTableBagages.getColumnModel().getColumn(1).setMaxWidth(50);
-        jTableBagages.getColumnModel().getColumn(2).setMinWidth(70);
-        jTableBagages.getColumnModel().getColumn(2).setPreferredWidth(70);
-        jTableBagages.getColumnModel().getColumn(2).setMaxWidth(70);
-        jTableBagages.getColumnModel().getColumn(3).setMinWidth(120);
-        jTableBagages.getColumnModel().getColumn(3).setPreferredWidth(120);
-        jTableBagages.getColumnModel().getColumn(3).setMaxWidth(120);
-        jTableBagages.getColumnModel().getColumn(4).setMinWidth(140);
-        jTableBagages.getColumnModel().getColumn(4).setPreferredWidth(140);
-        jTableBagages.getColumnModel().getColumn(4).setMaxWidth(140);
-        jTableBagages.getColumnModel().getColumn(5).setMinWidth(160);
-        jTableBagages.getColumnModel().getColumn(5).setPreferredWidth(160);
-        jTableBagages.getColumnModel().getColumn(5).setMaxWidth(160);
-        jTableBagages.getColumnModel().getColumn(6).setMinWidth(250);
-        jTableBagages.getColumnModel().getColumn(6).setPreferredWidth(250);
-        jTableBagages.getColumnModel().getColumn(6).setMaxWidth(250);
-    }
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -159,9 +140,63 @@ public class LugagesFrame extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    new DefaultTableModel(new Object [][] {}, new String [] {"Identifiant", "Poids", "Type", "Réceptionné (O/N)", "Chargé en soute (O/R/N)", "Vérifié par la douane (O/N)", "Remarques" }) {
+                Class[] types = new Class [] {
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, true, true, true, true
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+    
+                @Override
+                public void setValueAt(Object aValue, int row, int column) 
+                {
+                    switch (column) 
+                    {
+                        case 3:
+                        case 5:
+                            if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N"))
+                            {
+                                aValue = "N";
+                                javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
+                            }
+                            else
+                                aValue = aValue.toString().toUpperCase();
+                            break;
+                        case 4:
+                            if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N") && !aValue.toString().toUpperCase().equals("R"))
+                            {
+                                aValue = "N";
+                                javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"R\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
+                            }
+                            else
+                                aValue = aValue.toString().toUpperCase();
+                            break;
+                        case 6:
+                            if (aValue.toString().equals("")) 
+                            {
+                                aValue = "NEANT";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    super.setValueAt(aValue, row, column); 
+                }
+}
+            */
     public void initTableauBagages() {
-        HashMap <String, Object> hm = new HashMap<>();
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_LUGAGES);
+        HashMap <String, Object> hm = new HashMap<>();
         
         hm.put("IdVol", getIdVol());
         //hm.put("NomCompagnie", getNomCompagnie());
@@ -199,7 +234,7 @@ public class LugagesFrame extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         boolean Fini = true;//false;
                 
-        //Fini = CheckBagagesCharges();
+        Fini = CheckBagagesCharges();
         
         if (Fini)
         {            
@@ -220,9 +255,9 @@ public class LugagesFrame extends javax.swing.JFrame {
         {            
             for (int j = 3 ; Fini && j < model.getColumnCount() ; j++)
             {                
-                if ((j == 3 || j == 5) && !model.getValueAt(i, j).equals("O"))
+                if (j == 3 && !model.getValueAt(i, j).equals("O"))
                     Fini = false;
-                else if (j == 4 && (!model.getValueAt(i, j).equals("O") || !model.getValueAt(i, j).equals("R")))
+                else if (j == 4 && (!model.getValueAt(i, j).equals("O") && !model.getValueAt(i, j).equals("R")))
                     Fini = false;
             }
         }
@@ -236,11 +271,10 @@ public class LugagesFrame extends javax.swing.JFrame {
             for (int row = 0 ; row < dtm.getRowCount() ; row++)
             {
                 HashMap <String, Object> hm = new HashMap<>();
-                
+                System.out.println("dtm = " + dtm.getValueAt(row, 0));
                 hm.put("Identifiant", dtm.getValueAt(row, 0));                
                 for (int column = 3 ; column < dtm.getColumnCount() ; column++)
-                {                    
-                    
+                {       
                     switch (column) 
                     {
                         case 3:
@@ -264,6 +298,9 @@ public class LugagesFrame extends javax.swing.JFrame {
             
             getClient().EnvoyerRequete(Req);
             ReponseLUGAP Rep = getClient().RecevoirReponse();
+            
+            if (Rep.getCode() == ReponseLUGAP.STATUS_OK)
+                JOptionPane.showMessageDialog(this, "Travail terminé !", "Travail terminé", JOptionPane.INFORMATION_MESSAGE);
         }
         
         return Fini;

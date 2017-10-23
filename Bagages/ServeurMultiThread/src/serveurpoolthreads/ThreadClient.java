@@ -66,11 +66,13 @@ public class ThreadClient extends Thread {
                 
                 if (req != null)
                 {
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
+                    
                     this.TacheEnCours = req.createRunnable(CSocket, GUIApplication);
                     this.TacheEnCours.run();  
                     
                     EnvoyerReponse(CSocket, req.getRep());
-                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getRep().getCode() + "#" + getNom());
                 }
             }
             

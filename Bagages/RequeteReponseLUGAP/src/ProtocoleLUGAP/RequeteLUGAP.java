@@ -325,10 +325,17 @@ public class RequeteLUGAP implements Requete, Serializable{
         BD_airport.Connexion(); // try catch
         for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
         {
-            HashMap<String, Object> hm = getChargeUtile();
+            HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
+            System.out.println("UPDATE Bagages "
+                        + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
+                        + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
             try 
             {
-                Ok = BD_airport.Update("UPDATE Bagages SET Receptionne = " + hm.get("Receptionne") + ", Charge = " + hm.get("Charge") + ", Verifie = " + hm.get("Verifie") + ", Remarques = " + hm.get("Remarques") + " WHERE IdBagage = " + hm.get("Identifiant "));
+                Ok = BD_airport.Update("UPDATE Bagages "
+                        + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
+                        + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
+                
+                System.out.println("Ok = " + Ok);
             } 
             catch (SQLException ex) 
             {
@@ -342,6 +349,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 System.out.println("Update ok !");                
                 Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
             }    
+            Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
         } 
     }
     
@@ -399,6 +407,8 @@ public class RequeteLUGAP implements Requete, Serializable{
         {
             case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
             case REQUEST_LOAD_FLIGHTS: return "REQUEST_LOAD_FLIGHTS";
+            case REQUEST_LOAD_LUGAGES: return "REQUEST_LOAD_LUGAGES";
+            case REQUEST_SAVE_LUGAGES: return "REQUEST_SAVE_LUGAGES";
             default : return null;
         }
     }

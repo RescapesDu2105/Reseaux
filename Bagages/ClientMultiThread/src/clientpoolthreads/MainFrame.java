@@ -7,6 +7,9 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
