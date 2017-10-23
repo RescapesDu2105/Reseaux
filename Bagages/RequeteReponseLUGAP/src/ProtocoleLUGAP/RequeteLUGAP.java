@@ -37,6 +37,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
     public final static int REQUEST_LOAD_LUGAGES = 3;
+    public final static int REQUEST_SAVE_LUGAGES = 4;
         
     private int Type;
     private HashMap<String, Object> chargeUtile = null;
@@ -83,6 +84,14 @@ public class RequeteLUGAP implements Requete, Serializable{
                     }            
                 };
             
+            case REQUEST_SAVE_LUGAGES:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteSaveLugages(s, cs);
+                    }            
+                };
             
             default : return null;
         }
@@ -188,20 +197,14 @@ public class RequeteLUGAP implements Requete, Serializable{
         ResultSet RS;
         //ReponseLUGAP Rep = null;
         int i = 1;
-        
-        try 
-        {  
-            BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
-        }
-        catch (Exception ex)
-        {
-           ex.printStackTrace();
-        }
+         
+        BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
         
         try
         {                        
             BD_airport.Connexion(); // try catch
-            RS = BD_airport.Select("SELECT DISTINCT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart FROM bd_airport.vols INNER JOIN avions ON bd_airport.vols.IdVol = bd_airport.avions.Vol INNER JOIN bd_airport.compagnies ON bd_airport.avions.Compagnie = bd_airport.compagnies.IdCompagnie ORDER BY bd_airport.vols.HeureDepart");
+            RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart FROM bd_airport.vols NATURAL JOIN avions NATURAL JOIN bd_airport.compagnies ORDER BY bd_airport.vols.HeureDepart");
+            
             if (RS != null) 
             {         
                 Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
@@ -234,6 +237,103 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         //EnvoyerReponse(s, Rep);
         //cs.TraceEvenements(s.getRemoteSocketAddress().toString() + "#REQUEST_LOAD_FLIGHTS#" + "Thread client/RequeteLUGAP");
+    }
+    
+    private void traiteRequeteLoadLugages(Socket s, ConsoleServeur cs)
+    {
+        Bean_DB_Access_MySQL BD_airport = null;
+        ResultSet RS;
+        int i = 1;
+        
+        BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+        
+        try
+        {                        
+            BD_airport.Connexion(); // try catch
+            RS = BD_airport.Select("SELECT IdBagage, Poids, TypeBagage, Receptionne, Charge, Verifie, Remarques " +
+                                    "FROM bd_airport.vols NATURAL JOIN bd_airport.billets NATURAL JOIN bd_airport.bagages " +
+                                    "WHERE SUBSTR(IdBillet, 1, 3) = "+ getChargeUtile().get("IdVol") +
+                                    " AND SUBSTR(IdBillet, 5, 8) = date_format(sysdate(), '%d%m%Y')");
+            if (RS != null) 
+            {
+                Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+                while(RS.next())
+                {
+                    HashMap<String, Object> hm = new HashMap<>();
+                    
+                    String IdBagage = RS.getString("IdBagage");
+                    //System.out.println("IdBagage = " + IdBagage);
+                    float Poids = RS.getFloat("Poids");
+                    //System.out.println("Poids = " + Poids);
+                    String TypeBagage = RS.getString("TypeBagage");
+                    //System.out.println("TypeBagage = " + TypeBagage);
+                    char Receptionne = RS.getString("Receptionne").charAt(0);
+                    //System.out.println("Receptionne = " + Receptionne);
+                    char Charge = RS.getString("Charge").charAt(0);
+                    //System.out.println("Charge = " + Charge);
+                    char Verifie = RS.getString("Verifie").charAt(0);
+                    //System.out.println("Verifie = " + Verifie);
+                    String Remarques = RS.getString("Remarques");
+                    //System.out.println("Remarque = " + Remarque);
+                    
+                    hm.put("IdBagage", IdBagage);
+                    hm.put("Poids", Poids);
+                    hm.put("TypeBagage", TypeBagage);
+                    hm.put("Receptionne", Receptionne);
+                    hm.put("Charge", Charge);
+                    hm.put("Verifie", Verifie);
+                    hm.put("Remarques", Remarques);
+                    
+                    Rep.getChargeUtile().put(Integer.toString(i), hm);
+                    
+                    i++;
+                }
+            }
+            else
+            {
+                /*Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);*/
+            }
+        }
+        catch (SQLException ex) 
+        {
+            Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+            Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+            System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+        }           
+    }
+    
+    private void traiteRequeteSaveLugages(Socket s, ConsoleServeur cs)
+    {
+        Bean_DB_Access_MySQL BD_airport = null;
+        ResultSet RS;
+        //int i = 1;
+        int Ok = 0;
+        
+        BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+        
+        BD_airport.Connexion(); // try catch
+        for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
+        {
+            HashMap<String, Object> hm = getChargeUtile();
+            try 
+            {
+                Ok = BD_airport.Update("UPDATE Bagages SET Receptionne = " + hm.get("Receptionne") + ", Charge = " + hm.get("Charge") + ", Verifie = " + hm.get("Verifie") + ", Remarques = " + hm.get("Remarques") + " WHERE IdBagage = " + hm.get("Identifiant "));
+            } 
+            catch (SQLException ex) 
+            {
+                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+            }
+            
+            if (Ok == getChargeUtile().size())
+            {
+                System.out.println("Update ok !");                
+                Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+            }    
+        } 
     }
     
     /*
