@@ -132,7 +132,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                 System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
                 getClient().setNomUtilisateur(jTF_Login.getText());
 
-                this.setVisible(false);
+                this.dispose();
                 FenAuthentification Test = this;
                 //getClient().setNomUtilisateur("Zeydax");
                 java.awt.EventQueue.invokeLater(new Runnable() {
