@@ -35,14 +35,14 @@ public class Serveur extends Thread{
         try 
         {
             this.Prop = (new ServerProperties()).getProp();
+            this.Port_Bagages = Integer.parseInt(this.Prop.getProperty("PORT_BAGAGES"));
+            this.MaxClients = Integer.parseInt(this.Prop.getProperty("MAX_CLIENTS"));
         } 
         catch (IOException ex) 
         {
-            Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
             this.GUIApplication.TraceEvenements("serveur#initialisation#failed to read properties file");
+            System.exit(1);
         }
-        this.Port_Bagages = Integer.parseInt(getProp().getProperty("PORT_BAGAGES"));
-        this.MaxClients = Integer.parseInt(getProp().getProperty("MAX_CLIENTS"));
     }
        
     
@@ -64,6 +64,11 @@ public class Serveur extends Thread{
         for (int i = 0 ; i < getMaxClients() ; i++) 
         {
             getThreads().get(i).interrupt();
+            try {
+                getThreads().get(i).getCSocket().close();
+            } catch (IOException ex) {
+                Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }    
         

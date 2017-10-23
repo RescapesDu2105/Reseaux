@@ -72,7 +72,7 @@ public class ThreadClient extends Thread {
                     this.TacheEnCours.run();  
                     
                     EnvoyerReponse(CSocket, req.getRep());
-                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getRep().getCode() + "#" + getNom());
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getRep().getChargeUtile().get("Message")+ "#" + getNom());
                 }
             }
             
@@ -89,6 +89,7 @@ public class ThreadClient extends Thread {
             }
             System.out.println("Socket fermée !");
         }
+        System.out.println("Je me suis arrêté");
     }
     
     public RequeteLUGAP RecevoirRequete()

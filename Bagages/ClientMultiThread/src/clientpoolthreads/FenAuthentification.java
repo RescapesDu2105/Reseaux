@@ -7,6 +7,11 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -124,29 +129,45 @@ public class FenAuthentification extends javax.swing.JFrame {
         }
         else
         {
-            ReponseLUGAP Rep = getClient().Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
-            //ReponseLUGAP Rep = Client.Authenfication("Zeydax", "123");
-
-            if (Rep != null && Rep.getCode() == ReponseLUGAP.STATUS_OK)
+            ReponseLUGAP Rep = null;
+            try 
             {
-                System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
-                getClient().setNomUtilisateur(jTF_Login.getText());
-
-                this.dispose();
-                FenAuthentification Test = this;
-                //getClient().setNomUtilisateur("Zeydax");
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        new MainFrame(Test, getClient()).setVisible(true);
-                    }
-                });
-                this.jButton_EffacerActionPerformed(null);
+                Rep = getClient().Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
+                //ReponseLUGAP Rep = Client.Authenfication("Zeydax", "123");
+            } 
+            catch (IOException ex) 
+            {
+                JOptionPane.showMessageDialog(this, "Le serveur est indisponible !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            } 
+            catch (NoSuchAlgorithmException | NoSuchProviderException ex) 
+            {
+                JOptionPane.showMessageDialog(this, "Erreur interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
-            else
+
+            if (Rep != null) 
             {
-                JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
-                jPasswordField.setText("");
-                getClient().Deconnexion();
+                if(Rep.getCode() == ReponseLUGAP.STATUS_OK)
+                {
+                    System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
+                    getClient().setNomUtilisateur(jTF_Login.getText());
+
+                    this.dispose();
+                    FenAuthentification Test = this;
+                    //getClient().setNomUtilisateur("Zeydax");
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new MainFrame(Test, getClient()).setVisible(true);
+                        }
+                    });
+                    this.jButton_EffacerActionPerformed(null);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
+                    jPasswordField.setText("");
+                    getClient().Deconnexion();
+                }
             }
         }
     }//GEN-LAST:event_jButton_ConnexionActionPerformed

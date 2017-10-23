@@ -21,14 +21,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import requetepoolthreads.Reponse;
-import requetepoolthreads.Requete;
 
 /**
  *
@@ -82,16 +79,10 @@ public class Client {
         }
 }
     
-    public void Connexion()
+    public void Connexion() throws IOException
     {
-        try 
-        {
-            setCliSocket(new Socket(getIP(), getPort()));
-        } 
-        catch (IOException ex) 
-        {
-            System.exit(1);
-        }
+        
+        setCliSocket(new Socket(getIP(), getPort()));
         
         if (getCliSocket().isConnected()) 
         {
@@ -136,45 +127,36 @@ public class Client {
         }
     }
    
-    public ReponseLUGAP Authenfication(String Login, String Password) 
+    public ReponseLUGAP Authenfication(String Login, String Password) throws IOException, NoSuchAlgorithmException, NoSuchProviderException 
     {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER);
         ReponseLUGAP Rep = null;
         
-        Connexion();
+        Connexion();        
         
-        try 
-        {
-            Security.addProvider(new BouncyCastleProvider());
-            
-            System.out.println("Instanciation du message digest");
-            
-            Req.getChargeUtile().put("Login", Login);
-            
-            MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");
-            
-            md.update(Login.getBytes());
-            md.update(Password.getBytes()); 
-            
-            long Temps = (new Date()).getTime();
-            double Random = Math.random();
-            
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            DataOutputStream bdos = new DataOutputStream(baos);
-            bdos.writeLong(Temps); bdos.writeDouble(Random);
-            md.update(baos.toByteArray());
-            byte[] msgD = md.digest();
-            
-            Req.getChargeUtile().put("Temps", Temps);
-            Req.getChargeUtile().put("Random", Random);
-            Req.getChargeUtile().put("Digest", msgD); 
-        } 
-        catch (IOException | NoSuchAlgorithmException | NoSuchProviderException ex) 
-        {
-            Logger.getLogger(FenAuthentification.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FUCKED UP 5");
-            System.exit(0);
-        }
+        Security.addProvider(new BouncyCastleProvider());
+
+        System.out.println("Instanciation du message digest");
+
+        Req.getChargeUtile().put("Login", Login);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");
+
+        md.update(Login.getBytes());
+        md.update(Password.getBytes()); 
+
+        long Temps = (new Date()).getTime();
+        double Random = Math.random();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream bdos = new DataOutputStream(baos);
+        bdos.writeLong(Temps); bdos.writeDouble(Random);
+        md.update(baos.toByteArray());
+        byte[] msgD = md.digest();
+
+        Req.getChargeUtile().put("Temps", Temps);
+        Req.getChargeUtile().put("Random", Random);
+        Req.getChargeUtile().put("Digest", msgD);         
         
         EnvoyerRequete(Req);
         Rep = RecevoirReponse();

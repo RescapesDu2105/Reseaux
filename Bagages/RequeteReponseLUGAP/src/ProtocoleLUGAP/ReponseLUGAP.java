@@ -18,8 +18,14 @@ public class ReponseLUGAP implements Reponse, Serializable {
     public final static int WRONG_USER_PASSWORD = 401;
     public final static int INTERNAL_SERVER_ERROR = 500;
     
-    public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect";
+    public final static String LOGIN_OK = "Client connecté au serveur";
+    public final static String FLIGHTS_LOADED = "Informations sur les vols envoyés";
+    public final static String LUGAGES_LOADED = "Informations sur les bagages envoyés";
+    public final static String LUGAGES_SAVED = "Informations sur les bagages sauvés";
+    
+    public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
     public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";
+    
     
     
     private int CodeRetour;

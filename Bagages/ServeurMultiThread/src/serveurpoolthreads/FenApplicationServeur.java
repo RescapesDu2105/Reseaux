@@ -28,7 +28,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         initComponents();
         setLocationRelativeTo(null); 
         TraceEvenements("serveur#initialisation#main");
-        this.jButtonStartActionPerformed(null);
+        //this.jButtonStartActionPerformed(null);
     }
 
     /**
@@ -91,7 +91,8 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
-        if (!isStarted()) {
+        if (!isStarted()) 
+        {
             setServer(new Serveur(this));
             try 
             {
@@ -102,15 +103,12 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
                 System.err.println("Erreur de port d'écoute ! [" + ex + "]");
                 System.exit(1);
             }
-            catch (Exception ex) 
-            {
-                ex.printStackTrace();
-            }
             
             setStarted(true);
             jButtonStart.setText("Stop");
         }
-        else {   
+        else 
+        {   
             getServer().Stop();
             //getTs_CheckIN().interrupt();
             setStarted(false);
