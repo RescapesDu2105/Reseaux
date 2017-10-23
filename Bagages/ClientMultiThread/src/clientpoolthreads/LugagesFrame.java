@@ -9,7 +9,9 @@ import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
 import java.awt.Frame;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -22,7 +24,7 @@ public class LugagesFrame extends javax.swing.JFrame {
     private final String HeureDepart;
     private final Frame FenAuthentification;
     private final Client Client;
-    
+        
     /**
      * Creates new form LugagesFrame
      */
@@ -38,6 +40,9 @@ public class LugagesFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);           
         initComponents();
         initTableauBagages();
+        /*TableModel model = jTableBagages.getModel();
+        jTableBagages.setModel(new ModelLugages((DefaultTableModel) model));*/
+        //model.addTableModelListener(this);
     }
 
     /**
@@ -52,21 +57,14 @@ public class LugagesFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableBagages = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jTableBagages.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Identifiant", "Poids", "Type", "Réceptionné (O/N)", "Chargé en soute (O/N)", "Vérifié par la douane (O/N)", "Remarques"
-            }
-        ) {
+        jTableBagages.setModel(new DefaultTableModel(new Object [][] {}, new String [] {"Identifiant", "Poids", "Type", "Réceptionné (O/N)", "Chargé en soute (O/R/N)", "Vérifié par la douane (O/N)", "Remarques" }) {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
@@ -81,54 +79,196 @@ public class LugagesFrame extends javax.swing.JFrame {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
-        });
-        jScrollPane1.setViewportView(jTableBagages);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
+            @Override
+            public void setValueAt(Object aValue, int row, int column)
+            {
+                switch (column)
+                {
+                    case 3:
+                    case 5:
+                    if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N"))
+                    {
+                        aValue = "N";
+                        javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                    case 4:
+                    if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N") && !aValue.toString().toUpperCase().equals("R"))
+                    {
+                        aValue = "N";
+                        javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"R\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                    case 6:
+                    if (aValue.toString().equals(""))
+                    {
+                        aValue = "NEANT";
+                    }
+                    break;
+                    default:
+                    break;
+                }
+                super.setValueAt(aValue, row, column);
+            }
+        }
+    );
+    jTableBagages.setRowSelectionAllowed(false);
+    jScrollPane1.setViewportView(jTableBagages);
+    if (jTableBagages.getColumnModel().getColumnCount() > 0) {
+        jTableBagages.getColumnModel().getColumn(0).setMinWidth(250);
+        jTableBagages.getColumnModel().getColumn(0).setPreferredWidth(250);
+        jTableBagages.getColumnModel().getColumn(0).setMaxWidth(250);
+        jTableBagages.getColumnModel().getColumn(1).setMinWidth(50);
+        jTableBagages.getColumnModel().getColumn(1).setPreferredWidth(50);
+        jTableBagages.getColumnModel().getColumn(1).setMaxWidth(50);
+        jTableBagages.getColumnModel().getColumn(2).setMinWidth(70);
+        jTableBagages.getColumnModel().getColumn(2).setPreferredWidth(70);
+        jTableBagages.getColumnModel().getColumn(2).setMaxWidth(70);
+        jTableBagages.getColumnModel().getColumn(3).setMinWidth(120);
+        jTableBagages.getColumnModel().getColumn(3).setPreferredWidth(120);
+        jTableBagages.getColumnModel().getColumn(3).setMaxWidth(120);
+        jTableBagages.getColumnModel().getColumn(4).setMinWidth(140);
+        jTableBagages.getColumnModel().getColumn(4).setPreferredWidth(140);
+        jTableBagages.getColumnModel().getColumn(4).setMaxWidth(140);
+        jTableBagages.getColumnModel().getColumn(5).setMinWidth(160);
+        jTableBagages.getColumnModel().getColumn(5).setPreferredWidth(160);
+        jTableBagages.getColumnModel().getColumn(5).setMaxWidth(160);
+        jTableBagages.getColumnModel().getColumn(6).setMinWidth(250);
+        jTableBagages.getColumnModel().getColumn(6).setPreferredWidth(250);
+        jTableBagages.getColumnModel().getColumn(6).setMaxWidth(250);
+    }
 
-        pack();
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
+            .addContainerGap())
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(14, Short.MAX_VALUE))
+    );
+
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     public void initTableauBagages() {
         HashMap <String, Object> hm = new HashMap<>();
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_LUGAGES);
-        DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
         
         hm.put("IdVol", getIdVol());
-        hm.put("NomCompagnie", getNomCompagnie());
-        hm.put("Destination", getDestination());
-        hm.put("HureDepart", getHeureDepart());        
+        //hm.put("NomCompagnie", getNomCompagnie());
+        //hm.put("Destination", getDestination());
+        //hm.put("HeureDepart", getHeureDepart());        
         Req.setChargeUtile(hm);
+        hm = null;
         
         getClient().EnvoyerRequete(Req);       
-        //ReponseLUGAP Rep = getClient().RecevoirReponse();
+        ReponseLUGAP Rep = getClient().RecevoirReponse();
+        
+        if (Rep != null)
+        {            
+            DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
+            HashMap<String, Object> Bagages = Rep.getChargeUtile();
+            Object[] ligne = new Object[7];
+            
+            for (int Cpt = 1 ; Cpt <= Bagages.size() ; Cpt++) 
+            {
+                hm = (HashMap) Bagages.get(Integer.toString(Cpt));
+                ligne[0] = hm.get("IdBagage");
+                ligne[1] = hm.get("Poids");
+                ligne[2] = hm.get("TypeBagage");
+                ligne[3] = hm.get("Receptionne"); 
+                ligne[4] = hm.get("Charge"); 
+                ligne[5] = hm.get("Verifie"); 
+                ligne[6] = hm.get("Remarques"); 
+                dtm.insertRow(Cpt - 1, ligne);
+            }            
+        }
+        else
+            System.out.println("J'AI RIEN LOL");
     }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         boolean Fini = true;//false;
+                
+        //Fini = CheckBagagesCharges();
+        
+        if (Fini)
+        {            
+            Client.Deconnexion();
+            this.dispose();
+            FenAuthentification.setVisible(true);
+        }
+        else
+            JOptionPane.showMessageDialog(this, "Il reste encore des bagages à charger !", "Attention", JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_formWindowClosing
+    
+    private boolean CheckBagagesCharges() 
+    {
+        boolean Fini = true;
+        
+        TableModel model = jTableBagages.getModel();
+        for (int i = 0 ; Fini && i < model.getRowCount() ; i++)
+        {            
+            for (int j = 3 ; Fini && j < model.getColumnCount() ; j++)
+            {                
+                if ((j == 3 || j == 5) && !model.getValueAt(i, j).equals("O"))
+                    Fini = false;
+                else if (j == 4 && (!model.getValueAt(i, j).equals("O") || !model.getValueAt(i, j).equals("R")))
+                    Fini = false;
+            }
+        }
         
         if (Fini)
         {
-            Client.Deconnexion();
-            FenAuthentification.setVisible(true);
+            RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_SAVE_LUGAGES);
+            HashMap <String, Object> Bagages = Req.getChargeUtile();
+            DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
+            
+            for (int row = 0 ; row < dtm.getRowCount() ; row++)
+            {
+                HashMap <String, Object> hm = new HashMap<>();
+                
+                hm.put("Identifiant", dtm.getValueAt(row, 0));                
+                for (int column = 3 ; column < dtm.getColumnCount() ; column++)
+                {                    
+                    
+                    switch (column) 
+                    {
+                        case 3:
+                            hm.put("Receptionne", dtm.getValueAt(row, column));
+                            break;
+                        case 4:
+                            hm.put("Charge", dtm.getValueAt(row, column));
+                            break;
+                        case 5:
+                            hm.put("Verifie", dtm.getValueAt(row, column));
+                            break;
+                        case 6:
+                            hm.put("Remarques", dtm.getValueAt(row, column));
+                            break;
+                        default:
+                            break;
+                    } 
+                }
+                Bagages.put(Integer.toString(row + 1), hm);
+            }
+            
+            getClient().EnvoyerRequete(Req);
+            ReponseLUGAP Rep = getClient().RecevoirReponse();
         }
-    }//GEN-LAST:event_formWindowClosing
-
+        
+        return Fini;
+    }
+    
     public int getIdVol() {
         return IdVol;
     }
@@ -157,10 +297,11 @@ public class LugagesFrame extends javax.swing.JFrame {
     public String toString()
     {
         return "VOL " + getIdVol() + " " + getNomCompagnie() + " - " + getDestination() + " " + getHeureDepart();
-    }
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableBagages;
     // End of variables declaration//GEN-END:variables
+
 }

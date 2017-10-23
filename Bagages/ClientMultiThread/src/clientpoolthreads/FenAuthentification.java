@@ -6,6 +6,7 @@
 package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,9 +19,10 @@ public class FenAuthentification extends javax.swing.JFrame {
      * Creates new form Login_GUI
      */
     public FenAuthentification() {
-        this.Client = new Client();
+        this.Client = new Client();  
         setLocationRelativeTo(null); 
         initComponents();
+        this.getRootPane().setDefaultButton(jButton_Connexion);
         //this.jButton_ConnexionActionPerformed(null);
     }
 
@@ -42,6 +44,11 @@ public class FenAuthentification extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Connexion");
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
         jLabelLogin.setText("Nom d'utilisateur");
 
@@ -144,6 +151,15 @@ public class FenAuthentification extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
 
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+        System.out.println("Typed KeyCode = " + evt.getKeyCode());
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            System.out.println("Coucou");
+        }
+    }//GEN-LAST:event_formKeyTyped
+
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
