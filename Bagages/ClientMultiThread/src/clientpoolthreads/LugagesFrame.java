@@ -109,7 +109,7 @@ public class LugagesFrame extends javax.swing.JFrame {
                     default:
                     break;
                 }
-                super.setValueAt(aValue, row, column);
+                super.setValueAt(aValue.toString().toUpperCase(), row, column);
             }
         }
     );

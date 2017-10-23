@@ -84,6 +84,15 @@ public class RequeteLUGAP implements Requete, Serializable{
                     }            
                 };
             
+            case REQUEST_LOAD_LUGAGES:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteLoadLugages(s, cs);
+                    }            
+                };
+            
             case REQUEST_SAVE_LUGAGES:
                 return new Runnable() 
                 {
@@ -91,7 +100,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                     {
                         traiteRequeteSaveLugages(s, cs);
                     }            
-                };
+                };                
             
             default : return null;
         }
