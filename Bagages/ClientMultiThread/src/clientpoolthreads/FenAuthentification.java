@@ -137,7 +137,7 @@ public class FenAuthentification extends javax.swing.JFrame {
             } 
             catch (IOException ex) 
             {
-                JOptionPane.showMessageDialog(this, "Le serveur est indisponible !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Erreur", JOptionPane.ERROR_MESSAGE);
             } 
             catch (NoSuchAlgorithmException | NoSuchProviderException ex) 
             {

@@ -64,10 +64,17 @@ public class Serveur extends Thread{
         for (int i = 0 ; i < getMaxClients() ; i++) 
         {
             getThreads().get(i).interrupt();
-            try {
-                getThreads().get(i).getCSocket().close();
-            } catch (IOException ex) {
-                Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
+            try 
+            {
+                if (getThreads().get(i).getCSocket() != null)
+                    getThreads().get(i).getCSocket().close();
+                
+                getSSocket_Bagages().close();
+                System.out.println("Demande d'arrêt du " + getThreads().get(i).getNom());
+            } 
+            catch (IOException ex) 
+            {
+                System.err.println("Erreur socket ! [" + ex.getMessage() + "]");
             }
         }
     }    

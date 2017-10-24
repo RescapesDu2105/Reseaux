@@ -27,7 +27,6 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     public FenApplicationServeur() {
         initComponents();
         setLocationRelativeTo(null); 
-        TraceEvenements("serveur#initialisation#main");
         //this.jButtonStartActionPerformed(null);
     }
 
@@ -95,7 +94,8 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         {
             setServer(new Serveur(this));
             try 
-            {
+            {                
+                TraceEvenements("Serveur#Initialisation#Start");
                 getServer().Init();
             } 
             catch (IOException ex) 
@@ -109,7 +109,8 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         }
         else 
         {   
-            getServer().Stop();
+            getServer().Stop();             
+            TraceEvenements("Serveur#Arrêt du serveur#Stop");
             //getTs_CheckIN().interrupt();
             setStarted(false);
             jButtonStart.setText("Start");

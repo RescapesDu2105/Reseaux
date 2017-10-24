@@ -104,32 +104,45 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        String[] options = new String[] {"Oui", "Annuler"};
-        int Choix = JOptionPane.showOptionDialog(null, "Êtes-vous sûr de vouloir vous déconnecter ?", "Déconnexion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-          
-        if (Choix == 0)
-        {
-            getClient().Deconnexion();
+        if (!getClient().getCliSocket().isConnected())
+        {        
+            String[] options = new String[] {"Oui", "Annuler"};
+            int Choix = JOptionPane.showOptionDialog(null, "Êtes-vous sûr de vouloir vous déconnecter ?", "Déconnexion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 
-            this.dispose();
-            getFenAuthentification().setVisible(true);
-            //this.dispose();
+            if (Choix == 0)
+            {
+                getClient().Deconnexion();
+
+                this.dispose();
+                getFenAuthentification().setVisible(true);
+                //this.dispose();
+            }
+        }
+        else
+        {  
+            JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Serveur déconnecté", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
 
     private void jTableVolsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVolsMouseClicked
         if (evt.getClickCount() == 2 && !evt.isConsumed()) 
         {
-            DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
-            
-            this.dispose();
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new LugagesFrame(getFenAuthentification(), getClient(), (int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString()).setVisible(true);
-                }
-            });
-            /*LugagesFrame Test = new LugagesFrame(FenAuthentification, Client, (int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString());
-            Test.setVisible(true);*/
+            //if (!getClient().isConnected())            {
+                DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
+
+                this.dispose();
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        new LugagesFrame(getFenAuthentification(), getClient(), (int)dtm.getValueAt(jTableVols.getSelectedRow(), 0), dtm.getValueAt(jTableVols.getSelectedRow(), 1).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 2).toString(), dtm.getValueAt(jTableVols.getSelectedRow(), 3).toString()).setVisible(true);
+                    }
+                });
+           /* }
+            else
+            {  
+                JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Serveur déconnecté", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }*/
         }      
     }//GEN-LAST:event_jTableVolsMouseClicked
 

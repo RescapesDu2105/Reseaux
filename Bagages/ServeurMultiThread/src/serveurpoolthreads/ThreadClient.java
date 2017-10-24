@@ -47,20 +47,21 @@ public class ThreadClient extends Thread {
             System.out.println(getNom() + " avant get");
             try 
             {                
-                GUIApplication.TraceEvenements("serveur#en attente#" + getNom());
+                GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
                 System.out.println("********** Serveur en attente");
                 CSocket = SSocket.accept();
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
                 System.out.println("********** Serveur après accept()");                
-                GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#accept#" + getNom());
+                GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
             } 
             catch (IOException ex) 
             {
-                System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
+                if (!ex.getMessage().toUpperCase().equals("SOCKET CLOSED"))
+                    System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
                 this.interrupt();
             }
 
-            while (!getCSocket().isClosed())
+            while (getCSocket() != null && !getCSocket().isClosed())
             {  
                 RequeteLUGAP req = RecevoirRequete();  
                 
@@ -78,18 +79,25 @@ public class ThreadClient extends Thread {
             
             try 
             {
-                getOis().close();
-                setOis(null);
-                getOos().close();
-                setOos(null);
+                if (getOis() != null)
+                {                    
+                    getOis().close();
+                    setOis(null);
+                }
+                
+                if (getOos() != null) 
+                {                    
+                    getOos().close();
+                    setOos(null);
+                }
             } 
             catch (IOException ex) 
             {
-                Logger.getLogger(ThreadClient.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
             }
             System.out.println("Socket fermée !");
         }
-        System.out.println("Je me suis arrêté");
+        System.out.println(getNom() + " je m'arrête");
     }
     
     public RequeteLUGAP RecevoirRequete()
@@ -106,16 +114,13 @@ public class ThreadClient extends Thread {
         } 
         catch (IOException ex) 
         {
-            
-            //System.err.println("Erreur flux requête ! [" + ex.getMessage() + "]");
-            //ex.printStackTrace();
             try 
             {
                 CSocket.close();
             } 
             catch (IOException ex1) 
             {
-                System.err.println("Erreur socket ! [" + ex.getMessage() + "]");
+                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
             }
             return null;
         } 
@@ -128,7 +133,7 @@ public class ThreadClient extends Thread {
             } 
             catch (IOException ex1) 
             {
-                System.err.println("Erreur socket ! [" + ex.getMessage() + "]");
+                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
             }
             return null;
         }
@@ -138,14 +143,17 @@ public class ThreadClient extends Thread {
     
     public void EnvoyerReponse(Socket s, ReponseLUGAP Rep)
     {
-        try {   
+        try 
+        {   
             if (oos == null)
                 oos = new ObjectOutputStream(s.getOutputStream());
             
             oos.writeObject(Rep); 
             oos.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) 
+        {
+            System.err.println("Erreur d'envoi de la réponse ! [" + ex.getMessage() + "]");
         }
     }
 

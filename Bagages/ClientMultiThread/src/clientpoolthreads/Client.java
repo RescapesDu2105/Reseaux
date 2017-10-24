@@ -48,7 +48,8 @@ public class Client {
     }
     
     
-    public void LireProperties() {
+    public void LireProperties() 
+    {
         FileInputStream fis = null;
         String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
             
@@ -81,7 +82,6 @@ public class Client {
     
     public void Connexion() throws IOException
     {
-        
         setCliSocket(new Socket(getIP(), getPort()));
         
         if (getCliSocket().isConnected()) 
@@ -126,7 +126,7 @@ public class Client {
             System.exit(1);
         }
     }
-   
+    
     public ReponseLUGAP Authenfication(String Login, String Password) throws IOException, NoSuchAlgorithmException, NoSuchProviderException 
     {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER);
