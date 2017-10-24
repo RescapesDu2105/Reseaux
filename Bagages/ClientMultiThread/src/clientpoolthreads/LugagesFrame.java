@@ -8,6 +8,7 @@ package clientpoolthreads;
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
 import java.awt.Frame;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,21 +19,16 @@ import javax.swing.table.TableModel;
  * @author Philippe
  */
 public class LugagesFrame extends javax.swing.JFrame {
-    private final int IdVol;
-    private final String NomCompagnie;
-    private final String Destination;
-    private final String HeureDepart;
+    private final HashMap<String, Object> Vols;
     private final Frame FenAuthentification;
     private final Client Client;
         
     /**
      * Creates new form LugagesFrame
      */
-    LugagesFrame(Frame FenAuthentification, Client Client, int IdVol, String NomCompagnie, String Destination, String HeureDepart) {   
-        this.IdVol = IdVol;
-        this.NomCompagnie = NomCompagnie;
-        this.Destination = Destination;
-        this.HeureDepart = HeureDepart;
+    LugagesFrame(Frame FenAuthentification, Client Client, HashMap<String, Object> Vols) 
+    {   
+        this.Vols = Vols;
         this.FenAuthentification = FenAuthentification;
         this.Client = Client;
         
@@ -40,9 +36,6 @@ public class LugagesFrame extends javax.swing.JFrame {
         this.setLocation(400, 400);           
         initComponents();
         initTableauBagages();
-        /*TableModel model = jTableBagages.getModel();
-        jTableBagages.setModel(new ModelLugages((DefaultTableModel) model));*/
-        //model.addTableModelListener(this);
     }
 
     /**
@@ -140,71 +133,15 @@ public class LugagesFrame extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /*
-    new DefaultTableModel(new Object [][] {}, new String [] {"Identifiant", "Poids", "Type", "Réceptionné (O/N)", "Chargé en soute (O/R/N)", "Vérifié par la douane (O/N)", "Remarques" }) {
-                Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-                };
-                boolean[] canEdit = new boolean [] {
-                    false, false, false, true, true, true, true
-                };
-
-                public Class getColumnClass(int columnIndex) {
-                    return types [columnIndex];
-                }
-
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit [columnIndex];
-                }
-    
-                @Override
-                public void setValueAt(Object aValue, int row, int column) 
-                {
-                    switch (column) 
-                    {
-                        case 3:
-                        case 5:
-                            if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N"))
-                            {
-                                aValue = "N";
-                                javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
-                            }
-                            else
-                                aValue = aValue.toString().toUpperCase();
-                            break;
-                        case 4:
-                            if (!aValue.toString().toUpperCase().equals("O") && !aValue.toString().toUpperCase().equals("N") && !aValue.toString().toUpperCase().equals("R"))
-                            {
-                                aValue = "N";
-                                javax.swing.JOptionPane.showMessageDialog(jTableBagages, "Vous ne pouvez entrer que \"O\" ou \"R\" ou \"N\" comme valeurs pour la colonne " + this.getColumnName(column) + " !", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
-                            }
-                            else
-                                aValue = aValue.toString().toUpperCase();
-                            break;
-                        case 6:
-                            if (aValue.toString().equals("")) 
-                            {
-                                aValue = "NEANT";
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                    super.setValueAt(aValue, row, column); 
-                }
-}
-            */
-    public void initTableauBagages() {
+    public final void initTableauBagages() 
+    {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_LUGAGES);
         HashMap <String, Object> hm = new HashMap<>();
         
-        hm.put("IdVol", getIdVol());
-        //hm.put("NomCompagnie", getNomCompagnie());
-        //hm.put("Destination", getDestination());
-        //hm.put("HeureDepart", getHeureDepart());        
+        hm.put("IdVol", getVols().get("IdVol"));
+        hm.put("DateHeureDepart", getVols().get("DateHeureDepart"));
         Req.setChargeUtile(hm);
-        hm = null;
-        
+                
         getClient().EnvoyerRequete(Req);       
         ReponseLUGAP Rep = getClient().RecevoirReponse();
         
@@ -214,7 +151,7 @@ public class LugagesFrame extends javax.swing.JFrame {
             HashMap<String, Object> Bagages = Rep.getChargeUtile();
             Object[] ligne = new Object[7];
             
-            for (int Cpt = 1 ; Cpt <= Bagages.size() ; Cpt++) 
+            for (int Cpt = 1 ; Cpt <= Bagages.size() - 1 ; Cpt++) 
             {
                 hm = (HashMap) Bagages.get(Integer.toString(Cpt));
                 ligne[0] = hm.get("IdBagage");
@@ -232,7 +169,7 @@ public class LugagesFrame extends javax.swing.JFrame {
     }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        boolean Fini = true;//false;
+        boolean Fini;
                 
         Fini = CheckBagagesCharges();
         
@@ -242,8 +179,6 @@ public class LugagesFrame extends javax.swing.JFrame {
             this.dispose();
             FenAuthentification.setVisible(true);
         }
-        else
-            JOptionPane.showMessageDialog(this, "Il reste encore des bagages à charger !", "Attention", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_formWindowClosing
     
     private boolean CheckBagagesCharges() 
@@ -255,73 +190,69 @@ public class LugagesFrame extends javax.swing.JFrame {
         {            
             for (int j = 3 ; Fini && j < model.getColumnCount() ; j++)
             {                
-                if (j == 3 && !model.getValueAt(i, j).equals("O"))
+                if (j == 3 && !model.getValueAt(i,j).toString().equals("O"))
                     Fini = false;
-                else if (j == 4 && (!model.getValueAt(i, j).equals("O") && !model.getValueAt(i, j).equals("R")))
+                else if (j == 4 && (!model.getValueAt(i,j).toString().equals("O") && !model.getValueAt(i,j).toString().equals("R")))
                     Fini = false;
             }
         }
         
         if (Fini)
         {
-            RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_SAVE_LUGAGES);
-            HashMap <String, Object> Bagages = Req.getChargeUtile();
-            DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
-            
-            for (int row = 0 ; row < dtm.getRowCount() ; row++)
-            {
-                HashMap <String, Object> hm = new HashMap<>();
-                System.out.println("dtm = " + dtm.getValueAt(row, 0));
-                hm.put("Identifiant", dtm.getValueAt(row, 0));                
-                for (int column = 3 ; column < dtm.getColumnCount() ; column++)
-                {       
-                    switch (column) 
-                    {
-                        case 3:
-                            hm.put("Receptionne", dtm.getValueAt(row, column));
-                            break;
-                        case 4:
-                            hm.put("Charge", dtm.getValueAt(row, column));
-                            break;
-                        case 5:
-                            hm.put("Verifie", dtm.getValueAt(row, column));
-                            break;
-                        case 6:
-                            hm.put("Remarques", dtm.getValueAt(row, column));
-                            break;
-                        default:
-                            break;
-                    } 
+            String[] options = new String[] {"Oui", "Annuler"};
+            int Choix = JOptionPane.showOptionDialog(null, "Confirmez-vous la fin de la tâche ?", "Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        
+            if (Choix == 0)
+            {                
+                RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_SAVE_LUGAGES);
+                HashMap <String, Object> Bagages = Req.getChargeUtile();
+                DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
+
+                for (int row = 0 ; row < dtm.getRowCount() ; row++)
+                {
+                    HashMap <String, Object> hm = new HashMap<>();
+                    //System.out.println("dtm = " + dtm.getValueAt(row, 0));
+                    hm.put("Identifiant", dtm.getValueAt(row, 0));                
+                    for (int column = 3 ; column < dtm.getColumnCount() ; column++)
+                    {       
+                        switch (column) 
+                        {
+                            case 3:
+                                hm.put("Receptionne", dtm.getValueAt(row, column));
+                                break;
+                            case 4:
+                                hm.put("Charge", dtm.getValueAt(row, column));
+                                break;
+                            case 5:
+                                hm.put("Verifie", dtm.getValueAt(row, column));
+                                break;
+                            case 6:
+                                hm.put("Remarques", dtm.getValueAt(row, column));
+                                break;
+                            default:
+                                break;
+                        } 
+                    }
+                    Bagages.put(Integer.toString(row + 1), hm);
                 }
-                Bagages.put(Integer.toString(row + 1), hm);
-            }
-            
-            getClient().EnvoyerRequete(Req);
-            ReponseLUGAP Rep = getClient().RecevoirReponse();
-            
-            if (Rep.getCode() == ReponseLUGAP.STATUS_OK)
-                JOptionPane.showMessageDialog(this, "Travail terminé !", "Travail terminé", JOptionPane.INFORMATION_MESSAGE);
+                
+                getClient().EnvoyerRequete(Req);
+                ReponseLUGAP Rep = getClient().RecevoirReponse();
+            }    
+            else
+                Fini = false;
         }
+        else            
+            JOptionPane.showMessageDialog(this, "Il reste encore des bagages à charger !", "Attention", JOptionPane.WARNING_MESSAGE);
         
         return Fini;
     }
+
     
-    public int getIdVol() {
-        return IdVol;
+    public HashMap<String, Object> getVols() {
+        return Vols;
     }
-
-    public String getNomCompagnie() {
-        return NomCompagnie;
-    }
-
-    public String getDestination() {
-        return Destination;
-    }
-
-    public String getHeureDepart() {
-        return HeureDepart;
-    }
-
+        
     public Frame getFenAuthentification() {
         return FenAuthentification;
     }
@@ -331,9 +262,9 @@ public class LugagesFrame extends javax.swing.JFrame {
     }
     
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "VOL " + getIdVol() + " " + getNomCompagnie() + " - " + getDestination() + " " + getHeureDepart();
+        return "VOL " + getVols().get("IdVol") + " " + getVols().get("NomCompagnie") + " - " + getVols().get("Destination") + " " + ((Timestamp)getVols().get("DateHeureDepart")).toLocalDateTime().toLocalTime();
     }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

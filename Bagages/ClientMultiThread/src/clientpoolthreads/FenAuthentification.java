@@ -23,11 +23,22 @@ public class FenAuthentification extends javax.swing.JFrame {
     /**
      * Creates new form Login_GUI
      */
-    public FenAuthentification() {
-        this.Client = new Client();  
+    public FenAuthentification() 
+    {
         setLocationRelativeTo(null); 
         initComponents();
         this.getRootPane().setDefaultButton(jButton_Connexion);
+        
+        try 
+        {  
+            this.Client = new Client();
+        } 
+        catch (IOException ex) 
+        {
+            JOptionPane.showMessageDialog(this, "Problème interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        
         //this.jButton_ConnexionActionPerformed(null);
     }
 
@@ -157,7 +168,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                     //getClient().setNomUtilisateur("Zeydax");
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
-                            new MainFrame(Test, getClient()).setVisible(true);
+                            new FlightsFrame(Test, getClient()).setVisible(true);
                         }
                     });
                     this.jButton_EffacerActionPerformed(null);

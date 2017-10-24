@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import requetepoolthreads.ConsoleServeur;
 
 /**

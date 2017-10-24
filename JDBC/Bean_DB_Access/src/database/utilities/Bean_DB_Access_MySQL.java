@@ -25,25 +25,15 @@ public class Bean_DB_Access_MySQL extends Bean_DB_Access {
    }
 
     @Override
-    public String Connexion() {
+    public String Connexion() throws SQLException, ClassNotFoundException 
+    {
         String URL = "jdbc:mysql://" + getHost() + ":" + getPort() + "/" + getSchema();
         
-        try
-        {
-            Class.forName(getDriver());
+        Class.forName(getDriver());
+
+        setConnection(DriverManager.getConnection(URL, getLogin(), getPassword()));
+        setStatement(getConnection().createStatement());
                     
-            setConnection(DriverManager.getConnection(URL, getLogin(), getPassword()));
-            setStatement(getConnection().createStatement());
-        }
-        catch (SQLException Ex)
-        {
-            System.out.println("Code SQL : " + Ex.getErrorCode() + " - Erreur SQL : " + Ex.getMessage());
-            return Ex.getMessage();
-        } 
-        catch (ClassNotFoundException ex) {
-            Logger.getLogger(Bean_DB_Access_Oracle.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         return null;
     }
 }

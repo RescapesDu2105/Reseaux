@@ -20,8 +20,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
@@ -189,7 +192,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                     Password = RS.getString("Password");                    
             }            
         } 
-        catch (SQLException ex) 
+        catch (SQLException | ClassNotFoundException ex) 
         {            
             Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
             Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
@@ -204,15 +207,17 @@ public class RequeteLUGAP implements Requete, Serializable{
     {
         Bean_DB_Access_MySQL BD_airport = null;
         ResultSet RS;
-        //ReponseLUGAP Rep = null;
         int i = 1;
          
         BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
         
         try
         {                        
-            BD_airport.Connexion(); // try catch
-            RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart FROM bd_airport.vols NATURAL JOIN avions NATURAL JOIN bd_airport.compagnies ORDER BY bd_airport.vols.HeureDepart");
+            BD_airport.Connexion();
+            RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart "
+                    + "FROM bd_airport.vols NATURAL JOIN avions NATURAL JOIN bd_airport.compagnies "
+                    + "WHERE bd_airport.vols.HeureDepart BETWEEN current_time() AND ADDTIME(current_time(), '24:00:00') "
+                    + "ORDER BY bd_airport.vols.HeureDepart");
             
             if (RS != null) 
             {         
@@ -220,33 +225,28 @@ public class RequeteLUGAP implements Requete, Serializable{
                 while(RS.next())
                 {
                     int IdVol = RS.getInt("IdVol");
-                    System.out.println("IdVol = " + IdVol);
                     String NomCompagnie = RS.getString("Nom");
-                    System.out.println("NomCompagnie = " + NomCompagnie);
                     String Destination = RS.getString("Destination");
-                    System.out.println("Destination = " + Destination);
                     Timestamp DateHeureDepart = RS.getTimestamp("HeureDepart");
-                    System.out.println("DateHeureDepart = " + DateHeureDepart);
-                    String HeureDepart = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(DateHeureDepart);
-                    System.out.println("HeureDepart = " + HeureDepart);
                     
                     HashMap<String, Object> hm = new HashMap<>();
                     
                     hm.put("IdVol", IdVol);
                     hm.put("NomCompagnie", NomCompagnie);
                     hm.put("Destination", Destination);
-                    hm.put("DateDepart", DateHeureDepart);
-                    hm.put("HeureDepart", HeureDepart);
+                    hm.put("DateHeureDepart", DateHeureDepart);
                     
                     Rep.getChargeUtile().put(Integer.toString(i), hm);
                     i++;
                 } 
-                //Rep.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED);
             }
         }
-        catch (SQLException ex) 
+        catch (SQLException | ClassNotFoundException ex) 
         {
-            Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+            if (Rep == null)
+                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+            
             Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
         }
@@ -262,11 +262,11 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         try
         {                        
-            BD_airport.Connexion(); // try catch
+            BD_airport.Connexion();
             RS = BD_airport.Select("SELECT IdBagage, Poids, TypeBagage, Receptionne, Charge, Verifie, Remarques " +
                                     "FROM bd_airport.vols NATURAL JOIN bd_airport.billets NATURAL JOIN bd_airport.bagages " +
-                                    "WHERE SUBSTR(IdBillet, 1, 3) = "+ getChargeUtile().get("IdVol") +
-                                    " AND SUBSTR(IdBillet, 5, 8) = date_format(sysdate(), '%d%m%Y')");
+                                    "WHERE bd_airport.vols.IdVol = " + getChargeUtile().get("IdVol") +
+                                    " AND bd_airport.vols.HeureDepart = \"" + getChargeUtile().get("DateHeureDepart") + "\"");
             if (RS != null) 
             {
                 Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
@@ -275,19 +275,12 @@ public class RequeteLUGAP implements Requete, Serializable{
                     HashMap<String, Object> hm = new HashMap<>();
                     
                     String IdBagage = RS.getString("IdBagage");
-                    //System.out.println("IdBagage = " + IdBagage);
                     float Poids = RS.getFloat("Poids");
-                    //System.out.println("Poids = " + Poids);
                     String TypeBagage = RS.getString("TypeBagage");
-                    //System.out.println("TypeBagage = " + TypeBagage);
                     char Receptionne = RS.getString("Receptionne").charAt(0);
-                    //System.out.println("Receptionne = " + Receptionne);
                     char Charge = RS.getString("Charge").charAt(0);
-                    //System.out.println("Charge = " + Charge);
                     char Verifie = RS.getString("Verifie").charAt(0);
-                    //System.out.println("Verifie = " + Verifie);
                     String Remarques = RS.getString("Remarques");
-                    //System.out.println("Remarque = " + Remarque);
                     
                     hm.put("IdBagage", IdBagage);
                     hm.put("Poids", Poids);
@@ -301,16 +294,18 @@ public class RequeteLUGAP implements Requete, Serializable{
                     
                     i++;
                 }                
-                //Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED);
+                Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED);
             }
             else
             {
-                /*Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                if (Rep == null)
+                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                
                 Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);*/
+                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
         }
-        catch (SQLException ex) 
+        catch (SQLException | ClassNotFoundException ex) 
         {
             Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
             Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
@@ -322,47 +317,59 @@ public class RequeteLUGAP implements Requete, Serializable{
     {
         Bean_DB_Access_MySQL BD_airport = null;
         ResultSet RS;
-        //int i = 1;
         int Ok = 0;
         
         BD_airport = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
         
-        BD_airport.Connexion(); // try catch
-        for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
+        try 
         {
-            HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
-            System.out.println("UPDATE Bagages "
-                        + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
-                        + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
-            try 
-            {
-                Ok = BD_airport.Update("UPDATE Bagages "
-                        + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
-                        + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
-                
-                System.out.println("Ok = " + Ok);
-            } 
-            catch (SQLException ex) 
-            {
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-            }
-            
-            if (Ok == getChargeUtile().size())
-            {
-                System.out.println("Update ok !");                
-                Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED);
-                System.out.println(ReponseLUGAP.LUGAGES_SAVED);
-            }    
-            else 
-            {
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-            }
+            BD_airport.Connexion();
         } 
+        catch (SQLException | ClassNotFoundException ex) 
+        {
+            Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+            Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+            System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+        }
+        
+        if (Rep == null || (Rep != null && !Rep.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
+        {
+            for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
+            {
+                HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
+                System.out.println("UPDATE Bagages "
+                            + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
+                            + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
+                try 
+                {
+                    Ok = BD_airport.Update("UPDATE Bagages "
+                            + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
+                            + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
+
+                    System.out.println("Ok = " + Ok);
+                } 
+                catch (SQLException ex) 
+                {
+                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                    System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                }
+
+                if (Ok == getChargeUtile().size())
+                {
+                    System.out.println("Update ok !");                
+                    Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED);
+                    System.out.println(ReponseLUGAP.LUGAGES_SAVED);
+                }    
+                else 
+                {
+                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                    System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                }
+            } 
+        }
     }
     
     /*
@@ -379,8 +386,6 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }*/
     
-    //Getters - Setters
-
     public ReponseLUGAP getRep() {
         return Rep;
     }
