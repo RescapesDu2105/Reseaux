@@ -132,7 +132,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         {
             if (!Connection.getAutoCommit())
                 Rollback();
-            System.out.println("Erreur SQL : " + Ex.getMessage());
+            System.out.println("Code SQL : " + Ex.getErrorCode() + "Erreur SQL : " + Ex.getMessage());
         }
     }
     public boolean getAutoCommit() throws SQLException 
@@ -147,7 +147,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         {
             if (!Connection.getAutoCommit())
                 Rollback();
-            System.out.println("Erreur SQL : " + Ex.getMessage());
+            System.out.println("Code SQL : " + Ex.getErrorCode() + "Erreur SQL : " + Ex.getMessage());
         }
         
         return bool;
@@ -160,7 +160,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         catch (SQLException Ex) {
             if (!Connection.getAutoCommit())
                 Rollback();
-            System.out.println("Erreur SQL : " + Ex.getMessage());
+            System.out.println("Code SQL : " + Ex.getErrorCode() + "Erreur SQL : " + Ex.getMessage());
         }
     }    
     public void Rollback() 
