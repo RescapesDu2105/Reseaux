@@ -444,9 +444,10 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                                 ligne[nCol - 1] = String.valueOf(RS.getString(nCol));
                                 break;
                             case "DATE":
-                                Date d = RS.getDate(nCol);
-                                String strDate = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(d);
-                                ligne[nCol - 1] = strDate;
+                                ligne[nCol - 1] = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(RS.getDate(nCol));
+                                break;
+                            case "TIMESTAMP":                                
+                                ligne[nCol - 1] = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(RS.getTimestamp(nCol));
                                 break;
                             default : 
                                 break;
