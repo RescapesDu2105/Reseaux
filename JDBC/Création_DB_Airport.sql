@@ -73,19 +73,11 @@ CREATE TABLE `bd_airport`.`bagages` (
 
 CREATE TABLE `bd_airport`.`agents` (
   `IdAgent` INT NOT NULL,
-  `NomAgent` VARCHAR(25) NOT NULL,
-  `PrenomAgent` VARCHAR(25) NOT NULL,
+  `Nom` VARCHAR(25) NOT NULL,
+  `Prenom` VARCHAR(25) NOT NULL,
   `DateNaissance` DATE NOT NULL,
   `Poste` VARCHAR(45) NOT NULL,
+  `Login` VARCHAR(25),
+  `Password` VARCHAR(25),
+  CONSTRAINT `LoginUnique` UNIQUE(`Login`),
   PRIMARY KEY (`IdAgent`));
-   
-CREATE TABLE `bd_airport`.`comptes`(
-  `IdCompte` INT NOT NULL,
-  `Login` VARCHAR(25) NOT NULL,
-  `Password` VARCHAR(25) NOT NULL,
-  `IdAgent`INT NOT NULL,
-  PRIMARY KEY(`IdCompte`),
-  INDEX `Compte_idx` (`IdAgent` ASC),
-  CONSTRAINT `IdAgent` FOREIGN KEY (`IdAgent`) REFERENCES `bd_airport`.`agents` (`IdAgent`),
-  CONSTRAINT `LoginUnique` UNIQUE(`Login`)
-);

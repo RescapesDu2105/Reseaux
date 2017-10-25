@@ -6,14 +6,11 @@
 package application_test_jdbc;
 
 import database.utilities.Bean_DB_Access;
-import database.utilities.Bean_DB_Access_MySQL;
-import database.utilities.Bean_DB_Access_Oracle;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +25,9 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
-    public Application_Test_JDBC() {
+    public Application_Test_JDBC() 
+    {
+        setLocationRelativeTo(null);
         initComponents();        
         setEnabledQuery(false);
     }
@@ -186,7 +185,8 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void setEnabledQuery(boolean b){
+    public void setEnabledQuery(boolean b)
+    {
         jComboBoxRequete.setEnabled(b);
         jTF_Sel_Upd.setEnabled(b);
         jL_From_Set.setEnabled(b);
@@ -197,67 +197,78 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     }
     
     private void jButtonConnectOracleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectOracleActionPerformed
-        BeanAccess = new Bean_DB_Access_Oracle("localhost", "1521", "BD_JournalDeBord", "Soleil123");
+        BeanAccess = new Bean_DB_Access(Bean_DB_Access.DRIVER_ORACLE, "localhost", "1521", "BD_JournalDeBord", "Soleil123", "orcl");
         
-        if (jButtonConnectOracle.getText().equals("Connexion à Oracle")) {
-            
+        if (jButtonConnectOracle.getText().equals("Connexion à Oracle")) 
+        {            
             String Error = BeanAccess.Connexion();
-            if (Error != null) {
+            if (Error != null) 
+            {
                 jTA_Error.setEnabled(true);
                 jTA_Error.setText(Error);
             }
-            else {
+            else 
+            {
                 jButtonConnectOracle.setEnabled(false);
                 jButtonConnectMySQL.setText("Déconnexion");
                 setEnabledQuery(true);
             }
         }
-        else {
-            try {
-                BeanAccess.Deconnexion();
-            } catch (SQLException ex) {
+        else 
+        {
+            String Error = BeanAccess.Deconnexion();            
+            if (Error != null) 
+            {
                 jTA_Error.setEnabled(true);
-                jTA_Error.setText(ex.getMessage());
+                jTA_Error.setText(Error);
             }
-            jButtonConnectMySQL.setEnabled(true);
-            jButtonConnectOracle.setText("Connexion à Oracle");
-            setEnabledQuery(false);
+            else 
+            {
+                jButtonConnectMySQL.setEnabled(true);
+                jButtonConnectOracle.setText("Connexion à Oracle");
+                setEnabledQuery(false);
+            }
         }
-        
     }//GEN-LAST:event_jButtonConnectOracleActionPerformed
 
     private void jButtonConnectMySQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectMySQLActionPerformed
-        BeanAccess = new Bean_DB_Access_MySQL("localhost", "3306", "Zeydax", "1234", "bd_airport");
+        BeanAccess = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
         
-        if (jButtonConnectMySQL.getText().equals("Connexion à MySQL")) {
+        if (jButtonConnectMySQL.getText().equals("Connexion à MySQL")) 
+        {
             
             String Error = BeanAccess.Connexion();
             if (Error != null) {
                 jTA_Error.setEnabled(true);
                 jTA_Error.setText(Error);
             }
-            else {
+            else
+            {
                 jButtonConnectOracle.setEnabled(false);
                 jButtonConnectMySQL.setText("Déconnexion");
                 setEnabledQuery(true);
             }
         }
-        else {
-            try {
-                BeanAccess.Deconnexion();
-            } catch (SQLException ex) {
-                Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
+        else 
+        {
+            String Error = BeanAccess.Deconnexion();
+            if (Error != null) 
+            {
                 jTA_Error.setEnabled(true);
-                jTA_Error.setText(ex.getMessage());
+                jTA_Error.setText(Error);
             }
-            jButtonConnectOracle.setEnabled(true);
-            jButtonConnectMySQL.setText("Connexion à MySQL");
-            setEnabledQuery(false);
+            else 
+            {
+                jButtonConnectOracle.setEnabled(true);
+                jButtonConnectMySQL.setText("Connexion à MySQL");
+                setEnabledQuery(false);
+            }
         }
     }//GEN-LAST:event_jButtonConnectMySQLActionPerformed
     
     private void jComboBoxRequeteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxRequeteItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
+        if (evt.getStateChange() == ItemEvent.SELECTED) 
+        {
             if(evt.getItem().toString().equals("SELECT"))
                 jL_From_Set.setText("FROM");
             else 
@@ -268,64 +279,85 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
         ResultSet RS;
         String From = null, Set = null;
-                
-        try {
-            if(jComboBoxRequete.getSelectedItem().equals("SELECT")) {                
-                if (jButtonConnectMySQL.isEnabled()){
-                    String[] Tokens = null;
+        
+        if(jTF_Sel_Upd.getText().equals("") && jTF_From_Set.getText().equals(""))
+        {
+            jTA_Error.setEnabled(true);
+            jTA_Error.setText("La requête donnée est incorrecte !");
+        }
+        else
+        {                                    
+            jTA_Error.setText("");
+            jTA_Error.setEnabled(false);
+            
+            try 
+            {
+                if(jComboBoxRequete.getSelectedItem().equals("SELECT")) 
+                {        
+                    if (jTF_From_Set.getText().toUpperCase().equals("DUAL"))
+                        From = jTF_From_Set.getText();
+                    else if (jButtonConnectMySQL.isEnabled())
+                    {
+                        String[] Tokens;
 
-                    Tokens = jTF_From_Set.getText().toLowerCase().split(" and ");
-                    for (int i = 0 ; i < Tokens.length; i++) {
-                        if (From != null)
-                            From = From + BeanAccess.getSchema() + "." + Tokens[i];
-                        else
-                            From = BeanAccess.getSchema() + "." + Tokens[i];
+                        Tokens = jTF_From_Set.getText().toLowerCase().split(" and ");
+                        for (int i = 0 ; i < Tokens.length; i++) {
+                            if (From != null)
+                                From = From + BeanAccess.getSchema() + "." + Tokens[i];
+                            else
+                                From = BeanAccess.getSchema() + "." + Tokens[i];
+                        }
+                    }
+                    else
+                        From = jTF_From_Set.getText();                
+
+                    if (jTF_Where.getText().equals("")) 
+                    {
+                        RS = BeanAccess.Select((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From).toLowerCase());
+                        System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From).toLowerCase());
+                    }
+                    else 
+                    {
+                        RS = BeanAccess.Select((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From + " where " + jTF_Where.getText()).toLowerCase());
+                        System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From + " where " + jTF_Where.getText()).toLowerCase());
+                    }
+
+                    if (RS != null)
+                        AfficherResultSet(RS);
+                    else 
+                    {
+                        jTA_Error.setEnabled(true);
+                        jTA_Error.setText("Aucun résultat à afficher !");
                     }
                 }
-                else
-                    From = jTF_From_Set.getText();                
-                
-                if (jTF_Where.getText().equals("")) {
-                    RS = BeanAccess.Select((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From).toLowerCase());
-                    System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From).toLowerCase());
-                }
-                else {
-                    RS = BeanAccess.Select((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From + " where " + jTF_Where.getText()).toLowerCase());
-                    System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + jTF_Sel_Upd.getText() + " from " + From + " where " + jTF_Where.getText()).toLowerCase());
-                }
-                
-                if (RS != null)
-                    AfficherResultSet(RS);
-                else {
-                    jTA_Error.setEnabled(true);
-                    jTA_Error.setText("Aucun résultat à afficher !");
-                }
+                else 
+                {     
+                    int Ok;
+                    if (jTF_Where.getText().equals("")) 
+                    {                    
+                        Ok = BeanAccess.Update((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText()).toLowerCase());
+                        System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText()).toLowerCase());
+                    }
+                    else 
+                    {
+                        Ok = BeanAccess.Update((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText() + " where " + jTF_Where.getText()).toLowerCase());
+                        System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText() + " where " + jTF_Where.getText()).toLowerCase());
+                    }
+
+                    if (Ok == 1)
+                        System.out.println("Mise à jour réussie !");
+                    else 
+                    {                   
+                        jTA_Error.setEnabled(true);
+                        jTA_Error.setText("Erreur lors de la mise à jour !"); 
+                    }
+                }                                 
+            } 
+            catch (SQLException ex) 
+            {
+                jTA_Error.setEnabled(true);
+                jTA_Error.setText(ex.getMessage());
             }
-            else {     
-                int Ok;
-                if (jTF_Where.getText().equals("")) {                    
-                    Ok = BeanAccess.Update((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText()).toLowerCase());
-                    System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText()).toLowerCase());
-                    //System.out.println(Ok);
-                }
-                else {
-                    Ok = BeanAccess.Update((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText() + " where " + jTF_Where.getText()).toLowerCase());
-                    System.out.println((jComboBoxRequete.getSelectedItem().toString() + " " + BeanAccess.getSchema() + "." + jTF_Sel_Upd.getText() + " set " + jTF_From_Set.getText() + " where " + jTF_Where.getText()).toLowerCase());
-                    //System.out.println(Ok);
-                }
-                
-                if (Ok == 1)
-                    System.out.println("Mise à jour réussie !");
-                else {                   
-                    jTA_Error.setEnabled(true);
-                    jTA_Error.setText("Erreur lors de la mise à jour !"); 
-                }
-            }
-                                 
-        } catch (SQLException ex) {
-            Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
-            jTA_Error.setEnabled(true);
-            jTA_Error.setText(ex.getMessage());
         }
     }//GEN-LAST:event_jButtonSendActionPerformed
 
@@ -339,21 +371,29 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonClearActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            BeanAccess.Deconnexion();
-        } catch (SQLException ex) {
-            Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (BeanAccess.isConnected())
+        {
+            String Error = BeanAccess.Deconnexion();
+            if (Error != null) 
+            {
+                jTA_Error.setEnabled(true);
+                jTA_Error.setText(Error);
+            }
+        }    
     }//GEN-LAST:event_formWindowClosing
     
-    private void AfficherResultSet(ResultSet RS) throws SQLException {        
-        try {
+    private void AfficherResultSet(ResultSet RS) throws SQLException 
+    {        
+        try 
+        {
             int Cpt = 0, nCol, MaxColonnes = RS.getMetaData().getColumnCount();
             String[] NomColonnes = new String [MaxColonnes];        
             String[] TypeColonnes = new String [MaxColonnes];
             
-            if (RS.next()) {                
-                for (nCol = 1 ; nCol <= MaxColonnes ; nCol++) {
+            if (RS.next()) 
+            {                
+                for (nCol = 1 ; nCol <= MaxColonnes ; nCol++) 
+                {
                     NomColonnes[nCol - 1] = RS.getMetaData().getColumnName(nCol);
                     TypeColonnes[nCol - 1] = RS.getMetaData().getColumnTypeName(nCol);
                 }
@@ -361,47 +401,58 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                 int Temp = RS.getRow();
                 RS.last();
                 int MaxLignes = RS.getRow() - Temp + 1;
-                //Vector ligne = new Vector();
                 DefaultTableModel dtm = new DefaultTableModel(NomColonnes, 0);
                 
                 RS.beforeFirst();
                 nCol = 1;
-                while(RS.next()) {
+                while(RS.next()) 
+                {
                     nCol = 1;
-                    //ligne = new Vector();
                     String[] ligne = new String[MaxLignes];
                     
-                    while (nCol <= MaxColonnes) {
-                        System.out.println(RS.getMetaData().getColumnTypeName(nCol));
-                        switch (TypeColonnes[nCol - 1]) {
+                    while (nCol <= MaxColonnes) 
+                    {
+                        switch (TypeColonnes[nCol - 1]) 
+                        {
+                            case "BIT":
+                            case "TINYINT":
+                                ligne[nCol - 1] = String.valueOf(RS.getBoolean(nCol));
+                                break;
                             case "LONG":
-                                //ligne.add(String.valueOf(RS.getLong(nCol)));
+                            case "BIGINT":
                                 ligne[nCol - 1] = String.valueOf(RS.getLong(nCol));
+                                break;
+                            case "NUMBER":
+                            case "INT": 
+                            case "SMALLINT":
+                            case "MEDIUMINT":
+                                ligne[nCol - 1] = String.valueOf(RS.getInt(nCol));
+                                break;
+                            case "FLOAT":
+                                ligne[nCol - 1] = String.valueOf(RS.getFloat(nCol));
+                                break;
+                            case "DOUBLE":
+                                ligne[nCol - 1] = String.valueOf(RS.getDouble(nCol));
                                 break;
                             case "VARCHAR":
                             case "VARCHAR2":
-                                //ligne.add(String.valueOf(RS.getString(nCol)));
+                            case "CHAR":
+                            case "TEXT":
+                            case "LONGTEXT":
+                            case "MEDIUMTEXT":
+                            case "TIXYTEXT":
                                 ligne[nCol - 1] = String.valueOf(RS.getString(nCol));
                                 break;
                             case "DATE":
                                 Date d = RS.getDate(nCol);
                                 String strDate = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(d);
-                                //System.out.println(d.toString());
-                                //ligne.add(strDate);
                                 ligne[nCol - 1] = strDate;
-                                break;
-                            case "NUMBER":
-                            case "INT":                                
-                                //System.out.println(RS.getInt(nCol));
-                                //ligne.add(String.valueOf(RS.getInt(nCol)));
-                                ligne[nCol - 1] = String.valueOf(RS.getInt(nCol));
                                 break;
                             default : 
                                 break;
                         }                        
                         nCol++;
                     }
-                    //System.out.println(ligne);
                     dtm.insertRow(Cpt, ligne);
                     Cpt++;
                 }
@@ -409,12 +460,14 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
                 
                 jTable1.setModel(dtm);
             }
-            else {
+            else 
+            {
                 jTA_Error.setEnabled(true);
                 jTA_Error.setText("Aucun resultat à afficher !");
             }
-        } catch (SQLException ex) {            
-            Logger.getLogger(Application_Test_JDBC.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (SQLException ex) 
+        {            
             jTA_Error.setEnabled(true);
             jTA_Error.setText(ex.getMessage());
         }
@@ -422,7 +475,8 @@ public class Application_Test_JDBC extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) 
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
