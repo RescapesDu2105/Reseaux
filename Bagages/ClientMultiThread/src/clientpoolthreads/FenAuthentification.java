@@ -159,7 +159,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                 if(Rep.getCode() == ReponseLUGAP.STATUS_OK)
                 {
                     System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
-                    getClient().setNomUtilisateur(jTF_Login.getText());
+                    getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
 
                     this.dispose();
                     FenAuthentification Test = this;
