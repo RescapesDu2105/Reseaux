@@ -53,19 +53,16 @@ public final class ServerProperties {
                 } 
                 catch (IOException ex1) 
                 {
-                    Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex1);
                     System.exit(1);
                 }
             } 
             catch (FileNotFoundException ex1) 
             {
-                Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex1);
                 System.exit(1);
             }
         } 
         catch (IOException ex) 
         {
-            Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }
     }

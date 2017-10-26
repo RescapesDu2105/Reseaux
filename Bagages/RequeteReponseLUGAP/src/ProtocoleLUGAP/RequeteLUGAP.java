@@ -19,8 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
@@ -42,13 +40,6 @@ public class RequeteLUGAP implements Requete, Serializable{
     private Socket SocketClient;
     
     private ReponseLUGAP Rep = null;
-
-    
-    /*public RequeteLUGAP(int Type, HashMap chargeUtile, Socket SocketClient) {
-        this.Type = Type;
-        this.chargeUtile = chargeUtile;
-        this.SocketClient = SocketClient;
-    }*/
 
     public RequeteLUGAP(int Type, HashMap chargeUtile) 
     {
@@ -123,12 +114,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     private void traiteRequeteLoginPorter() 
-    {
-        /*String adresseDistante = s.getRemoteSocketAddress().toString();        
-        System.out.println("Debut de traiteRequeteLoginPorter : adresse distante = " + adresseDistante);*/
-        byte b;
-        
-        
+    {        
         String user = getChargeUtile().get("Login").toString();
         System.out.println("Utilisateur = " + user);
         long Temps = (long) getChargeUtile().get("Temps");

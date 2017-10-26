@@ -7,7 +7,6 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
-import java.awt.Frame;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import javax.swing.JOptionPane;

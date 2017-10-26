@@ -11,11 +11,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -43,32 +45,40 @@ public class Client {
     private String NomUtilisateur;
     private boolean ConnectedToServer;
     
-    public Client() throws IOException {
+    public Client() throws IOException, UnknownHostException
+    {
         LireProperties();
     }
     
     
-    public void LireProperties() throws FileNotFoundException, IOException 
+    public void LireProperties() throws UnknownHostException, IOException
     {
         FileInputStream fis = null;
+        FileOutputStream fos = null;
         String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
         
         
-        fis = new FileInputStream(nomFichier);
-        getProp().load(fis);
-        fis.close();
+        try 
+        {
+            fis = new FileInputStream(nomFichier);
+            getProp().load(fis);
+            fis.close();
+        } 
+        catch (FileNotFoundException ex) 
+        {            
+            fos = new FileOutputStream(nomFichier);
+
+            getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
+            getProp().setProperty("ADRESSEIP", "127.0.0.1");
+        } 
         
-        if (fis != null) 
+        if (fis != null || fos != null) 
         {
             setPort(Integer.parseInt(getProp().getProperty("PORT_BAGAGES")));            
             setIP(InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
             
             System.out.println("Port : " + getPort());
             System.out.println("IP : " + getIP());
-        }
-        else {
-            System.out.println("FUCKED UP 3");
-            System.exit(1);
         }
 }
     
