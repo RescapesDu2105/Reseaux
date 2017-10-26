@@ -20,13 +20,13 @@ import javax.swing.table.TableModel;
  */
 public class LugagesFrame extends javax.swing.JFrame {
     private final HashMap<String, Object> Vols;
-    private final Frame FenAuthentification;
+    private final FenAuthentification FenAuthentification;
     private final Client Client;
         
     /**
      * Creates new form LugagesFrame
      */
-    LugagesFrame(Frame FenAuthentification, Client Client, HashMap<String, Object> Vols) 
+    LugagesFrame(FenAuthentification FenAuthentification, Client Client, HashMap<String, Object> Vols) 
     {   
         this.Vols = Vols;
         this.FenAuthentification = FenAuthentification;
@@ -185,9 +185,10 @@ public class LugagesFrame extends javax.swing.JFrame {
         
         if (Fini)
         {            
-            Client.Deconnexion();
+            getClient().Deconnexion();
             this.dispose();
-            FenAuthentification.setVisible(true);
+            getFenAuthentification().setVisible(true);
+            getFenAuthentification().getRootPane().setDefaultButton(getFenAuthentification().getjButton_Connexion());
         }
     }//GEN-LAST:event_formWindowClosing
     
@@ -263,7 +264,7 @@ public class LugagesFrame extends javax.swing.JFrame {
         return Vols;
     }
         
-    public Frame getFenAuthentification() {
+    public FenAuthentification getFenAuthentification() {
         return FenAuthentification;
     }
 
