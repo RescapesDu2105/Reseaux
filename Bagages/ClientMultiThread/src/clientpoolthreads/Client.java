@@ -41,6 +41,7 @@ public class Client {
     private Properties Prop = new Properties();
     
     private String NomUtilisateur;
+    private boolean ConnectedToServer;
     
     public Client() throws IOException {
         LireProperties();
@@ -84,7 +85,7 @@ public class Client {
                 System.out.println("Création des flux");
                 setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
                 getOos().flush();
-            System.out.println("Fin de la création des flux");
+                System.out.println("Fin de la création des flux");
             }
             catch(IOException ex) 
             {
@@ -92,6 +93,7 @@ public class Client {
             }
             System.out.println("Client prêt");
             System.out.println("Connected = " + getCliSocket().isConnected());
+            setConnectedToServer(true);
         }
         else 
         {            
@@ -99,22 +101,46 @@ public class Client {
         }
     }
 
-    public void Deconnexion() 
+    public String Deconnexion() 
     {
-        try 
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOG_OUT_PORTER);
+        ReponseLUGAP Rep;
+        
+        EnvoyerRequete(Req);
+        Rep = RecevoirReponse();
+        
+        if (Rep != null)
         {
-            getOis().close();
-            setOis(null);
-            getOos().close();
-            setOos(null);
-            getCliSocket().close();
-            setCliSocket(null);            
-            setNomUtilisateur("");
-        } 
-        catch (IOException ex) 
+            if (Rep.getCode() == ReponseLUGAP.LOG_OUT_OK)
+            {
+                try 
+                {
+                    getOis().close();
+                    setOis(null);
+                    getOos().close();
+                    setOos(null);
+                    getCliSocket().close();
+                    setCliSocket(null);            
+                    setNomUtilisateur("");                
+                } 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    System.exit(1);
+                }
+                setConnectedToServer(false);
+
+                return null;
+            }
+            else
+            {
+                return Rep.getChargeUtile().get("Message").toString();
+            }
+        }
+        else
         {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(1);
+            setConnectedToServer(false);
+            return null;
         }
     }
     
@@ -164,7 +190,7 @@ public class Client {
         } 
         catch (IOException ex) 
         {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            setConnectedToServer(false);
         }
     }
     
@@ -179,7 +205,12 @@ public class Client {
             
             Rep = (ReponseLUGAP) getOis().readObject();
         } 
-        catch (IOException | ClassNotFoundException ex) 
+        catch (IOException ex) 
+        {
+            setConnectedToServer(false);
+            Rep = null;
+        }
+        catch (ClassNotFoundException ex)
         {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -243,6 +274,14 @@ public class Client {
 
     public void setNomUtilisateur(String NomUtilisateur) {
         this.NomUtilisateur = NomUtilisateur;
+    }
+
+    public boolean isConnectedToServer() {
+        return ConnectedToServer;
+    }
+
+    public void setConnectedToServer(boolean ConnectedToServer) {
+        this.ConnectedToServer = ConnectedToServer;
     }
     
     

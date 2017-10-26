@@ -146,26 +146,36 @@ public class LugagesFrame extends javax.swing.JFrame {
         ReponseLUGAP Rep = getClient().RecevoirReponse();
         
         if (Rep != null)
-        {            
-            DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
-            HashMap<String, Object> Bagages = Rep.getChargeUtile();
-            Object[] ligne = new Object[7];
-            
-            for (int Cpt = 1 ; Cpt <= Bagages.size() - 1 ; Cpt++) 
+        {    
+            if (Rep.getCode() == ReponseLUGAP.LUGAGES_LOADED)
             {
-                hm = (HashMap) Bagages.get(Integer.toString(Cpt));
-                ligne[0] = hm.get("IdBagage");
-                ligne[1] = hm.get("Poids");
-                ligne[2] = hm.get("TypeBagage");
-                ligne[3] = hm.get("Receptionne"); 
-                ligne[4] = hm.get("Charge"); 
-                ligne[5] = hm.get("Verifie"); 
-                ligne[6] = hm.get("Remarques"); 
-                dtm.insertRow(Cpt - 1, ligne);
-            }            
+                DefaultTableModel dtm = (DefaultTableModel) jTableBagages.getModel();
+                HashMap<String, Object> Bagages = Rep.getChargeUtile();
+                Object[] ligne = new Object[7];
+
+                for (int Cpt = 1 ; Cpt <= Bagages.size() - 1 ; Cpt++) 
+                {
+                    hm = (HashMap) Bagages.get(Integer.toString(Cpt));
+                    ligne[0] = hm.get("IdBagage");
+                    ligne[1] = hm.get("Poids");
+                    ligne[2] = hm.get("TypeBagage");
+                    ligne[3] = hm.get("Receptionne"); 
+                    ligne[4] = hm.get("Charge"); 
+                    ligne[5] = hm.get("Verifie"); 
+                    ligne[6] = hm.get("Remarques"); 
+                    dtm.insertRow(Cpt - 1, ligne);
+                }            
+            }
+            else if (Rep != null)
+            {
+                JOptionPane.showMessageDialog(this, ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE, "Impossible de charger les bagages !", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }   
         }
         else
-            System.out.println("J'AI RIEN LOL");
+        {
+            JOptionPane.showMessageDialog(this, "Le serveur s'est déconnecté !", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

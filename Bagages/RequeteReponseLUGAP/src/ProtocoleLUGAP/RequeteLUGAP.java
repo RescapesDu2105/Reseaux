@@ -19,6 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
@@ -29,6 +31,7 @@ import requetepoolthreads.Requete;
  */
 public class RequeteLUGAP implements Requete, Serializable{
     //public final static int REQUEST_TEMPORARY_KEY = 0;
+    public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
     public final static int REQUEST_LOAD_LUGAGES = 3;
@@ -64,12 +67,21 @@ public class RequeteLUGAP implements Requete, Serializable{
     {
         switch(getType())
         {
+            case REQUEST_LOG_OUT_PORTER:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteLogOutPorter(s);
+                    }            
+                };
+                
             case REQUEST_LOGIN_PORTER:
                 return new Runnable() 
                 {
                     public void run() 
                     {
-                        traiteRequeteLoginPorter(s, cs);
+                        traiteRequeteLoginPorter();
                     }            
                 };
             
@@ -78,7 +90,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadFlights(s, cs);
+                        traiteRequeteLoadFlights();
                     }            
                 };
             
@@ -87,7 +99,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadLugages(s, cs);
+                        traiteRequeteLoadLugages();
                     }            
                 };
             
@@ -96,7 +108,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteSaveLugages(s, cs);
+                        traiteRequeteSaveLugages();
                     }            
                 };                
             
@@ -104,10 +116,16 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }    
     
-    private void traiteRequeteLoginPorter(Socket s, ConsoleServeur cs) 
+    private void traiteRequeteLogOutPorter(Socket s) 
     {
-        String adresseDistante = s.getRemoteSocketAddress().toString();        
-        System.out.println("Debut de traiteRequeteLoginPorter : adresse distante = " + adresseDistante);
+        Rep = new ReponseLUGAP(ReponseLUGAP.LOG_OUT_OK);
+        Rep.getChargeUtile().put("Message", ReponseLUGAP.LOG_OUT_OK_MESSAGE);
+    }
+    
+    private void traiteRequeteLoginPorter() 
+    {
+        /*String adresseDistante = s.getRemoteSocketAddress().toString();        
+        System.out.println("Debut de traiteRequeteLoginPorter : adresse distante = " + adresseDistante);*/
         byte b;
         
         
@@ -138,11 +156,10 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                 if (MessageDigest.isEqual(msgD, msgDLocal)) 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LOGIN_OK);
+                    Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LOGIN_OK_MESSAGE);
                     Rep.getChargeUtile().put("Nom", Champs[1]);
                     Rep.getChargeUtile().put("Prenom", Champs[2]);
-                    System.out.println(ReponseLUGAP.LOGIN_OK);
                 }
                 else 
                 {
@@ -202,7 +219,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     
-    private void traiteRequeteLoadFlights(Socket s, ConsoleServeur cs)
+    private void traiteRequeteLoadFlights()
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -221,7 +238,7 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                 if (RS != null) 
                 {         
-                    Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+                    Rep = new ReponseLUGAP(ReponseLUGAP.FLIGHTS_LOADED);
                     while(RS.next())
                     {
                         int IdVol = RS.getInt("IdVol");
@@ -239,7 +256,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                         Rep.getChargeUtile().put(Integer.toString(i), hm);
                         i++;
                     } 
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED_MESSAGE);
                 }
             }
             catch (SQLException ex) 
@@ -248,12 +265,11 @@ public class RequeteLUGAP implements Requete, Serializable{
                     Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
 
                 Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
         }
     }
     
-    private void traiteRequeteLoadLugages(Socket s, ConsoleServeur cs)
+    private void traiteRequeteLoadLugages()
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -271,7 +287,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                                         " AND bd_airport.vols.HeureDepart = \"" + getChargeUtile().get("DateHeureDepart") + "\"");
                 if (RS != null) 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
+                    Rep = new ReponseLUGAP(ReponseLUGAP.LUGAGES_LOADED);
                     while(RS.next())
                     {
                         HashMap<String, Object> hm = new HashMap<>();
@@ -296,7 +312,7 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                         i++;
                     }                
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED_MESSAGE);
                 }
                 else
                 {
@@ -316,7 +332,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }
     
-    private void traiteRequeteSaveLugages(Socket s, ConsoleServeur cs)
+    private void traiteRequeteSaveLugages()
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -329,9 +345,7 @@ public class RequeteLUGAP implements Requete, Serializable{
             for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
             {
                 HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
-                /*System.out.println("UPDATE Bagages "
-                            + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
-                            + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");*/
+                
                 try 
                 {
                     Ok = BD_airport.Update("UPDATE Bagages "
@@ -340,44 +354,22 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                     System.out.println("Ok = " + Ok);
                 } 
-                catch (SQLException ex) 
-                {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                    System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                }
+                catch (SQLException ex) {}
 
                 if (Ok == getChargeUtile().size())
-                {
-                    System.out.println("Update ok !");                
-                    Rep = new ReponseLUGAP(ReponseLUGAP.STATUS_OK);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED);
-                    System.out.println(ReponseLUGAP.LUGAGES_SAVED);
+                {     
+                    Rep = new ReponseLUGAP(ReponseLUGAP.LUGAGES_SAVED);
+                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED_MESSAGE);
                 }    
                 else 
                 {
                     Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
                     Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
-                    System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 }
             } 
         }
     }
-    
-    /*
-    public void EnvoyerReponse(Socket s, ReponseLUGAP Rep)
-    {
-        ObjectOutputStream oos = null;
         
-        try {            
-            oos = new ObjectOutputStream(s.getOutputStream());
-            oos.writeObject(Rep); 
-            oos.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(RequeteLUGAP.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
-    
     public Bean_DB_Access Connexion_DB()
     {
         Bean_DB_Access BD_airport;
@@ -434,6 +426,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     {
         switch(getType()) 
         {
+            case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
             case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
             case REQUEST_LOAD_FLIGHTS: return "REQUEST_LOAD_FLIGHTS";
             case REQUEST_LOAD_LUGAGES: return "REQUEST_LOAD_LUGAGES";

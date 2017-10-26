@@ -108,23 +108,26 @@ public class FlightsFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if (getClient().getCliSocket().isConnected())
-        {        
-            String[] options = new String[] {"Oui", "Annuler"};
-            int Choix = JOptionPane.showOptionDialog(null, "Êtes-vous sûr de vouloir vous déconnecter ?", "Déconnexion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        String[] options = new String[] {"Oui", "Annuler"};
+        int Choix = JOptionPane.showOptionDialog(null, "Êtes-vous sûr de vouloir vous déconnecter ?", "Déconnexion", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 
-            if (Choix == 0)
+        if (Choix == 0)
+        {
+            String Error = getClient().Deconnexion();
+
+            if(Error == null)
             {
-                getClient().Deconnexion();
-
                 this.dispose();
                 getFenAuthentification().setVisible(true);
+                getFenAuthentification().getRootPane().setDefaultButton(getFenAuthentification().getjButton_Connexion());
             }
-        }
-        else
-        {  
-            JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Serveur déconnecté", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            else if (getClient().isConnectedToServer())
+                JOptionPane.showMessageDialog(this, Error, "Erreur", JOptionPane.ERROR_MESSAGE);                
+            else
+            {  
+                JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Serveur déconnecté", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }                    
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -158,20 +161,32 @@ public class FlightsFrame extends javax.swing.JFrame {
         
         if (Rep != null)
         {
-            HashMap<String, Object> RepVols = Rep.getChargeUtile();
-            Object[] ligne = new Object[4];
-            
-            for (int Cpt = 1 ; Cpt <= RepVols.size() - 1 ; Cpt++) 
+            if (Rep.getCode() == ReponseLUGAP.FLIGHTS_LOADED)
             {
-                Vols.add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
-                
-                ligne[0] = Vols.get(Cpt - 1).get("IdVol");
-                ligne[1] = Vols.get(Cpt - 1).get("NomCompagnie");
-                ligne[2] = Vols.get(Cpt - 1).get("Destination");
-                Timestamp DateHeureDepart = (Timestamp) Vols.get(Cpt - 1).get("DateHeureDepart");
-                ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
-                dtm.insertRow(Cpt - 1, ligne);
-            }            
+                HashMap<String, Object> RepVols = Rep.getChargeUtile();
+                Object[] ligne = new Object[4];
+
+                for (int Cpt = 1 ; Cpt <= RepVols.size() - 1 ; Cpt++) 
+                {
+                    Vols.add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
+
+                    ligne[0] = Vols.get(Cpt - 1).get("IdVol");
+                    ligne[1] = Vols.get(Cpt - 1).get("NomCompagnie");
+                    ligne[2] = Vols.get(Cpt - 1).get("Destination");
+                    Timestamp DateHeureDepart = (Timestamp) Vols.get(Cpt - 1).get("DateHeureDepart");
+                    ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
+                    dtm.insertRow(Cpt - 1, ligne);
+                }            
+            }
+            else if (Rep != null)
+            {
+                JOptionPane.showMessageDialog(this, ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE, "Impossible de charger les vols !", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            } 
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Le serveur s'est déconnecté !", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 

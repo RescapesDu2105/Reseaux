@@ -22,35 +22,49 @@ public final class ServerProperties {
     private String NomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
 
     
-    public ServerProperties() throws FileNotFoundException, IOException {       
+    public ServerProperties() throws FileNotFoundException, IOException 
+    {       
         FileInputStream fis = null;
         
-        try {
+        try 
+        {
             fis = new FileInputStream(getNomFichier());
             getProp().load(fis);
             fis.close();
-        } catch (FileNotFoundException ex) {
+        } 
+        catch (FileNotFoundException ex) 
+        {
             FileOutputStream fos;
-            try {
+            try 
+            {
                 fos = new FileOutputStream(getNomFichier());
                 
-                getProp().setProperty("PORT_CHECKIN", String.valueOf(30041));
-                getProp().setProperty("PORT_BAGAGES", String.valueOf(30042));
-                getProp().setProperty("MAX_CLIENTS", String.valueOf(10));
-                getProp().setProperty("BD", "bd_airport");
-                getProp().setProperty("ADRESSEIP", "192.168.0.3");    
+                getProp().setProperty("PORT_CHECKIN", Integer.toString(30041));
+                getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
+                getProp().setProperty("MAX_CLIENTS", Integer.toString(5));
+                getProp().setProperty("SCHEMA_BD", "bd_airport");
+                getProp().setProperty("ADRESSEIP", "127.0.0.1"); 
+                getProp().setProperty("HOST_BD", "localhost");
+                getProp().setProperty("PORT_BD", "3306");   
                 
-                try {
+                try 
+                {                   
                     getProp().store(fos, null);
-                } catch (IOException ex1) {
+                } 
+                catch (IOException ex1) 
+                {
                     Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex1);
                     System.exit(1);
                 }
-            } catch (FileNotFoundException ex1) {
+            } 
+            catch (FileNotFoundException ex1) 
+            {
                 Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex1);
                 System.exit(1);
             }
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             Logger.getLogger(ServerProperties.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }

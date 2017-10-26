@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
@@ -156,7 +157,7 @@ public class FenAuthentification extends javax.swing.JFrame {
 
             if (Rep != null) 
             {
-                if(Rep.getCode() == ReponseLUGAP.STATUS_OK)
+                if(Rep.getCode() == ReponseLUGAP.LOGIN_OK)
                 {
                     System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
                     getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
@@ -231,6 +232,10 @@ public class FenAuthentification extends javax.swing.JFrame {
 
     public void setClient(Client Client) {
         this.Client = Client;
+    }
+
+    public JButton getjButton_Connexion() {
+        return jButton_Connexion;
     }
 
     

@@ -2,9 +2,9 @@ INSERT INTO bd_airport.Compagnies VALUES ('1', 'WALABIES-AIRLINES');
 INSERT INTO bd_airport.Compagnies VALUES ('2', 'POWDER-AIRLINES');
 INSERT INTO bd_airport.Compagnies VALUES ('3', 'AIR FRANCE CANAILLE');
 
-INSERT INTO bd_airport.Vols VALUES ('714', 'Sydney', '2017-10-26 05:30:00', '2017-10-27 01:00:00');
-INSERT INTO bd_airport.Vols VALUES ('362', 'Peshawar', '2017-10-26 06:30:00', '2017-10-26 22:00:00');
-INSERT INTO bd_airport.Vols VALUES ('152', 'Paris', '2017-10-26 07:20:00', '2017-10-26 08:20:00');
+INSERT INTO bd_airport.Vols VALUES ('714', 'Sydney', '2017-10-26 15:30:00', '2017-10-27 11:00:00');
+INSERT INTO bd_airport.Vols VALUES ('362', 'Peshawar', '2017-10-26 16:30:00', '2017-10-26 08:00:00');
+INSERT INTO bd_airport.Vols VALUES ('152', 'Paris', '2017-10-26 17:20:00', '2017-10-26 18:20:00');
 
 INSERT INTO bd_airport.Avions VALUES ('1','Sully','Airbus A320','30','3','152');
 INSERT INTO bd_airport.Avions VALUES ('4','Atlas','Boeing 777','20','2','362');

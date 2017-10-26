@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import requetepoolthreads.ConsoleServeur;
 
 /**
@@ -72,6 +74,19 @@ public class ThreadClient extends Thread {
                     
                     EnvoyerReponse(CSocket, req.getRep());
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getRep().getChargeUtile().get("Message")+ "#" + getNom());
+                    if (req.getRep().getCode() == ReponseLUGAP.LOG_OUT_OK)
+                    {                        
+                        try 
+                        {
+                            CSocket.close();
+                        } 
+                        catch (IOException ex) 
+                        {
+                            Logger.getLogger(ThreadClient.class.getName()).log(Level.SEVERE, null, ex);
+                            req.getRep().setCodeRetour(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                            req.getRep().getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                        }
+                    }
                 }
             }
             

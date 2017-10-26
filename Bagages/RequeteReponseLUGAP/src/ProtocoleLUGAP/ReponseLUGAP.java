@@ -18,15 +18,19 @@ public class ReponseLUGAP implements Reponse, Serializable {
     public final static int WRONG_USER_PASSWORD = 401;
     public final static int INTERNAL_SERVER_ERROR = 500;
     
-    public final static String LOGIN_OK = "Client connecté au serveur";
-    public final static String FLIGHTS_LOADED = "Informations sur les vols envoyés";
-    public final static String LUGAGES_LOADED = "Informations sur les bagages envoyés";
-    public final static String LUGAGES_SAVED = "Informations sur les bagages sauvés";
+    public final static int LOG_OUT_OK = 201;
+    public final static int LOGIN_OK = 202;
+    public final static int FLIGHTS_LOADED = 203;
+    public final static int LUGAGES_LOADED = 204;
+    public final static int LUGAGES_SAVED = 205;
     
+    public final static String LOG_OUT_OK_MESSAGE = "Client déconnecté du serveur";
+    public final static String LOGIN_OK_MESSAGE = "Client connecté au serveur";
+    public final static String FLIGHTS_LOADED_MESSAGE = "Informations sur les vols envoyés";
+    public final static String LUGAGES_LOADED_MESSAGE = "Informations sur les bagages envoyés";
+    public final static String LUGAGES_SAVED_MESSAGE = "Informations sur les bagages sauvés";
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
-    public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";
-    
-    
+    public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";  
     
     private int CodeRetour;
     private HashMap<String, Object> ChargeUtile;
@@ -54,7 +58,7 @@ public class ReponseLUGAP implements Reponse, Serializable {
     public void setChargeUtile(HashMap ChargeUtile) {
         this.ChargeUtile = ChargeUtile;
     }
-    private void setCodeRetour(int CodeRetour) {
+    public void setCodeRetour(int CodeRetour) {
         this.CodeRetour = CodeRetour;
     }
     
