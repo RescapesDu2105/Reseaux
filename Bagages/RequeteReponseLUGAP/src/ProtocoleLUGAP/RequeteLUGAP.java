@@ -18,6 +18,7 @@ import java.security.Security;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.ConsoleServeur;
@@ -28,7 +29,6 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
-    //public final static int REQUEST_TEMPORARY_KEY = 0;
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
@@ -54,7 +54,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     @Override
-    public Runnable createRunnable(final Socket s, final ConsoleServeur cs) 
+    public Runnable createRunnable(final Socket s, ArrayList<String> Tab) 
     {
         switch(getType())
         {
@@ -81,7 +81,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadFlights();
+                        traiteRequeteLoadFlights(Tab);
                     }            
                 };
             
@@ -90,7 +90,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadLugages();
+                        traiteRequeteLoadLugages(Tab);
                     }            
                 };
             
@@ -149,7 +149,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 }
                 else 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+                    Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
                     Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
                     System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
                 }
@@ -163,7 +163,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }       
         else
         {
-            Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+            Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
             Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
             System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
         }               
@@ -205,7 +205,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     
-    private void traiteRequeteLoadFlights()
+    private void traiteRequeteLoadFlights(ArrayList<String> Tab)
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -255,7 +255,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }
     
-    private void traiteRequeteLoadLugages()
+    private void traiteRequeteLoadLugages(ArrayList<String>Tab)
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;

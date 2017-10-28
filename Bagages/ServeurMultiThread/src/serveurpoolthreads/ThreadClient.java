@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import requetepoolthreads.ConsoleServeur;
 
 /**
@@ -27,7 +28,9 @@ public class ThreadClient extends Thread {
     private ObjectInputStream ois = null;
     private ObjectOutputStream oos = null;
     
-    private Runnable TacheEnCours;
+    private Runnable TacheEnCours; //Pas utile
+    
+    private ArrayList<String>Tab = null;
 
     public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication) 
     {
@@ -49,6 +52,7 @@ public class ThreadClient extends Thread {
                 System.out.println("********** Serveur en attente");
                 CSocket = SSocket.accept();
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
+                Tab = new ArrayList<>();
                 System.out.println("********** Serveur après accept()");                
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
             } 
@@ -65,9 +69,9 @@ public class ThreadClient extends Thread {
                 
                 if (req != null)
                 {
-                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
+                    this.GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
                     
-                    this.TacheEnCours = req.createRunnable(CSocket, GUIApplication);
+                    this.TacheEnCours = req.createRunnable(CSocket, getTab());
                     this.TacheEnCours.run();  
                     
                     EnvoyerReponse(CSocket, req.getRep());
@@ -221,5 +225,13 @@ public class ThreadClient extends Thread {
 
     public void setTacheEnCours(Runnable TacheEnCours) {
         this.TacheEnCours = TacheEnCours;
+    }
+
+    public ArrayList<String> getTab() {
+        return Tab;
+    }
+
+    public void setTab(ArrayList<String> Tab) {
+        this.Tab = Tab;
     }
 }

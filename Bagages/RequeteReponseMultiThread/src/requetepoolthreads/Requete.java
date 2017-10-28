@@ -6,11 +6,12 @@
 package requetepoolthreads;
 
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  *
  * @author Philippe
  */
 public interface Requete {
-    public Runnable createRunnable(Socket s, ConsoleServeur cs);
+    public Runnable createRunnable(Socket s, ArrayList<String> Tab);
 }
