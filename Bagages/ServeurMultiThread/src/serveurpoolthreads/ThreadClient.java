@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 import requetepoolthreads.ConsoleServeur;
 
 /**
@@ -30,13 +30,14 @@ public class ThreadClient extends Thread {
     
     private Runnable TacheEnCours; //Pas utile
     
-    private ArrayList<String>Tab = null;
+    private HashMap<String, Object>Tab = null;
 
     public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication) 
     {
         this.Nom = Nom;
         this.SSocket = SSocket;
-        this.GUIApplication = GUIApplication;        
+        this.GUIApplication = GUIApplication;     
+        this.Tab = new HashMap<>();
     }
     
     
@@ -45,15 +46,17 @@ public class ThreadClient extends Thread {
     {  
         while(!isInterrupted()) 
         {
+            System.out.println("avant get Tab = " + Tab);
             System.out.println(getNom() + " avant get");
             try 
             {                
                 GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
-                System.out.println("********** Serveur en attente");
+                //System.out.println("********** Serveur en attente");
+                System.out.println("1 Tab = " + Tab);
                 CSocket = SSocket.accept();
+                System.out.println("2 Tab = " + Tab);
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
-                Tab = new ArrayList<>();
-                System.out.println("********** Serveur après accept()");                
+                //System.out.println("********** Serveur après accept()");      
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
             } 
             catch (IOException ex) 
@@ -66,12 +69,10 @@ public class ThreadClient extends Thread {
             while (getCSocket() != null && !getCSocket().isClosed())
             {  
                 RequeteLUGAP req = RecevoirRequete();  
-                
                 if (req != null)
                 {
                     this.GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
-                    
-                    this.TacheEnCours = req.createRunnable(CSocket, getTab());
+                    this.TacheEnCours = req.createRunnable(getTab());
                     this.TacheEnCours.run();  
                     
                     EnvoyerReponse(CSocket, req.getRep());
@@ -88,7 +89,7 @@ public class ThreadClient extends Thread {
                             req.getRep().getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                         }
                     }
-                }
+                } 
             }
             
             try 
@@ -124,7 +125,7 @@ public class ThreadClient extends Thread {
                 setOis(new ObjectInputStream(CSocket.getInputStream()));
             
             req = (RequeteLUGAP)ois.readObject();
-            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
+            //System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
         } 
         catch (IOException ex) 
         {
@@ -227,11 +228,12 @@ public class ThreadClient extends Thread {
         this.TacheEnCours = TacheEnCours;
     }
 
-    public ArrayList<String> getTab() {
+    public HashMap<String, Object> getTab() {
         return Tab;
     }
 
-    public void setTab(ArrayList<String> Tab) {
+    public void setTab(HashMap<String, Object> Tab) {
         this.Tab = Tab;
     }
+
 }

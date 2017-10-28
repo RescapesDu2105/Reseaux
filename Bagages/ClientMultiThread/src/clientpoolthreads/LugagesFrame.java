@@ -138,7 +138,6 @@ public class LugagesFrame extends javax.swing.JFrame {
         HashMap <String, Object> hm = new HashMap<>();
         
         hm.put("IdVol", getVols().get("IdVol"));
-        hm.put("DateHeureDepart", getVols().get("DateHeureDepart"));
         Req.setChargeUtile(hm);
                 
         getClient().EnvoyerRequete(Req);       
@@ -152,7 +151,7 @@ public class LugagesFrame extends javax.swing.JFrame {
                 HashMap<String, Object> Bagages = Rep.getChargeUtile();
                 Object[] ligne = new Object[7];
 
-                for (int Cpt = 1 ; Cpt <= Bagages.size() - 1 ; Cpt++) 
+                for (int Cpt = 1 ; Cpt <= Bagages.size() - 2 ; Cpt++) 
                 {
                     hm = (HashMap) Bagages.get(Integer.toString(Cpt));
                     ligne[0] = hm.get("IdBagage");
@@ -245,9 +244,16 @@ public class LugagesFrame extends javax.swing.JFrame {
                     }
                     Bagages.put(Integer.toString(row + 1), hm);
                 }
-                
+                Bagages.put("IdVol", getVols().get("IdVol"));
+                System.out.println("Req = " + Req.getChargeUtile());
                 getClient().EnvoyerRequete(Req);
                 ReponseLUGAP Rep = getClient().RecevoirReponse();
+                
+                /*if (Rep == null)
+                {
+                    JOptionPane.showMessageDialog(this, Rep.getChargeUtile().get("Message"), "Problème lors de la sauvegarde des bagages !", JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                }   */
             }    
             else
                 Fini = false;

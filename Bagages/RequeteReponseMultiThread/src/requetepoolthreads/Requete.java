@@ -5,13 +5,12 @@
  */
 package requetepoolthreads;
 
-import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author Philippe
  */
 public interface Requete {
-    public Runnable createRunnable(Socket s, ArrayList<String> Tab);
+    public Runnable createRunnable(HashMap<String, Object> Tab);
 }
