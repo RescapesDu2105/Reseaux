@@ -339,6 +339,7 @@ public class RequeteLUGAP implements Requete, Serializable{
             int IdVol = (int)getChargeUtile().get("IdVol");
             System.out.println("IdVol = " + IdVol);
             Tab.put("IdVol", IdVol);
+            Tab.put("Test", "Test");
             //System.out.println("Tab = " + Tab);
             
             System.out.println("getChargeUtile() = " + getChargeUtile());
