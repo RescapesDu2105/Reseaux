@@ -14,12 +14,12 @@ import requetepoolthreads.Reponse;
  * @author Philippe
  */
 public class ReponseLUGAP implements Reponse, Serializable {
-    public final static int STATUS_OK = 200;    
-    public final static int WRONG_USER_PASSWORD = 401;
+    //public final static int STATUS_OK = 200;    
     public final static int INTERNAL_SERVER_ERROR = 500;
     
     public final static int LOG_OUT_OK = 201;
     public final static int LOGIN_OK = 202;
+    public final static int LOGIN_KO = 402;
     public final static int FLIGHTS_LOADED = 203;
     public final static int LUGAGES_LOADED = 204;
     public final static int LUGAGES_SAVED = 205;

@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import requetepoolthreads.ConsoleServeur;
 import requetepoolthreads.Requete;
 
 /**
@@ -28,7 +27,6 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
-    //public final static int REQUEST_TEMPORARY_KEY = 0;
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
@@ -55,6 +53,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     
     @Override
     public Runnable createRunnable() 
+    //public Runnable createRunnable(HashMap<String, Object> Tab) 
     {
         switch(getType())
         {
@@ -81,7 +80,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadFlights();
+                        traiteRequeteLoadFlights(Tab);
                     }            
                 };
             
@@ -99,7 +98,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteSaveLugages();
+                        traiteRequeteSaveLugages(Tab);
                     }            
                 };                
             
@@ -148,7 +147,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 }
                 else 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+                    Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
                     Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
                     System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
                 }
@@ -162,7 +161,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }       
         else
         {
-            Rep = new ReponseLUGAP(ReponseLUGAP.WRONG_USER_PASSWORD);
+            Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
             Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
             System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
         }               
@@ -204,7 +203,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     
-    private void traiteRequeteLoadFlights()
+    private void traiteRequeteLoadFlights(HashMap<String, Object> Tab)
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -227,16 +226,25 @@ public class RequeteLUGAP implements Requete, Serializable{
                     while(RS.next())
                     {
                         int IdVol = RS.getInt("IdVol");
-                        String NomCompagnie = RS.getString("Nom");
+                        int NumeroVol = RS.getInt("NumeroVol");
+                        String NomCompagnie = RS.getString("NomCompagnie");
                         String Destination = RS.getString("Destination");
                         Timestamp DateHeureDepart = RS.getTimestamp("HeureDepart");
 
                         HashMap<String, Object> hm = new HashMap<>();
-
-                        hm.put("IdVol", IdVol);
-                        hm.put("NomCompagnie", NomCompagnie);
-                        hm.put("Destination", Destination);
-                        hm.put("DateHeureDepart", DateHeureDepart);
+                        
+                        boolean bContient = Tab.containsValue(IdVol);
+                        //System.out.println("Tab = " + Tab);
+                        System.out.println("bContient = " + bContient);
+                        if (!bContient)
+                        {
+                            hm.put("IdVol", IdVol);
+                            hm.put("NumeroVol", NumeroVol);
+                            hm.put("NomCompagnie", NomCompagnie);
+                            hm.put("Destination", Destination);
+                            hm.put("DateHeureDepart", DateHeureDepart);
+                        }                           
+                        hm.put("BagagesChargés", bContient);
 
                         Rep.getChargeUtile().put(Integer.toString(i), hm);
                         i++;
@@ -248,7 +256,9 @@ public class RequeteLUGAP implements Requete, Serializable{
             {
                 if (Rep == null)
                     Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-
+                else
+                    Rep.setCodeRetour(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                
                 Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
         }
@@ -296,6 +306,7 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                         i++;
                     }                
+                    Rep.getChargeUtile().put("IdVol", getChargeUtile().get("IdVol"));
                     Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED_MESSAGE);
                 }
                 else
@@ -316,7 +327,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }
     
-    private void traiteRequeteSaveLugages()
+    private void traiteRequeteSaveLugages(HashMap<String, Object> Tab)
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -324,19 +335,26 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         BD_airport = Connexion_DB();
         
-        if (BD_airport != null && Rep == null || (Rep != null && !Rep.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
+        if (BD_airport != null && Rep == null)// || (Rep != null && !Rep.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
         {
-            for (int i = 1 ; i <= getChargeUtile().size() ; i++) 
+            int IdVol = (int)getChargeUtile().get("IdVol");
+            System.out.println("IdVol = " + IdVol);
+            Tab.put("IdVol", IdVol);
+            Tab.put("Test", "Test");
+            //System.out.println("Tab = " + Tab);
+            
+            System.out.println("getChargeUtile() = " + getChargeUtile());
+            System.out.println("getChargeUtile().size() = " + getChargeUtile().size());
+            
+            for (int i = 1 ; i <= getChargeUtile().size() - 1 ; i++) 
             {
                 HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
-                
+                System.out.println("i = " + i);
                 try 
                 {
                     Ok = BD_airport.Update("UPDATE Bagages "
                             + "SET Receptionne = \"" + hm.get("Receptionne") + "\", Charge = \"" + hm.get("Charge") + "\", Verifie = \"" + hm.get("Verifie") + "\", Remarques = \"" + hm.get("Remarques") 
                             + "\" WHERE IdBagage = \"" + hm.get("Identifiant") + "\"");
-
-                    System.out.println("Ok = " + Ok);
                 } 
                 catch (SQLException ex) {}
 

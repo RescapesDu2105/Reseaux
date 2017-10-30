@@ -169,18 +169,21 @@ public class FlightsFrame extends javax.swing.JFrame {
                 for (int Cpt = 1 ; Cpt <= RepVols.size() - 1 ; Cpt++) 
                 {
                     Vols.add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
-
-                    ligne[0] = Vols.get(Cpt - 1).get("IdVol");
-                    ligne[1] = Vols.get(Cpt - 1).get("NomCompagnie");
-                    ligne[2] = Vols.get(Cpt - 1).get("Destination");
-                    Timestamp DateHeureDepart = (Timestamp) Vols.get(Cpt - 1).get("DateHeureDepart");
-                    ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
-                    dtm.insertRow(Cpt - 1, ligne);
+                    HashMap<String, Object> Vol = Vols.get(Cpt - 1);
+                    if (!(boolean)Vol.get("BagagesChargés"))
+                    {
+                        ligne[0] = Vol.get("NumeroVol");
+                        ligne[1] = Vol.get("NomCompagnie");
+                        ligne[2] = Vol.get("Destination");
+                        Timestamp DateHeureDepart = (Timestamp) Vol.get("DateHeureDepart");
+                        ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
+                        dtm.insertRow(Cpt - 1, ligne);
+                    }
                 }            
             }
-            else if (Rep != null)
+            else
             {
-                JOptionPane.showMessageDialog(this, ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE, "Impossible de charger les vols !", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, Rep.getChargeUtile().get("Message"), "Impossible de charger les vols !", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             } 
         }

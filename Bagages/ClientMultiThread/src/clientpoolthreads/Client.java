@@ -70,6 +70,8 @@ public class Client {
 
             getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
             getProp().setProperty("ADRESSEIP", "127.0.0.1");
+            
+            getProp().store(fos, null);
         } 
         
         if (fis != null || fos != null) 
