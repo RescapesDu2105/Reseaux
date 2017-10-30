@@ -53,7 +53,7 @@ public class ThreadClient extends Thread {
                 GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
                 //System.out.println("********** Serveur en attente");
                 System.out.println("1 Tab = " + Tab);
-                CSocket = SSocket.accept();
+                CSocket = SSocket.accept(); // wtf
                 System.out.println("2 Tab = " + Tab);
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
                 //System.out.println("********** Serveur après accept()");      
