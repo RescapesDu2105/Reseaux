@@ -54,7 +54,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     @Override
-    public Runnable createRunnable(final Socket s, final ConsoleServeur cs) 
+    public Runnable createRunnable() 
     {
         switch(getType())
         {
@@ -63,7 +63,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLogOutPorter(s);
+                        traiteRequeteLogOutPorter();
                     }            
                 };
                 
@@ -107,7 +107,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         }
     }    
     
-    private void traiteRequeteLogOutPorter(Socket s) 
+    private void traiteRequeteLogOutPorter() 
     {
         Rep = new ReponseLUGAP(ReponseLUGAP.LOG_OUT_OK);
         Rep.getChargeUtile().put("Message", ReponseLUGAP.LOG_OUT_OK_MESSAGE);
@@ -116,7 +116,6 @@ public class RequeteLUGAP implements Requete, Serializable{
     private void traiteRequeteLoginPorter() 
     {        
         String user = getChargeUtile().get("Login").toString();
-        System.out.println("Utilisateur = " + user);
         long Temps = (long) getChargeUtile().get("Temps");
         double Random = (double) getChargeUtile().get("Random");
         byte[] msgD = (byte[]) getChargeUtile().get("Digest");
@@ -217,7 +216,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         {
             try
             {                        
-                RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.compagnies.Nom, bd_airport.vols.Destination, bd_airport.vols.HeureDepart "
+                RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.vols.NumeroVol, bd_airport.compagnies.NomCompagnie, bd_airport.vols.Destination, bd_airport.vols.HeureDepart "
                         + "FROM bd_airport.vols NATURAL JOIN avions NATURAL JOIN bd_airport.compagnies "
                         + "WHERE bd_airport.vols.HeureDepart BETWEEN current_time() AND ADDTIME(current_time(), '24:00:00') "
                         + "ORDER BY bd_airport.vols.HeureDepart");
@@ -269,8 +268,7 @@ public class RequeteLUGAP implements Requete, Serializable{
             {                        
                 RS = BD_airport.Select("SELECT IdBagage, Poids, TypeBagage, Receptionne, Charge, Verifie, Remarques " +
                                         "FROM bd_airport.vols NATURAL JOIN bd_airport.billets NATURAL JOIN bd_airport.bagages " +
-                                        "WHERE bd_airport.vols.IdVol = " + getChargeUtile().get("IdVol") +
-                                        " AND bd_airport.vols.HeureDepart = \"" + getChargeUtile().get("DateHeureDepart") + "\"");
+                                        "WHERE bd_airport.vols.IdVol = " + getChargeUtile().get("IdVol"));
                 if (RS != null) 
                 {
                     Rep = new ReponseLUGAP(ReponseLUGAP.LUGAGES_LOADED);
