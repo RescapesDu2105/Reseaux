@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Properties;
 import requetepoolthreads.ConsoleServeur;
 
 /**
@@ -20,24 +21,27 @@ import requetepoolthreads.ConsoleServeur;
  * @author Philippe
  */
 public class ThreadClient extends Thread {
-    private String Nom;
-    private ConsoleServeur GUIApplication;
-    private ServerSocket SSocket = null;
+    private final String Nom;
+    private final ConsoleServeur GUIApplication;
+    private final ServerSocket SSocket;
     private Socket CSocket = null;
     
     private ObjectInputStream ois = null;
     private ObjectOutputStream oos = null;
     
-    private Runnable TacheEnCours; //Pas utile
+    private Runnable TacheEnCours = null; //Pas utile
     
-    private HashMap<String, Object>Tab = null;
+    private final Properties Prop;
+    
+    //private HashMap<String, Object>Tab = null;
 
-    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication) 
+    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop) 
     {
         this.Nom = Nom;
         this.SSocket = SSocket;
         this.GUIApplication = GUIApplication;     
-        this.Tab = new HashMap<>();
+        //this.Tab = new HashMap<>();
+        this.Prop = Prop;
     }
     
     
@@ -46,15 +50,14 @@ public class ThreadClient extends Thread {
     {  
         while(!isInterrupted()) 
         {
-            System.out.println("avant get Tab = " + Tab);
-            System.out.println(getNom() + " avant get");
+            //System.out.println("avant get Tab = " + Tab);
             try 
             {                
                 GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
                 //System.out.println("********** Serveur en attente");
-                System.out.println("1 Tab = " + Tab);
+                //System.out.println("1 Tab = " + Tab);
                 CSocket = SSocket.accept(); // wtf
-                System.out.println("2 Tab = " + Tab);
+                //System.out.println("2 Tab = " + Tab);
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
                 //System.out.println("********** Serveur après accept()");      
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
@@ -72,7 +75,7 @@ public class ThreadClient extends Thread {
                 if (req != null)
                 {
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());                    
-                    this.TacheEnCours = req.createRunnable();
+                    this.TacheEnCours = req.createRunnable(getProp());
                     //this.GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
                     //this.TacheEnCours = req.createRunnable(getTab());
                     this.TacheEnCours.run();  
@@ -186,32 +189,16 @@ public class ThreadClient extends Thread {
         return GUIApplication;
     }
 
-    public void setGUIApplication(ConsoleServeur GUIApplication) {
-        this.GUIApplication = GUIApplication;
-    }
-
     public ServerSocket getSSocket() {
         return SSocket;
-    }
-
-    public void setSSocket(ServerSocket SSocket) {
-        this.SSocket = SSocket;
     }
 
     public Socket getCSocket() {
         return CSocket;
     }
-
-    public void setCSocket(Socket CSocket) {
-        this.CSocket = CSocket;
-    }
         
     public String getNom() {
         return Nom;
-    }
-
-    public void setNom(String Nom) {
-        this.Nom = Nom;
     }
 
     public ObjectInputStream getOis() {
@@ -230,12 +217,15 @@ public class ThreadClient extends Thread {
         this.TacheEnCours = TacheEnCours;
     }
 
-    public HashMap<String, Object> getTab() {
+    /*public HashMap<String, Object> getTab() {
         return Tab;
     }
 
     public void setTab(HashMap<String, Object> Tab) {
         this.Tab = Tab;
-    }
+    }*/
 
+    public Properties getProp() {
+        return Prop;
+    }
 }

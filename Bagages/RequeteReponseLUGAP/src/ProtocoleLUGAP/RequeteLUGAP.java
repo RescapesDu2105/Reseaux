@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Properties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.Requete;
 
@@ -34,10 +35,11 @@ public class RequeteLUGAP implements Requete, Serializable{
     public final static int REQUEST_SAVE_LUGAGES = 4;
         
     private int Type;
-    private HashMap<String, Object> chargeUtile = null;
+    private HashMap<String, Object> chargeUtile;
     private Socket SocketClient;
     
     private ReponseLUGAP Rep = null;
+    private Properties Prop = null;
 
     public RequeteLUGAP(int Type, HashMap chargeUtile) 
     {
@@ -52,9 +54,11 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     @Override
-    public Runnable createRunnable() 
+    public Runnable createRunnable(Properties Prop) 
     //public Runnable createRunnable(HashMap<String, Object> Tab) 
     {
+        setProp(Prop);
+        
         switch(getType())
         {
             case REQUEST_LOG_OUT_PORTER:
@@ -198,6 +202,8 @@ public class RequeteLUGAP implements Requete, Serializable{
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE + " : " + ex.getMessage());
             }
         }
+        
+        BD_airport.Deconnexion();
                 
         return Champs;
     }
@@ -260,6 +266,8 @@ public class RequeteLUGAP implements Requete, Serializable{
                 Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
         }
+        
+        BD_airport.Deconnexion();
     }
     
     private void traiteRequeteLoadLugages()
@@ -323,6 +331,8 @@ public class RequeteLUGAP implements Requete, Serializable{
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }     
         }
+        
+        BD_airport.Deconnexion();
     }
     
     private void traiteRequeteSaveLugages()//HashMap<String, Object> Tab)
@@ -368,6 +378,8 @@ public class RequeteLUGAP implements Requete, Serializable{
                 }
             } 
         }
+        
+        BD_airport.Deconnexion();
     }
         
     public Bean_DB_Access Connexion_DB()
@@ -375,7 +387,8 @@ public class RequeteLUGAP implements Requete, Serializable{
         Bean_DB_Access BD_airport;
         String Error;
         
-        BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+        BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, getProp().getProperty("HOST_BD"), getProp().getProperty("PORT_BD"), "Zeydax", "1234", getProp().getProperty("SCHEMA_BD"));
+        //BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
         if (BD_airport != null)
         {
             Error = BD_airport.Connexion();
@@ -420,6 +433,14 @@ public class RequeteLUGAP implements Requete, Serializable{
 
     public void setSocketClient(Socket SocketClient) {
         this.SocketClient = SocketClient;
+    }
+
+    public Properties getProp() {
+        return Prop;
+    }
+
+    public void setProp(Properties Prop) {
+        this.Prop = Prop;
     }
     
     public String getNomTypeRequete() 

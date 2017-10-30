@@ -6,12 +6,13 @@
 package requetepoolthreads;
 
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  *
  * @author Philippe
  */
 public interface Requete {
-    public Runnable createRunnable();
+    public Runnable createRunnable(Properties Prop);
     //public Runnable createRunnable(HashMap<String, Object> Tab);
 }

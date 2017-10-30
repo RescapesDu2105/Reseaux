@@ -52,7 +52,7 @@ public class Serveur extends Thread{
         System.out.println("MaxClients : " + getMaxClients());
         for (int i = 0 ; i < getMaxClients() ; i++) 
         {
-            getThreads().add(new ThreadClient("Thread du pool n°" + String.valueOf(i + 1), getSSocket_Bagages(), getGUIApplication()));
+            getThreads().add(new ThreadClient("Thread du pool n°" + String.valueOf(i + 1), getSSocket_Bagages(), getGUIApplication(), getProp()));
             getThreads().get(i).start();
         }
     }        

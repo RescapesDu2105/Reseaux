@@ -42,10 +42,10 @@ public final class ServerProperties {
                 getProp().setProperty("PORT_CHECKIN", Integer.toString(30041));
                 getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
                 getProp().setProperty("MAX_CLIENTS", Integer.toString(5));
-                getProp().setProperty("SCHEMA_BD", "bd_airport");
                 getProp().setProperty("ADRESSEIP", "127.0.0.1"); 
                 getProp().setProperty("HOST_BD", "localhost");
                 getProp().setProperty("PORT_BD", "3306");   
+                getProp().setProperty("SCHEMA_BD", "bd_airport");
                 
                 try 
                 {                   
