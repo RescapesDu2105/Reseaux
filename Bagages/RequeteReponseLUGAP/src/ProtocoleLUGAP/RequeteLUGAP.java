@@ -225,7 +225,8 @@ public class RequeteLUGAP implements Requete, Serializable{
             {                        
                 RS = BD_airport.Select("SELECT bd_airport.vols.IdVol, bd_airport.vols.NumeroVol, bd_airport.compagnies.NomCompagnie, bd_airport.vols.Destination, bd_airport.vols.HeureDepart "
                         + "FROM bd_airport.vols NATURAL JOIN avions NATURAL JOIN bd_airport.compagnies "
-                        + "WHERE bd_airport.vols.HeureDepart BETWEEN current_time() AND ADDTIME(current_time(), '24:00:00') "
+                        + "WHERE bd_airport.vols.HeureDepart BETWEEN current_time() AND ADDTIME(current_time(), '04:00:00') "
+                        + "AND bd_airport.vols.IdVol IN (SELECT DISTINCT IdVol FROM bd_airport.bagages NATURAL JOIN bd_airport.billets WHERE Charge != 'O') "
                         + "ORDER BY bd_airport.vols.HeureDepart");
 
                 if (RS != null) 
