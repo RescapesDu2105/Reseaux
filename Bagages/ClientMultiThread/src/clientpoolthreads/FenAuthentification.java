@@ -8,7 +8,6 @@ package clientpoolthreads;
 import ProtocoleLUGAP.ReponseLUGAP;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import javax.swing.JButton;
