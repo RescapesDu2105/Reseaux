@@ -145,7 +145,12 @@ public class ControlDataCenter extends HttpServlet {
             {                                    
                 if (request.getParameter("Inscription") != null)
                 {
-                    if (request.getParameter("inputNom").isEmpty())
+                    if(request.getParameter("inputPassword").length() < 4)
+                    {                        
+                        session.setAttribute("ErrorLogin", "La longueur du mot de passe doit être supérieur à 4 !");
+                        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
+                    }
+                    else if (request.getParameter("inputNom").isEmpty())
                     {
                         session.setAttribute("ErrorLogin", "Le champ du nom de famille ne peut être vide !");
                         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
