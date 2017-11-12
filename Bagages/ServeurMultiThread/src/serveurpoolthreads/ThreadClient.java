@@ -135,7 +135,7 @@ public class ThreadClient extends Thread {
         } 
         catch (IOException ex) 
         {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             try 
             {
                 CSocket.close();
