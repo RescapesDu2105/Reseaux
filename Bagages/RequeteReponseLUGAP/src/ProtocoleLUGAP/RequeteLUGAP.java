@@ -28,6 +28,8 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
+    //private static final long serialVersionUID = 4296258939822015079L;
+    
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_LOAD_FLIGHTS = 2;
@@ -38,7 +40,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     private HashMap<String, Object> chargeUtile;
     private Socket SocketClient;
     
-    private ReponseLUGAP Rep = null;
+    private ReponseLUGAP Reponse = null;
     private Properties Prop = null;
 
     public RequeteLUGAP(int Type, HashMap chargeUtile) 
@@ -112,8 +114,8 @@ public class RequeteLUGAP implements Requete, Serializable{
     
     private void traiteRequeteLogOutPorter() 
     {
-        Rep = new ReponseLUGAP(ReponseLUGAP.LOG_OUT_OK);
-        Rep.getChargeUtile().put("Message", ReponseLUGAP.LOG_OUT_OK_MESSAGE);
+        Reponse = new ReponseLUGAP(ReponseLUGAP.LOG_OUT_OK);
+        Reponse.getChargeUtile().put("Message", ReponseLUGAP.LOG_OUT_OK_MESSAGE);
     }
     
     private void traiteRequeteLoginPorter() 
@@ -144,29 +146,29 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                 if (MessageDigest.isEqual(msgD, msgDLocal)) 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LOGIN_OK_MESSAGE);
-                    Rep.getChargeUtile().put("Nom", Champs[1]);
-                    Rep.getChargeUtile().put("Prenom", Champs[2]);
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.LOGIN_OK_MESSAGE);
+                    Reponse.getChargeUtile().put("Nom", Champs[1]);
+                    Reponse.getChargeUtile().put("Prenom", Champs[2]);
                 }
                 else 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
                     System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
                 }
             } 
             catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex) 
             {
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }; 
         }       
         else
         {
-            Rep = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
-            Rep.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+            Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
+            Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
             System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
         }               
     }
@@ -197,8 +199,8 @@ public class RequeteLUGAP implements Requete, Serializable{
             } 
             catch (SQLException ex) 
             {            
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE + " : " + ex.getMessage());
             }
         }
@@ -228,7 +230,7 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                 if (RS != null) 
                 {         
-                    Rep = new ReponseLUGAP(ReponseLUGAP.FLIGHTS_LOADED);
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.FLIGHTS_LOADED);
                     while(RS.next())
                     {
                         int IdVol = RS.getInt("IdVol");
@@ -250,20 +252,20 @@ public class RequeteLUGAP implements Requete, Serializable{
                             hm.put("DateHeureDepart", DateHeureDepart);
                         //} hm.put("BagagesChargés", bContient);
 
-                        Rep.getChargeUtile().put(Integer.toString(i), hm);
+                        Reponse.getChargeUtile().put(Integer.toString(i), hm);
                         i++;
                     } 
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED_MESSAGE);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.FLIGHTS_LOADED_MESSAGE);
                 }
             }
             catch (SQLException ex) 
             {
-                if (Rep == null)
-                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                if (Reponse == null)
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
                 else
-                    Rep.setCodeRetour(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                    Reponse.setCode(ReponseLUGAP.INTERNAL_SERVER_ERROR);
                 
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
         }
         
@@ -287,7 +289,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                                         "WHERE bd_airport.vols.IdVol = " + getChargeUtile().get("IdVol"));
                 if (RS != null) 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.LUGAGES_LOADED);
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.LUGAGES_LOADED);
                     while(RS.next())
                     {
                         HashMap<String, Object> hm = new HashMap<>();
@@ -308,26 +310,26 @@ public class RequeteLUGAP implements Requete, Serializable{
                         hm.put("Verifie", Verifie);
                         hm.put("Remarques", Remarques);
 
-                        Rep.getChargeUtile().put(Integer.toString(i), hm);
+                        Reponse.getChargeUtile().put(Integer.toString(i), hm);
 
                         i++;
                     }                
-                    Rep.getChargeUtile().put("IdVol", getChargeUtile().get("IdVol"));
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED_MESSAGE);
+                    Reponse.getChargeUtile().put("IdVol", getChargeUtile().get("IdVol"));
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_LOADED_MESSAGE);
                 }
                 else
                 {
-                    if (Rep == null)
-                        Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                    if (Reponse == null)
+                        Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
 
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                     System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 }
             }
             catch (SQLException ex) 
             {
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }     
         }
@@ -343,7 +345,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         BD_airport = Connexion_DB();
         
-        if (BD_airport != null && Rep == null)// || (Rep != null && !Rep.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
+        if (BD_airport != null && Reponse == null)// || (Reponse != null && !Reponse.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
         {
             //int IdVol = (int)getChargeUtile().get("IdVol");
             //System.out.println("IdVol = " + IdVol);
@@ -368,13 +370,13 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                 if (Ok == getChargeUtile().size())
                 {     
-                    Rep = new ReponseLUGAP(ReponseLUGAP.LUGAGES_SAVED);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED_MESSAGE);
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.LUGAGES_SAVED);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.LUGAGES_SAVED_MESSAGE);
                 }    
                 else 
                 {
-                    Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                    Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                    Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 }
             } 
         }
@@ -394,8 +396,8 @@ public class RequeteLUGAP implements Requete, Serializable{
             Error = BD_airport.Connexion();
             if (Error != null)
             {
-                Rep = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
-                Rep.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE + " : " + Error);
             }                
         }        
@@ -403,12 +405,13 @@ public class RequeteLUGAP implements Requete, Serializable{
         return BD_airport;
     }
     
-    public ReponseLUGAP getRep() {
-        return Rep;
+    @Override
+    public ReponseLUGAP getReponse() {
+        return Reponse;
     }
 
-    public void setRep(ReponseLUGAP Rep) {
-        this.Rep = Rep;
+    public void setReponse(ReponseLUGAP Reponse) {
+        this.Reponse = Reponse;
     }
     
     public int getType() {

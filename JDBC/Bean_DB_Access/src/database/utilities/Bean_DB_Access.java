@@ -12,6 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -74,6 +78,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
             try 
             {
                 Statement.close();
+                Connection.close();
             } 
             catch (SQLException ex) 
             {
@@ -92,6 +97,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         try
         {
             Statement stmt = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            //System.out.println("Requete = " + Requete);
             return stmt.executeQuery(Requete);
         }
         catch (SQLException Ex)
@@ -102,6 +108,29 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         
         return null;
     }    
+    public synchronized void Insert(String Table, HashMap<String, Object> Data) throws SQLException
+    {        
+        //int ret = Statement.executeUpdate(Requete);
+        
+        String Champs = "(", Valeurs = "(";        
+        // Marche avec des float, number etc ??
+        for (Map.Entry<String, Object> e : Data.entrySet())
+        {
+            Champs = Champs + e.getKey() + ",";
+            Valeurs = Valeurs + "'" + e.getValue().toString() + "',";
+        }
+        
+        Champs = Champs.replaceFirst(",$", ")");
+        Valeurs = Valeurs.replaceFirst(",$", ")");     
+        
+        String Requete = "INSERT INTO " + getSchema() + "." + Table + Champs + " VALUES " + Valeurs;
+        //System.out.println("Requete = " + Requete);
+        PreparedStatement PrepStmt = getConnection().prepareStatement(Requete);
+        PrepStmt.executeUpdate();
+        
+        if (!getAutoCommit())
+            Commit();
+    }
     public synchronized int Update(String Requete) throws SQLException
     {
         try
@@ -120,6 +149,26 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         
         return 0;
     }    
+    public synchronized void CreateEvent(String EventName, String Schedule, String Task) throws SQLException
+    {
+        try
+        {
+            String Requete = ""
+                    + "CREATE EVENT " + EventName + " "
+                    + "ON SCHEDULE " + Schedule + " "
+                    + "DO "
+                        + Task;
+            //System.out.println("Requete = " + Requete);
+            Statement.execute(Requete);
+            if(!getAutoCommit())
+                Commit();
+        }
+        catch (SQLException Ex)
+        {
+            if (!Connection.getAutoCommit())
+                Rollback();
+        }
+    }
     
     /* Commit - Rollback */
     public void setAutoCommit(boolean AC) throws SQLException 

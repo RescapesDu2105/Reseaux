@@ -49,7 +49,6 @@ public class Serveur extends Thread{
         setSSocket_Bagages(new ServerSocket(getPort_Bagages()));
         //setSSocket_CheckIN(new ServerSocket(getPort_CheckIN()));
         
-        System.out.println("MaxClients : " + getMaxClients());
         for (int i = 0 ; i < getMaxClients() ; i++) 
         {
             getThreads().add(new ThreadClient("Thread du pool n°" + String.valueOf(i + 1), getSSocket_Bagages(), getGUIApplication(), getProp()));
