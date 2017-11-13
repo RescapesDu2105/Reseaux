@@ -16,10 +16,10 @@ public interface Reponse {
     public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";  
     
     public final static int LOG_OUT_OK = 201;
-    public final static int LOGIN_OK = 202;
-    public final static int LOGIN_KO = 402;
     public final static String LOG_OUT_OK_MESSAGE = "Client déconnecté du serveur";
+    public final static int LOGIN_OK = 202;
     public final static String LOGIN_OK_MESSAGE = "Client connecté au serveur";
+    public final static int LOGIN_KO = 402;    
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
     
     public int getCode();
