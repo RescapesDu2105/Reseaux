@@ -22,6 +22,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -53,8 +54,9 @@ public class Client {
     {
         FileInputStream fis = null;
         FileOutputStream fos = null;
-        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-        
+        String nomFichier = System.getProperty("user.dir").split("\\\\dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
+        System.out.println("test = " + Arrays.toString(System.getProperty("user.dir").split("\\\\dist")));
+        System.out.println("nomFichier = " + nomFichier);
         
         try 
         {
