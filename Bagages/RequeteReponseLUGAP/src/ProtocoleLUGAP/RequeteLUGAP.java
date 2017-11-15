@@ -28,7 +28,6 @@ import requetepoolthreads.Requete;
  * @author Philippe
  */
 public class RequeteLUGAP implements Requete, Serializable{
-    //private static final long serialVersionUID = 4296258939822015079L;
     
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
@@ -57,7 +56,6 @@ public class RequeteLUGAP implements Requete, Serializable{
     
     @Override
     public Runnable createRunnable(Properties Prop) 
-    //public Runnable createRunnable(HashMap<String, Object> Tab) 
     {
         setProp(Prop);
         
@@ -86,7 +84,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteLoadFlights();//Tab);
+                        traiteRequeteLoadFlights();
                     }            
                 };
             
@@ -104,7 +102,7 @@ public class RequeteLUGAP implements Requete, Serializable{
                 {
                     public void run() 
                     {
-                        traiteRequeteSaveLugages();//Tab);
+                        traiteRequeteSaveLugages();
                     }            
                 };                
             
@@ -211,7 +209,7 @@ public class RequeteLUGAP implements Requete, Serializable{
     }
     
     
-    private void traiteRequeteLoadFlights()//HashMap<String, Object> Tab)
+    private void traiteRequeteLoadFlights()
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -242,16 +240,11 @@ public class RequeteLUGAP implements Requete, Serializable{
 
                         HashMap<String, Object> hm = new HashMap<>();
                         
-                        //boolean bContient = Tab.containsValue(IdVol);
-                        //System.out.println("Tab = " + Tab);
-                        //System.out.println("bContient = " + bContient);
-                        //if (!bContient) {
-                            hm.put("IdVol", IdVol);
-                            hm.put("NumeroVol", NumeroVol);
-                            hm.put("NomCompagnie", NomCompagnie);
-                            hm.put("Destination", Destination);
-                            hm.put("DateHeureDepart", DateHeureDepart);
-                        //} hm.put("BagagesChargés", bContient);
+                        hm.put("IdVol", IdVol);
+                        hm.put("NumeroVol", NumeroVol);
+                        hm.put("NomCompagnie", NomCompagnie);
+                        hm.put("Destination", Destination);
+                        hm.put("DateHeureDepart", DateHeureDepart);
 
                         Reponse.getChargeUtile().put(Integer.toString(i), hm);
                         i++;
@@ -338,7 +331,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         BD_airport.Deconnexion();
     }
     
-    private void traiteRequeteSaveLugages()//HashMap<String, Object> Tab)
+    private void traiteRequeteSaveLugages()
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -346,21 +339,12 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         BD_airport = Connexion_DB();
         
-        if (BD_airport != null && Reponse == null)// || (Reponse != null && !Reponse.getChargeUtile().get("Message").equals(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE)))
-        {
-            //int IdVol = (int)getChargeUtile().get("IdVol");
-            //System.out.println("IdVol = " + IdVol);
-            //Tab.put("IdVol", IdVol);
-            //Tab.put("Test", "Test");
-            //System.out.println("Tab = " + Tab);
-            
-            //System.out.println("getChargeUtile() = " + getChargeUtile());
-            //System.out.println("getChargeUtile().size() = " + getChargeUtile().size());
-            
+        if (BD_airport != null && Reponse == null)
+        {            
             for (int i = 1 ; i <= getChargeUtile().size() - 1 ; i++) 
             {
                 HashMap<String, Object> hm = (HashMap<String, Object>) getChargeUtile().get(Integer.toString(i));
-                System.out.println("i = " + i);
+                
                 try 
                 {
                     Ok = BD_airport.Update("UPDATE Bagages "
@@ -392,6 +376,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         
         BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, getProp().getProperty("HOST_BD"), getProp().getProperty("PORT_BD"), "Zeydax", "1234", getProp().getProperty("SCHEMA_BD"));
         //BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+        
         if (BD_airport != null)
         {
             Error = BD_airport.Connexion();
@@ -423,6 +408,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         this.Type = Type;
     }
 
+    @Override
     public HashMap getChargeUtile() {
         return chargeUtile;
     }
@@ -447,6 +433,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         this.Prop = Prop;
     }
     
+    @Override
     public String getNomTypeRequete() 
     {
         switch(getType()) 

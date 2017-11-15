@@ -24,8 +24,6 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
@@ -137,7 +135,6 @@ public class Client {
                 } 
                 catch (IOException ex) 
                 {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     System.exit(1);
                 }
                 setConnectedToServer(false);
@@ -164,8 +161,6 @@ public class Client {
         Connexion();        
         
         Security.addProvider(new BouncyCastleProvider());
-
-        System.out.println("Instanciation du message digest");
 
         Req.getChargeUtile().put("Login", Login);
 
@@ -217,14 +212,9 @@ public class Client {
             
             Rep = (ReponseLUGAP) getOis().readObject();
         } 
-        catch (IOException ex) 
+        catch (IOException | ClassNotFoundException ex) 
         {
             setConnectedToServer(false);
-            Rep = null;
-        }
-        catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return Rep;

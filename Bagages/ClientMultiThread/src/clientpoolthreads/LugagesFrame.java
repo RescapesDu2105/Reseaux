@@ -220,7 +220,7 @@ public class LugagesFrame extends javax.swing.JFrame {
                 for (int row = 0 ; row < dtm.getRowCount() ; row++)
                 {
                     HashMap <String, Object> hm = new HashMap<>();
-                    //System.out.println("dtm = " + dtm.getValueAt(row, 0));
+                    
                     hm.put("Identifiant", dtm.getValueAt(row, 0));                
                     for (int column = 3 ; column < dtm.getColumnCount() ; column++)
                     {       
@@ -249,11 +249,11 @@ public class LugagesFrame extends javax.swing.JFrame {
                 getClient().EnvoyerRequete(Req);
                 ReponseLUGAP Rep = getClient().RecevoirReponse();
                 
-                /*if (Rep == null)
+                if (Rep == null)
                 {
                     JOptionPane.showMessageDialog(this, Rep.getChargeUtile().get("Message"), "Problème lors de la sauvegarde des bagages !", JOptionPane.ERROR_MESSAGE);
                     System.exit(1);
-                }   */
+                }
             }    
             else
                 Fini = false;

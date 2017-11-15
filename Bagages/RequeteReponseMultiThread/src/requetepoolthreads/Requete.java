@@ -14,7 +14,6 @@ import java.util.Properties;
  */
 public interface Requete {
     public Runnable createRunnable(Properties Prop);
-    //public Runnable createRunnable(HashMap<String, Object> Tab);
     public Reponse getReponse();
     public HashMap getChargeUtile();
     public String getNomTypeRequete();

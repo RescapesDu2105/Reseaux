@@ -31,15 +31,12 @@ public class ThreadClient extends Thread {
     private Runnable TacheEnCours = null; //Pas utile
     
     private final Properties Prop;
-    
-    //private HashMap<String, Object>Tab = null;
 
     public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop) 
     {
         this.Nom = Nom;
         this.SSocket = SSocket;
-        this.GUIApplication = GUIApplication;     
-        //this.Tab = new HashMap<>();
+        this.GUIApplication = GUIApplication;    
         this.Prop = Prop;
     }
     
@@ -49,17 +46,12 @@ public class ThreadClient extends Thread {
     {  
         while(!isInterrupted()) 
         {
-            //System.out.println("avant get Tab = " + Tab);
             try 
             {                
                 GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
-                //System.out.println("********** Serveur en attente");
-                //System.out.println("1 Tab = " + Tab);
-                CSocket = SSocket.accept(); // wtf
+                CSocket = SSocket.accept();
                 System.out.println("CSocket = " + CSocket.isClosed() + " " + CSocket.isConnected());
-                //System.out.println("2 Tab = " + Tab);
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
-                //System.out.println("********** Serveur après accept()");      
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
             } 
             catch (IOException ex) 
@@ -69,11 +61,9 @@ public class ThreadClient extends Thread {
                 this.interrupt();
             }
             
-            System.out.println("Test = " + getCSocket() + " et " + !getCSocket().isClosed());
             while (getCSocket() != null && !getCSocket().isClosed())
             {  
                 Requete req = RecevoirRequete(); 
-                System.out.println("req = " + req);
                 if (req != null)
                 {
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());                    
@@ -118,7 +108,7 @@ public class ThreadClient extends Thread {
             }
             System.out.println("Socket fermée !");
         }
-        System.out.println(getNom() + " je m'arrête");
+        System.out.println(getNom() + " Je m'arrête");
     }
     
     public Requete RecevoirRequete()
@@ -135,7 +125,6 @@ public class ThreadClient extends Thread {
         } 
         catch (IOException ex) 
         {
-            //ex.printStackTrace();
             try 
             {
                 CSocket.close();
@@ -218,14 +207,6 @@ public class ThreadClient extends Thread {
     public void setTacheEnCours(Runnable TacheEnCours) {
         this.TacheEnCours = TacheEnCours;
     }
-
-    /*public HashMap<String, Object> getTab() {
-        return Tab;
-    }
-
-    public void setTab(HashMap<String, Object> Tab) {
-        this.Tab = Tab;
-    }*/
 
     public Properties getProp() {
         return Prop;

@@ -29,7 +29,7 @@ public class FlightsFrame extends javax.swing.JFrame {
     FlightsFrame(FenAuthentification f, Client c) { 
         this.FenAuthentification = f;
         this.Client = c;
-        //this.FenAuthentification = f;
+        
         this.setTitle("Bagagiste : " + this.Client.getNomUtilisateur());
         setLocationRelativeTo(null); 
         initComponents();        
@@ -134,20 +134,12 @@ public class FlightsFrame extends javax.swing.JFrame {
     private void jTableVolsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVolsMouseClicked
         if (evt.getClickCount() == 2 && !evt.isConsumed()) 
         {
-            //if (!getClient().isConnected())            {
-                //System.out.println("Vols = " + getVols().get(jTableVols.getSelectedRow()));
-                this.dispose();
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        new LugagesFrame(getFenAuthentification(), getClient(), getVols().get(jTableVols.getSelectedRow())).setVisible(true);
-                    }
-                });
-           /* }
-            else
-            {  
-                JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Serveur déconnecté", JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
-            }*/
+            this.dispose();
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new LugagesFrame(getFenAuthentification(), getClient(), getVols().get(jTableVols.getSelectedRow())).setVisible(true);
+                }
+            });
         }      
     }//GEN-LAST:event_jTableVolsMouseClicked
 
@@ -170,14 +162,13 @@ public class FlightsFrame extends javax.swing.JFrame {
                 {
                     Vols.add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
                     HashMap<String, Object> Vol = Vols.get(Cpt - 1);
-                    //if (!(boolean)Vol.get("BagagesChargés")) {
-                        ligne[0] = Vol.get("NumeroVol");
-                        ligne[1] = Vol.get("NomCompagnie");
-                        ligne[2] = Vol.get("Destination");
-                        Timestamp DateHeureDepart = (Timestamp) Vol.get("DateHeureDepart");
-                        ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
-                        dtm.insertRow(Cpt - 1, ligne);
-                    //}
+                    
+                    ligne[0] = Vol.get("NumeroVol");
+                    ligne[1] = Vol.get("NomCompagnie");
+                    ligne[2] = Vol.get("Destination");
+                    Timestamp DateHeureDepart = (Timestamp) Vol.get("DateHeureDepart");
+                    ligne[3] = DateHeureDepart.toLocalDateTime().toLocalTime();            
+                    dtm.insertRow(Cpt - 1, ligne);
                 }            
             }
             else

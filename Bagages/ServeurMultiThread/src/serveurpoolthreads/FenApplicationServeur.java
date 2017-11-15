@@ -159,16 +159,13 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
         
         while(parser.hasMoreTokens()){ 
             String Token = parser.nextToken();
-            //System.out.println("Token : " + Token);
             if (Token != null)
                 Ligne.add(Token);  
-            //System.out.println("Ligne : " + Ligne.toString());
         }
         
         DefaultTableModel dtm = (DefaultTableModel) TableauEvenements.getModel();        
         dtm.insertRow(dtm.getRowCount(), Ligne.toArray());
         
-        //System.out.println("RowCount : " + dtm.getRowCount());
         TableauEvenements.setModel(dtm);
     }
 

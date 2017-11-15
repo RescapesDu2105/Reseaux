@@ -14,7 +14,6 @@ import requetepoolthreads.Reponse;
  * @author Philippe
  */
 public class ReponseLUGAP implements Reponse, Serializable {
-    //public final static int STATUS_OK = 200;    
     
     public final static int FLIGHTS_LOADED = 203;
     public final static int LUGAGES_LOADED = 204;

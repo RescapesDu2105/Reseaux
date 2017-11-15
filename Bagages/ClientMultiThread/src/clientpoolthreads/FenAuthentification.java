@@ -6,7 +6,6 @@
 package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -59,11 +58,6 @@ public class FenAuthentification extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Connexion");
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                formKeyTyped(evt);
-            }
-        });
 
         jLabelLogin.setText("Nom d'utilisateur");
 
@@ -159,16 +153,13 @@ public class FenAuthentification extends javax.swing.JFrame {
             {
                 if(Rep.getCode() == ReponseLUGAP.LOGIN_OK)
                 {
-                    System.out.println("Rep = " + Rep.getChargeUtile().get("Message"));
                     getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
 
                     this.dispose();
                     FenAuthentification Test = this;
-                    //getClient().setNomUtilisateur("Zeydax");
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            new FlightsFrame(Test, getClient()).setVisible(true);
-                        }
+                    
+                    java.awt.EventQueue.invokeLater(() -> {
+                        new FlightsFrame(Test, getClient()).setVisible(true);
                     });
                     this.jButton_EffacerActionPerformed(null);
                 }
@@ -181,14 +172,6 @@ public class FenAuthentification extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
-
-    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
-        System.out.println("Typed KeyCode = " + evt.getKeyCode());
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-            System.out.println("Coucou");
-        }
-    }//GEN-LAST:event_formKeyTyped
 
     
     public static void main(String args[]) {
@@ -219,10 +202,8 @@ public class FenAuthentification extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FenAuthentification().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FenAuthentification().setVisible(true);
         });
     }
     
