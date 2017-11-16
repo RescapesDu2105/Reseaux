@@ -13,11 +13,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%  
     response.setIntHeader("Refresh", 60);
-    Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+    /*Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
     BD_airport.Connexion();
     ControlDataCenter.MAJ_Panier(session, BD_airport);
     ControlDataCenter.ChargerPanier(session, BD_airport);
-    BD_airport.Deconnexion();
+    BD_airport.Deconnexion();*/
 %>
 <!DOCTYPE html>
 <html>

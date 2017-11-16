@@ -6,6 +6,10 @@ package Servlets;
  * and open the template in the editor.
  */
 
+import Beans.Client;
+import Beans.Vols;
+import Classes.Promesse;
+import Classes.Vol;
 import database.utilities.Bean_DB_Access;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -58,7 +62,16 @@ public class ControlDataCenter extends HttpServlet {
         switch (Action) 
         {
             case "Authentification":
-                Authentification(request, response, session);
+                boolean Connected = Authentification(request, response, session);
+
+                if(Connected)
+                {                    
+                    ChargerVols(session);
+                    ChargerPanier(session);
+                    response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
+                }
+                else
+                    response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
                 break;
             case "Deconnexion":
                 session.invalidate();
@@ -132,34 +145,24 @@ public class ControlDataCenter extends HttpServlet {
     }// </editor-fold>
     
     
-    private void Authentification(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
+    private boolean Authentification(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
+        boolean Connected = false; 
+
         if(request.getParameterMap().containsKey("inputLogin"))
         {   
             if(request.getParameter("inputPassword").isEmpty())
-            {
                 session.setAttribute("ErrorLogin", "Le champ du mot de passe ne peut pas être vide !");
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-            }
             else
-            {                                    
+            {                                   
                 if (request.getParameter("Inscription") != null)
                 {
                     if(request.getParameter("inputPassword").length() < 4)
-                    {                        
                         session.setAttribute("ErrorLogin", "La longueur du mot de passe doit être supérieur à 4 !");
-                        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-                    }
                     else if (request.getParameter("inputNom").isEmpty())
-                    {
                         session.setAttribute("ErrorLogin", "Le champ du nom de famille ne peut être vide !");
-                        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-                    }
                     else if (request.getParameter("inputPrenom").isEmpty())
-                    {
                         session.setAttribute("ErrorLogin", "Le champ du prénom ne peut être vide !");
-                        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-                    }
                     else
                     {
                         HashMap<String, Object> hm = new HashMap<>();
@@ -168,22 +171,19 @@ public class ControlDataCenter extends HttpServlet {
                         hm.put("Nom", request.getParameter("inputNom"));
                         hm.put("Prenom", request.getParameter("inputPrenom"));
 
-                        ConnexionClient(request, response, session, hm);
+                        Connected = ConnexionClient(request, session, hm);
                     }                                                
                 }
-                else
-                {                        
-                    ConnexionClient(request, response, session);
-                }
+                else             
+                    Connected = ConnexionClient(request, session);
             }
         }
-        else
-        {            
-            session.setAttribute("ErrorLogin", "Veuillez remplir les champs de connexion !");                            
-            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-        }
+        else      
+            session.setAttribute("ErrorLogin", "Veuillez remplir les champs de connexion !");  
+
+        return Connected;
     }
-    private void ConnexionClient(HttpServletRequest request, HttpServletResponse response, HttpSession session, HashMap<String, Object> InscriptionClient) throws IOException
+    private boolean ConnexionClient(HttpServletRequest request, HttpSession session, HashMap<String, Object> InscriptionClient) throws IOException
     {
         ResultSet RS; 
         
@@ -195,38 +195,30 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                MemberDataCenter MDC = new MemberDataCenter()
-                session.setAttribute("IdClient", RS.getInt("IdClient")); 
+                Client Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));
+                //
+                /*session.setAttribute("IdClient", RS.getInt("IdClient")); 
                 session.setAttribute("Nom", RS.getString("Nom"));
-                session.setAttribute("Prenom", RS.getString("Prenom"));
-                
-                
-                RS = BD_airport.Select("SELECT COUNT(*) FROM Promesses WHERE IdClient = " + session.getAttribute("IdClient"));
-                if (RS.next())
-                    session.setAttribute("NbItemsPanier", RS.getInt(1));
-                else
-                    session.setAttribute("NbItemsPanier", 0);
-                
-                session.setAttribute("Connected", true);
-                
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
+                session.setAttribute("Prenom", RS.getString("Prenom"));*/
+                session.setAttribute("Client", Client);                
             }
             else
-            {
-                session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !");    
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-            }     
+                session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !");  
+
             RS.close();
         } 
         catch (SQLException ex) 
         {
-            System.out.println("ex = " + ex.getMessage());
             session.setAttribute("ErrorLogin", "Le nom d'utilisateur existe déjà !"); 
-            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-        }          
-        BD_airport.Deconnexion();
+        }  
+        finally 
+        {
+            BD_airport.Deconnexion();
+        }        
+
+        return session.getAttribute("Client") != null;
     }
-    private void ConnexionClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException
+    private boolean ConnexionClient(HttpServletRequest request, HttpSession session) throws IOException
     {
         ResultSet RS; 
         
@@ -237,86 +229,69 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                session.setAttribute("IdClient", RS.getInt("IdClient")); 
-                session.setAttribute("Nom", RS.getString("Nom"));
-                session.setAttribute("Prenom", RS.getString("Prenom"));
-                
-                RS = BD_airport.Select("SELECT COUNT(*) FROM Promesses WHERE IdClient = " + session.getAttribute("IdClient"));
-                if (RS.next())
-                    session.setAttribute("NbItemsPanier", RS.getInt(1));
-                else
-                    session.setAttribute("NbItemsPanier", 0);
-                                
-                session.setAttribute("Connected", true);
-
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
+                Client Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));             
+                session.setAttribute("Client", Client);
             }
             else
-            {
-                session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !");    
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-            }     
+                session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !"); 
+
             RS.close();
         } 
         catch (SQLException ex) 
         {
             session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !");
-            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
-        }          
-        BD_airport.Deconnexion();
+        }     
+        finally 
+        {    
+            BD_airport.Deconnexion();
+        } 
+
+        return session.getAttribute("Client") != null;
     }
     
-    public static void ChargerVols(HttpSession session, Bean_DB_Access BD_airport) throws SQLException 
+    public void ChargerVols(HttpSession session) 
     {
         ResultSet RS;
-        int i;
-        
-        for(i = 1 ; session.getAttribute("Vol_" + i) != null ; i++)
-        {
-            session.removeAttribute("Vol_" + i);
+        int i;        
+        Vols Vols = new Vols();
+
+        BD_airport.Connexion();
+        try
+        {        
+            RS = BD_airport.Select(""
+                    + "SELECT IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, PlacesRestantes "
+                    + "FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
+                    + "WHERE bd_airport.vols.HeureDepart >= current_time() "
+                    + "AND bd_airport.vols.PlacesRestantes > 0 "
+                    + "ORDER BY HeureDepart");
+            
+            i = 0;
+            
+            while(RS.next())
+            {
+                Vol Vol = new Vol(RS.getInt("IdVol"), RS.getInt("NumeroVol"), RS.getString("NomCompagnie"), RS.getString("Destination"), RS.getTimestamp("HeureDepart"), RS.getTimestamp("HeureArrivee"), RS.getInt("PlacesRestantes"));
+                System.out.println("Vol = " + Vol.getIdVol() + " " + Vol.getDateDepart());
+                Vols.getVols().add(Vol);
+            }               
+            RS.close();    
         }
-                
-        RS = BD_airport.Select(""
-                + "SELECT IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, PlacesRestantes "
-                + "FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
-                + "WHERE bd_airport.vols.HeureDepart >= current_time() "
-                + "AND bd_airport.vols.PlacesRestantes > 0 "
-                + "ORDER BY HeureDepart");
-        
-        i = 0;
-        while(RS.next())
+        catch (SQLException ex) 
         {
-            i++;
-            HashMap<String, Object> hm = new HashMap<>();
-            
-            hm.put("IdVol", RS.getInt("IdVol"));
-            hm.put("NumeroVol", RS.getInt("NumeroVol"));
-            hm.put("NomCompagnie", RS.getString("NomCompagnie"));
-            hm.put("Destination", RS.getString("Destination"));
-            hm.put("HeureDepart", RS.getTimestamp("HeureDepart"));
-            hm.put("HeureArrivee", RS.getTimestamp("HeureArrivee"));
-            hm.put("PlacesRestantes", RS.getInt("PlacesRestantes"));
-            
-            session.setAttribute("Vol_" + i, hm);
-        }               
-        RS.close();
-        session.setAttribute("NbVols", i);
+            session.setAttribute("Error", "Problème lors du chargement des vols !");
+        }     
+        finally 
+        {    
+            BD_airport.Deconnexion();
+        } 
+
+        session.setAttribute("Vols", Vols);
+        //
+        //session.setAttribute("NbVols", i);
         
-        if (i == 0)            
+        if (session.getAttribute("Error") != null && Vols.getVols().size() == 0)//i == 0)
             session.setAttribute("Error", "Aucun vol n'est prévu dans les prochaines 24 heures !");
     }
     
-    public static void MAJ_Panier(HttpSession session, Bean_DB_Access BD_airport) throws SQLException
-    {
-        ResultSet RS = BD_airport.Select("SELECT COUNT(*) FROM bd_airport.Promesses WHERE IdClient = " + session.getAttribute("IdClient"));
-        if (RS != null)
-        {        
-            RS.next();
-            session.removeAttribute("NbItemsPanier");
-            session.setAttribute("NbItemsPanier", RS.getInt(1));
-        }
-    }
-
     private void AjoutPanier(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
         int NbItemsPanier = (int) session.getAttribute("NbItemsPanier");
@@ -362,24 +337,30 @@ public class ControlDataCenter extends HttpServlet {
                 
                 BD_airport.Insert("Promesses", hm);
                 RS = BD_airport.Select(""
-                        + "SELECT IdPromesse "
+                        + "SELECT *"
                         + "FROM bd_airport.Promesses "
                         + "WHERE IdClient = " + session.getAttribute("IdClient") + " "
                         + "AND DateTimePromesse = '" + DateTimePromesse + "'");
                                 
                 int IdPromesse = -1;
+                Promesse Promesse = null;
                 if(RS != null)
                 {
                     RS.next();
                     IdPromesse = RS.getInt("IdPromesse");
+                    //
+                    Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("NbAccompagnants"), Integer.parseInt(request.getParameter("IdVol")));
                 }                
                 
                 if(IdPromesse != -1)
                 {
                     BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
                           "DELETE FROM bd_airport.Promesses "
-                        + "WHERE IdPromesse = " + IdPromesse);                
+                        + "WHERE IdPromesse = " + IdPromesse);   
+                    
+                    //Suite
                 }
+                
                 
                 session.removeAttribute("NbItemsPanier");
                 session.setAttribute("NbItemsPanier", NbItemsPanier + 1);
@@ -397,27 +378,35 @@ public class ControlDataCenter extends HttpServlet {
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
     }
 
-    public static void ChargerPanier(HttpSession session, Bean_DB_Access BD_airport) throws SQLException
+    public void ChargerPanier(HttpSession session)
     {
         ResultSet RS;
         
-        for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
+        /*for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
         {
             session.removeAttribute("Article_" + i);
-        }
+        }*/
         
+        BD_airport.Connexion();
         try
         {                
-            RS = BD_airport.Select("SELECT IdPromesse, DateTimePromesse, IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, NbAccompagnants "
+            System.out.println("IdClient = " + ((Client)session.getAttribute("Client")).getIdClient());
+
+            RS = BD_airport.Select("SELECT IdPromesse, DateTimePromesse, IdVol, NbAccompagnants "
                     + "FROM bd_airport.Promesses NATURAL JOIN bd_airport.Vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
-                    + "WHERE IdClient = '" + session.getAttribute("IdClient") + "' "
+                    + "WHERE IdClient = '" + ((Client)session.getAttribute("Client")).getIdClient() + "' "
                     + "ORDER BY DateTimePromesse, IdPromesse");
 
             int i = 0;
 
+            
+            Client Client = (Client) session.getAttribute("Client");            
+            
             while(RS.next())
             {
-                i++;
+                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants"));
+                //
+                /*i++;
                 
                 HashMap<String, Object> hm = new HashMap<>();
                 hm.put("IdPromesse", RS.getInt("IdPromesse"));
@@ -431,13 +420,19 @@ public class ControlDataCenter extends HttpServlet {
                 hm.put("NbAccompagnants", RS.getInt("NbAccompagnants"));
                     
                 session.setAttribute("Article_" + i, hm);
-                System.out.println("Article_" + i + " = " + session.getAttribute("Article_" + i));
+                System.out.println("Article_" + i + " = " + session.getAttribute("Article_" + i));*/
+                
+                Client.getPanier().add(Promesse);
             }        
             RS.close();
         } 
         catch (SQLException ex) 
         {            
             session.setAttribute("Error", "Une erreur interne s'est produite !");
+        }
+        finally
+        {
+            BD_airport.Deconnexion();
         }
     }
 
@@ -488,7 +483,7 @@ public class ControlDataCenter extends HttpServlet {
 
     private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
-        ArrayList ArticlesAvant = new ArrayList<>(), ArticlesApres = new ArrayList<>();//, ArticlesPlusDisponibles = new ArrayList<>();
+        /*ArrayList ArticlesAvant = new ArrayList<>(), ArticlesApres = new ArrayList<>();//, ArticlesPlusDisponibles = new ArrayList<>();
 
         // On sauvegarde les articles
         for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
@@ -536,6 +531,6 @@ public class ControlDataCenter extends HttpServlet {
             //ChargerPanier()
         }
         
-        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
+        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");*/
     }
 }

@@ -1,4 +1,4 @@
-package Util;
+package Classes;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -16,35 +16,45 @@ import java.util.Locale;
  */
 public class Vol
 {
+    private int IdVol;
     private int NumeroVol;
     private String NomCompagnie;
     private String Destination;
     private Timestamp DateDepart;
     private Timestamp DateArrivee;
-    private int NbAccompagnants;
+    private int PlacesRestantes;
 
     public Vol() 
     {
         
     }
 
-    public Vol(int NumeroVol, String NomCompagnie, String Destination, Timestamp DateDepart, Timestamp DateArrivee, int NbAccompagnants) 
+    public Vol(int IdVol, int NumeroVol, String NomCompagnie, String Destination, Timestamp DateDepart, Timestamp DateArrivee, int PlacesRestantes) 
     {
+        this.IdVol = IdVol;
         this.NumeroVol = NumeroVol;
         this.NomCompagnie = NomCompagnie;
         this.Destination = Destination;
         this.DateDepart = DateDepart;
         this.DateArrivee = DateArrivee;
-        this.NbAccompagnants = NbAccompagnants;
-    }
-    
-    
-    public int getNbAccompagnants() {
-        return NbAccompagnants;
+        this.PlacesRestantes = PlacesRestantes;
     }
 
-    public void setNbAccompagnants(int NbAccompagnants) {
-        this.NbAccompagnants = NbAccompagnants;
+    
+    public int getIdVol() {
+        return IdVol;
+    }
+
+    public void setIdVol(int IdVol) {
+        this.IdVol = IdVol;
+    }
+    
+    public int getPlacesRestantes() {
+        return PlacesRestantes;
+    }
+
+    public void setPlacesRestantes(int PlacesRestantes) {
+        this.PlacesRestantes = PlacesRestantes;
     }
     
     public String getHeureDepart() 

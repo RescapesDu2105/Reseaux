@@ -4,6 +4,9 @@
     Author     : Philippe
 --%>
 
+<%@page import="java.sql.Date"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="Classes.Vol"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.Locale"%>
@@ -12,13 +15,15 @@
 <%@page import="Servlets.ControlDataCenter"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="Vols" scope="session" class="Beans.Vols"/>
+<jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
     response.setIntHeader("Refresh", 60);
-    Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+    /*Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
     BD_airport.Connexion();
     ControlDataCenter.ChargerVols(session, BD_airport);
     ControlDataCenter.MAJ_Panier(session, BD_airport);
-    BD_airport.Deconnexion();
+    BD_airport.Deconnexion();*/
 %>
 <!DOCTYPE html>
 <html>
@@ -40,12 +45,12 @@
                 <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPCaddie.jsp"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item active">
-                        <a class="nav-link"><strong>Client : <% out.println(session.getAttribute("Prenom") + " " + session.getAttribute("Nom")); %></strong></a>
+                        <a class="nav-link"><strong>Client : <%= Client.getPrenom() + " " + Client.getNom() %></strong></a>
                     </li>
                 </ul>
                 <form action="ControlDataCenter" method="POST">                                        
                     <button type="submit" class ="btn btn-info btn-"> 
-                        <% out.println(session.getAttribute("NbItemsPanier")); %>
+                        <%= Client.getPanier().size() %>
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         Panier
                         <input type="hidden" name="action" value="VoirPanier">
@@ -61,56 +66,56 @@
         
         <%  if(session.getAttribute("Error") != null && session.getAttribute("Error").equals("Aucun vol n'est prévu dans les prochaines 24 heures !"))
             {
-                out.println("<div class=\"mx-auto col-md-6\">");
-                out.println("<div class=\"alert alert-danger\" role=\"alert\">"+ session.getAttribute("Error") +"</div>"); 
-                out.println("</div>");
-                session.setAttribute("Error", null);
+        %>      
+                <div class="mx-auto col-md-6">
+                    <div class="alert alert-danger" role="alert"><%= session.getAttribute("Error") %></div>"); 
+                </div>
+        <%      session.setAttribute("Error", null);
             }
             else
             {
         %>           
-        <div class="mx-auto col-md-10">            
-            <table class ="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>Numéro du vol</th>
-                        <th>Nom compagnie</th>
-                        <th>Destination</th>
-                        <th>Heure de départ</th>
-                        <th>Heure d'arrivée</th>
-                        <th>Places restantes</th>
-                        <th>Nombre d'accompagnants</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% 
-                        int i = 1;
-                        while(session.getAttribute("Vol_" + i) != null)
-                        {
-                            HashMap<String, Object> Vol = (HashMap<String, Object>) session.getAttribute("Vol_" + i);
-                    %>      
+                <div class="mx-auto col-md-10">            
+                    <table class ="table table-hover table-striped">
+                        <thead>
                             <tr>
-                                <th scope="row"><% out.println(Vol.get("NumeroVol")); %></th>
-                                <td><% out.println(Vol.get("NomCompagnie")); %></td>
-                                <td><% out.println(Vol.get("Destination")); %></td>
-                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureDepart"))); %></td>
-                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureArrivee"))); %></td>
-                                <td><% out.println(Vol.get("PlacesRestantes")); %></td>                                
-                                <form action="ControlDataCenter" method="POST">
-                                    <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<% out.println(Vol.get("PlacesRestantes")); %>" step="1" value="0" style="width: 75px;"></td>
-                                    <input type="hidden" name="action" value="AjoutPanier">
-                                    <input type="hidden" name="IdVol" value=<% out.println(Vol.get("IdVol").toString()); %> >
-                                    <input type="hidden" name="NumeroVol" value=<% out.println(Vol.get("NumeroVol").toString()); %> >
-                                    <input type="hidden" name="HeureDepart" value=<% out.println(Vol.get("HeureDepart").toString()); %> >
-                                    <td><button class="btn btn-success btn-block" type="submit" id="submit"><i class="fa fa-plus"></i> Ajouter au panier</button></td>
-                                </form>
+                                <th>Numéro du vol</th>
+                                <th>Nom compagnie</th>
+                                <th>Destination</th>
+                                <th>Heure de départ</th>
+                                <th>Heure d'arrivée</th>
+                                <th>Places restantes</th>
+                                <th>Nombre d'accompagnants</th>
                             </tr>
-                    <%      i++;
-                        } 
-                    %>
-                </tbody>
-            </table>
-        </div>        
-        <% } %>
+                        </thead>
+                        <tbody>
+                            <% 
+                                for(int i = 0 ; i < Vols.getVols().size() ; i++)
+                                {
+                                    Vol Vol = Vols.getVols().get(i);
+                                    if (Vol.getDateDepart().compareTo(Calendar.getInstance().getTime()) > 0)
+                                    {
+                            %>      
+                                        <tr>
+                                            <th scope="row"><%= Vol.getNumeroVol() %></th>
+                                            <td><%= Vol.getNomCompagnie() %></td>
+                                            <td><%= Vol.getDestination() %></td>
+                                            <td><%= Vol.getHeureDepart() %></td>
+                                            <td><%= Vol.getHeureArrivee() %></td>
+                                            <td><%= Vol.getPlacesRestantes() %></td>                                
+                                            <form action="ControlDataCenter" method="POST">
+                                                <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<%= Vol.getPlacesRestantes() %>" step="1" value="0" style="width: 75px;"></td>
+                                                <input type="hidden" name="action" value="AjoutPanier">
+                                                <input type="hidden" name="IdVol" value=<%= Vol.getIdVol() %> >
+                                                <td><button class="btn btn-success btn-block" type="submit" id="submit"><i class="fa fa-plus"></i> Ajouter au panier</button></td>
+                                            </form>
+                                        </tr>
+                            <%      }
+                                } 
+                            %>
+                        </tbody>
+                    </table>
+                </div>        
+        <%  }   %>
     </body>
 </html>

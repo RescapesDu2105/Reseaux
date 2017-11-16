@@ -6,33 +6,30 @@ package Beans;
  * and open the template in the editor.
  */
 
-import Classes.Commandes;
+import Classes.Promesse;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
 /**
  *
  * @author Philippe
  */
-public class MemberDataCenter implements Serializable 
+public class Client implements Serializable 
 {
     private int IdClient;
     private String Nom;
     private String Prenom;
-    private ArrayList<Commandes> Panier;
+    private ArrayList<Promesse> Panier;
 
-    public MemberDataCenter() 
+    public Client() 
     {
         this.Nom = null;
         this.Prenom = null;
         this.Panier = new ArrayList<>();
     }
     
-    public MemberDataCenter(int IdClient, String Nom, String Prenom) 
+    public Client(int IdClient, String Nom, String Prenom) 
     {
         this.IdClient = IdClient;
         this.Nom = Nom;
@@ -42,20 +39,20 @@ public class MemberDataCenter implements Serializable
     
     public void TrierPanier()
     {
-        Collections.sort(getPanier(), (Commandes Commande1, Commandes Commande2) -> 
+        Collections.sort(getPanier(), (Promesse Promesse1, Promesse Promesse2) -> 
         {
-            int Comparison = Commande1.getDateCommande().compareTo(Commande2.getDateCommande());
+            int Comparison = Promesse1.getDatePromesse().compareTo(Promesse2.getDatePromesse());
             
             if (Comparison == 0)
             {
-                return Integer.compare(Commande1.getNumeroCommande(), Commande2.getNumeroCommande());
+                return Integer.compare(Promesse1.getIdPromesse(), Promesse2.getIdPromesse());
             }
             else
                 return Comparison;
         });
     }
     
-    public boolean equals(MemberDataCenter MDC)
+    public boolean equals(Client MDC)
     {
         return (getNom().equals(MDC.getNom()) && getPrenom().equals(MDC.getPrenom()));
     }
@@ -77,11 +74,11 @@ public class MemberDataCenter implements Serializable
         this.Prenom = Prenom;
     }
 
-    public ArrayList<Commandes> getPanier() {
+    public ArrayList<Promesse> getPanier() {
         return Panier;
     }
 
-    public void setPanier(ArrayList<Commandes> Panier) {
+    public void setPanier(ArrayList<Promesse> Panier) {
         this.Panier = Panier;
     }
 

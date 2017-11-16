@@ -5,10 +5,11 @@
  */
 package Beans;
 
-import Util.Vol;
+import Classes.Vol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  *
@@ -16,22 +17,16 @@ import java.util.Collections;
  */
 public class Vols implements Serializable 
 {
-    private ArrayList<Vol> ListeVols;
+    private ArrayList<Vol> Vols;
     
     public Vols() 
     {
-        this.ListeVols = null;
-    }
-    
-    public Vols(ArrayList<Vol> ListeVols)
-    {
-        this.ListeVols = ListeVols;
-        TrierListeVols();
-    }
+        this.Vols = new ArrayList<>();
+    }   
     
     public void TrierListeVols()
     {
-        Collections.sort(getListeVols(), (Vol Vol1, Vol Vol2) -> 
+        Collections.sort(getVols(), (Vol Vol1, Vol Vol2) -> 
         {
             int Comparison = Vol1.getHeureDepart().compareTo(Vol2.getHeureDepart());
             
@@ -44,11 +39,25 @@ public class Vols implements Serializable
         });
     }
 
-    public ArrayList<Vol> getListeVols() {
-        return ListeVols;
+    public Vol getVol(int IdVol)
+    {
+        boolean Trouve = false;
+        Vol Vol = null;
+        
+        for (Iterator<Vol> it = getVols().iterator(); !Trouve && it.hasNext();) 
+        {
+            Vol = it.next();
+            Trouve = (Vol.getIdVol() == IdVol);
+        }
+        
+        return Vol;
+    }
+    
+    public ArrayList<Vol> getVols() {
+        return Vols;
     }
 
-    public void setListeVols(ArrayList<Vol> ListeVols) {
-        this.ListeVols = ListeVols;
+    public void setVols(ArrayList<Vol> Vols) {
+        this.Vols = Vols;
     }    
 }
