@@ -278,6 +278,7 @@ public class ControlDataCenter extends HttpServlet {
                 + "SELECT IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, PlacesRestantes "
                 + "FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
                 + "WHERE bd_airport.vols.HeureDepart >= current_time() "
+                + "AND bd_airport.vols.PlacesRestantes > 0 "
                 + "ORDER BY HeureDepart");
         
         i = 0;

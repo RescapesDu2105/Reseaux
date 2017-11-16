@@ -25,6 +25,8 @@ import java.security.Security;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
@@ -55,9 +57,7 @@ public class Client {
         FileInputStream fis = null;
         FileOutputStream fos = null;
         String nomFichier = System.getProperty("user.dir").split("\\\\dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
-        System.out.println("test = " + Arrays.toString(System.getProperty("user.dir").split("\\\\dist")));
-        System.out.println("nomFichier = " + nomFichier);
-        
+                
         try 
         {
             fis = new FileInputStream(nomFichier);
@@ -65,13 +65,24 @@ public class Client {
             fis.close();
         } 
         catch (FileNotFoundException ex) 
-        {            
-            fos = new FileOutputStream(nomFichier);
+        {    
+            try
+            {           
+                nomFichier = System.getProperty("user.dir") + System.getProperty("file.separator") + "config.properties";
+                
+                fis = new FileInputStream(nomFichier);
+                getProp().load(fis);
+                fis.close();
+            } 
+            catch (FileNotFoundException ex1) 
+            {       
+                fos = new FileOutputStream(nomFichier);
+                
+                getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
+                getProp().setProperty("ADRESSEIP", "192.168.0.3");
 
-            getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
-            getProp().setProperty("ADRESSEIP", "127.0.0.1");
-            
-            getProp().store(fos, null);
+                getProp().store(fos, null);
+            }
         } 
         
         if (fis != null || fos != null) 

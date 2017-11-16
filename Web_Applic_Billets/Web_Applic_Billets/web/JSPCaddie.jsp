@@ -93,8 +93,8 @@
                                 <th scope="row"><% out.println(Vol.get("NumeroVol")); %></th>
                                 <td><% out.println(Vol.get("NomCompagnie")); %></td>
                                 <td><% out.println(Vol.get("Destination")); %></td>
-                                <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureDepart"))); %></td>
-                                <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureArrivee"))); %></td>
+                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureDepart"))); %></td>
+                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Vol.get("HeureArrivee"))); %></td>
                                 <td><% out.println(Vol.get("PlacesRestantes")); %></td>                                
                                 <form action="ControlDataCenter" method="POST">
                                     <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<% out.println(Vol.get("PlacesRestantes")); %>" step="1" value="0" style="width: 75px;"></td>

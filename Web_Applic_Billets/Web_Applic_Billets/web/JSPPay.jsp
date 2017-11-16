@@ -120,8 +120,8 @@
                                 <td><% out.println(Billets.get("NumeroVol")); %></td>
                                 <td><% out.println(Billets.get("NomCompagnie")); %></td>
                                 <td><% out.println(Billets.get("Destination")); %></td>
-                                <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureDepart"))); %></td>
-                                <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureArrivee"))); %></td>
+                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureDepart"))); %></td>
+                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureArrivee"))); %></td>
                                 <td><% out.println(Billets.get("NbAccompagnants")); %></td>
                                 <form action="ControlDataCenter" method="POST">
                                     <input type="hidden" name="action" value="RetirerPanier">
