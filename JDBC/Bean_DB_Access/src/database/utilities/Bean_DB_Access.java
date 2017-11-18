@@ -13,9 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -97,11 +95,12 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         try
         {
             Statement stmt = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            //System.out.println("Requete = " + Requete);
+            System.out.println("Requete = " + Requete);
             return stmt.executeQuery(Requete);
         }
         catch (SQLException Ex)
         {
+            Ex.printStackTrace();
             if (!Connection.getAutoCommit())
                 Rollback();
         }
@@ -154,10 +153,10 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         try
         {
             String Requete = ""
-                    + "CREATE EVENT " + EventName + " "
-                    + "ON SCHEDULE " + Schedule + " "
-                    + "DO "
-                        + Task;
+                + "CREATE EVENT " + EventName + " "
+                + "ON SCHEDULE " + Schedule + " "
+                + "DO "
+                    + Task;
             //System.out.println("Requete = " + Requete);
             Statement.execute(Requete);
             if(!getAutoCommit())
@@ -168,6 +167,27 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
             if (!Connection.getAutoCommit())
                 Rollback();
         }
+    }
+    public synchronized void DropEvent(String EventName) throws SQLException    
+    {
+        String Requete = "DROP EVENT IF EXISTS " + EventName;
+        
+        try
+        {
+            Statement.execute(Requete);
+                if(!getAutoCommit())
+                    Commit();
+        }
+        catch (SQLException Ex)
+        {
+            if (!Connection.getAutoCommit())
+                Rollback();
+        }
+    }
+    
+    public synchronized int doFunction(HashMap<String, Object> Parameters
+    {
+        
     }
     
     /* Commit - Rollback */

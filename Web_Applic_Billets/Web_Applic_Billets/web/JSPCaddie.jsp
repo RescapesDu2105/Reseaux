@@ -19,11 +19,6 @@
 <jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
     response.setIntHeader("Refresh", 60);
-    /*Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
-    BD_airport.Connexion();
-    ControlDataCenter.ChargerVols(session, BD_airport);
-    ControlDataCenter.MAJ_Panier(session, BD_airport);
-    BD_airport.Deconnexion();*/
 %>
 <!DOCTYPE html>
 <html>
@@ -100,8 +95,8 @@
                                             <th scope="row"><%= Vol.getNumeroVol() %></th>
                                             <td><%= Vol.getNomCompagnie() %></td>
                                             <td><%= Vol.getDestination() %></td>
-                                            <td><%= Vol.getHeureDepart() %></td>
-                                            <td><%= Vol.getHeureArrivee() %></td>
+                                            <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                            <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
                                             <td><%= Vol.getPlacesRestantes() %></td>                                
                                             <form action="ControlDataCenter" method="POST">
                                                 <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<%= Vol.getPlacesRestantes() %>" step="1" value="0" style="width: 75px;"></td>

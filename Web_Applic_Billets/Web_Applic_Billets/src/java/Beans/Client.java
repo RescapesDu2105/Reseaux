@@ -52,9 +52,22 @@ public class Client implements Serializable
         });
     }
     
-    public boolean equals(Client MDC)
+    public boolean equals(Client Client)
     {
-        return (getNom().equals(MDC.getNom()) && getPrenom().equals(MDC.getPrenom()));
+        return (getNom().equals(Client.getNom()) && getPrenom().equals(Client.getPrenom()));
+    }
+    
+    public boolean ContientPromesse(int IdPromesse)
+    {
+        boolean contient = false;
+        
+        for(int i = 0 ; i < getPanier().size() && !contient ; i++)
+        {
+            if (getPanier().get(i).getIdPromesse() == IdPromesse)
+                contient = true;
+        }
+        
+        return contient;
     }
 
     public boolean RetirerPromesse(int IdPromesse)

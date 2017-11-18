@@ -1,6 +1,7 @@
 package Classes;
 
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Locale;
@@ -15,19 +16,19 @@ import java.util.Locale;
  *
  * @author Philippe
  */
-public class Promesse 
+public class Promesse implements Serializable
 {
     private int IdPromesse;
     private Timestamp DatePromesse;
     private int IdVol;
     private int NbAccompagnants;
 
-    public Promesse(int IdPromesse, Timestamp DatePromesse, int IdVol, int NbAccompagnants) 
+    public Promesse(int IdPromesse, Timestamp DatePromesse, int NbAccompagnants, int IdVol) 
     {
         this.IdPromesse = IdPromesse;
         this.DatePromesse = DatePromesse;
-        this.IdVol = IdVol;
-        this.NbAccompagnants = NbAccompagnants;            
+        this.NbAccompagnants = NbAccompagnants; 
+        this.IdVol = IdVol;           
     }
 
     public Promesse()
@@ -35,6 +36,25 @@ public class Promesse
         
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj == null)
+            return false;
+        if(!Promesse.class.isAssignableFrom(obj.getClass()))
+            return false;
+        
+        final Promesse other = (Promesse) obj;        
+        
+        return this.IdPromesse == other.IdPromesse;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + this.IdPromesse;
+        return hash;
+    }
 
     public int getIdPromesse() {
         return IdPromesse;

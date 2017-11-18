@@ -4,6 +4,7 @@
     Author     : Philippe
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="Classes.Vol"%>
 <%@page import="Beans.Vols"%>
 <%@page import="Classes.Promesse"%>
@@ -121,8 +122,8 @@
                                 <td><%= Vol.getNumeroVol() %></td>
                                 <td><%= Vol.getNomCompagnie() %></td>
                                 <td><%= Vol.getDestination() %></td>
-                                <td><%= Vol.getHeureDepart() %></td>
-                                <td><%= Vol.getHeureArrivee() %></td>
+                                <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
                                 <td><%= Promesse.getNbAccompagnants() %></td>
                                 <form action="ControlDataCenter" method="POST">
                                     <input type="hidden" name="action" value="RetirerPanier">
@@ -179,33 +180,27 @@
                                         </thead>
                                         <tbody>
                                         <%
-                                            i = 1;
-                                            while(session.getAttribute("Error_Achat_" + i) != null)
+                                            ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>)session.getAttribute("ArticlesPlusDisponibles");
+                                            for(i = 0 ; i < ArticlesPlusDisponibles.size() ; i++)
                                             {
-                                                HashMap<String, Object> Errors = (HashMap<String, Object>) session.getAttribute("Error_Achat_" + i);
-                                                System.out.println("Errors = " + Errors);
+                                                Promesse Promesse = ArticlesPlusDisponibles.get(i);
+                                                Vol Vol = Vols.getVol(Promesse.getIdVol());
                                             %>
                                                 <tr>
-                                                    <th scope="row"><% out.println(Errors.get("IdPromesse")); %></th>
-                                                    <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.FRANCE).format(Errors.get("DateTimePromesse"))); %></td>
-                                                    <td><% out.println(Errors.get("NumeroVol")); %></td>
-                                                    <td><% out.println(Errors.get("Destination")); %></td>
-                                                    <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.FRANCE).format(Errors.get("HeureDepart"))); %></td>
-                                                    <td><% out.println(Errors.get("NbAccompagnants")); %></td>
+                                                    <th scope="row"><%= Promesse.getIdPromesse() %></th>
+                                                    <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
+                                                    <td><%= Vol.getNumeroVol() %></td>
+                                                    <td><%= Vol.getDestination() %></td>
+                                                    <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                                    <td><%= Promesse.getNbAccompagnants() %></td>
                                                     <td>Expiré</td>
                                                 </tr>
-                                        <%
-                                                session.removeAttribute("Error_Achat_" + i);
-                                                i++;
-                                            } %>
+                                        <%  } %>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="ControlDataCenter" method="POST">
-                                        <input type="hidden" name="action" value="AnnulerPaiement">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-undo"></i> Annuler</button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-undo"></i> Annuler</button>
                                     <form action="ControlDataCenter" method="POST">
                                         <input type="hidden" name="action" value="ConfirmerPaiement">
                                         <button type="button" class="btn btn-success"><i class="fa fa-check"></i> Confirmer le payement</button>

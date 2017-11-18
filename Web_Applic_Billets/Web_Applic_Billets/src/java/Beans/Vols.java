@@ -26,9 +26,8 @@ public class Vols implements Serializable
     
     public void TrierListeVols()
     {
-        Collections.sort(getVols(), (Vol Vol1, Vol Vol2) -> 
-        {
-            int Comparison = Vol1.getHeureDepart().compareTo(Vol2.getHeureDepart());
+        Collections.sort(getVols(), (Vol Vol1, Vol Vol2) -> {
+            int Comparison = Vol1.getDateDepart().compareTo(Vol2.getDateDepart());
             
             if (Comparison == 0)
             {

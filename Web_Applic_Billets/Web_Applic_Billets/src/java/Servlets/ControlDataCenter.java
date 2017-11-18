@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -30,7 +32,7 @@ import javax.servlet.http.HttpSession;
  */
 public class ControlDataCenter extends HttpServlet {
     private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
-    private Client Client;
+    private Client Client = null;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -95,10 +97,6 @@ public class ControlDataCenter extends HttpServlet {
                 break;
             case "Payer":
                 Payer(request, response, session);
-                break;
-            case "AnnulerPaiement":
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
-                break;
             case "ConfirmerPaiement":
                 break;
             default:
@@ -226,7 +224,8 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));             
+                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));    
+            System.out.println("IdClient = " + Client.getIdClient());         
                 session.setAttribute("Client", Client);
             }
             else
@@ -243,7 +242,7 @@ public class ControlDataCenter extends HttpServlet {
             BD_airport.Deconnexion();
         } 
 
-        return session.getAttribute("Client") != null;
+        return Client != null;
     }
     
     public void ChargerVols(HttpSession session) 
@@ -264,7 +263,7 @@ public class ControlDataCenter extends HttpServlet {
             while(RS.next())
             {
                 Vol Vol = new Vol(RS.getInt("IdVol"), RS.getInt("NumeroVol"), RS.getString("NomCompagnie"), RS.getString("Destination"), RS.getTimestamp("HeureDepart"), RS.getTimestamp("HeureArrivee"), RS.getInt("PlacesRestantes"));
-                System.out.println("Vol = " + Vol.getIdVol() + " " + Vol.getDateDepart());
+                //System.out.println("Vol = " + Vol.getIdVol() + " " + Vol.getDateDepart());
                 Vols.getVols().add(Vol);
             }               
             RS.close();    
@@ -280,7 +279,7 @@ public class ControlDataCenter extends HttpServlet {
 
         getServletContext().removeAttribute("Vols");
         getServletContext().setAttribute("Vols", Vols);
-        System.out.println("Vols = " + Vols.getVols());
+        //System.out.println("Vols = " + Vols.getVols());
         
         if (session.getAttribute("Error") != null && Vols.getVols().isEmpty())//i == 0)
             session.setAttribute("Error", "Aucun vol n'est prévu dans les prochaines 24 heures !");
@@ -290,14 +289,14 @@ public class ControlDataCenter extends HttpServlet {
     {
         ResultSet RS;
         Timestamp DateTimePromesse;
-                
-        System.out.println("Client.getIdClient() = " + Client.getIdClient());
+           
+        System.out.println("IdClient Panier = " + Client.getIdClient());
         //String IdBilletDebut = request.getParameter("NumeroVol") + "-" + request.getParameter("HeureDepart").substring(8, 10) + request.getParameter("HeureDepart").substring(5, 7) + request.getParameter("HeureDepart").substring(0, 4) + "-";
         //System.out.println("IdBilletDebut = " + IdBilletDebut);
                 
+        BD_airport.Connexion();       
         try 
-        {   
-            BD_airport.Connexion();        
+        {    
             /*RS = BD_airport.Select(""
                     + "SELECT CONCAT('" + IdBilletDebut + "', LPAD(ids1.id + 1, 4, '0')) AS IdBillet, current_timestamp() AS DateTimePromesse "
                     + "FROM ("
@@ -314,40 +313,48 @@ public class ControlDataCenter extends HttpServlet {
                         + "ORDER BY ids1.id)"
                     + "LIMIT 1");*/
             
-            RS = BD_airport.Select("SELECT CURRENT_TIMESTAMP() FROM DUAL");
-            boolean Ok = RS.next();
-            if(Ok)
+            RS = BD_airport.Select("SELECT CURRENT_TIMESTAMP() FROM dual");
+            //System.out.println("RS = " + RS.getObject(1));
+            if(RS.next())
             {
+                //int IdPromesse = RS.getInt(1);
+                //System.out.println("IdPromesse = " + IdPromesse);
                 DateTimePromesse = RS.getTimestamp(1);
+                int NbAccompagnants = Integer.parseInt(request.getParameter("NbAccompagnants"));
+                int IdVol = Integer.parseInt(request.getParameter("IdVol"));
                 
                 HashMap<String, Object> hm = new HashMap<>();
         
-                hm.put("NbAccompagnants", Integer.parseInt(request.getParameter("NbAccompagnants")));
+                //hm.put("IdPromesse", IdPromesse);
                 hm.put("DateTimePromesse", DateTimePromesse);
+                hm.put("NbAccompagnants", NbAccompagnants);
                 hm.put("IdClient", Client.getIdClient());
-                hm.put("IdVol", Integer.parseInt(request.getParameter("IdVol")));
+                hm.put("IdVol", IdVol);
 
                 System.out.println("hm = " + hm);
                 
-                BD_airport.Insert("Promesses", hm);
+                BD_airport.Insert("Promesses", hm);                                
                 RS = BD_airport.Select(""
-                        + "SELECT *"
+                        + "SELECT * "
                         + "FROM bd_airport.Promesses "
                         + "WHERE IdClient = " + Client.getIdClient() + " "
-                        + "AND DateTimePromesse = '" + DateTimePromesse + "'");
+                        + "AND DateTimePromesse = '" + DateTimePromesse + "' "
+                        + "ORDER BY IdPromesse DESC");
                                 
+                int IdPromesse;
                 if(RS != null)
                 {
                     RS.next();
-                    
-                    Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), DateTimePromesse, RS.getInt("NbAccompagnants"), Integer.parseInt(request.getParameter("IdVol")));
-                    
-                    BD_airport.CreateEvent("Event_" + Promesse.getIdPromesse(), "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
+                    IdPromesse = RS.getInt("IdPromesse");
+                    Promesse Promesse = new Promesse(IdPromesse, DateTimePromesse, NbAccompagnants, IdVol);
+
+                    BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
                           "DELETE FROM bd_airport.Promesses "
-                        + "WHERE IdPromesse = " + Promesse.getIdPromesse()); 
-                    
+                        + "WHERE IdPromesse = " + IdPromesse); 
+                
                     Client.getPanier().add(Promesse);
-                }                             
+                }
+
             }           
             RS.close();       
         } 
@@ -369,16 +376,15 @@ public class ControlDataCenter extends HttpServlet {
         BD_airport.Connexion();
         try
         {                
-            System.out.println("IdClient = " + ((Client)session.getAttribute("Client")).getIdClient());
-
             RS = BD_airport.Select("SELECT IdPromesse, DateTimePromesse, IdVol, NbAccompagnants "
                     + "FROM bd_airport.Promesses NATURAL JOIN bd_airport.Vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
                     + "WHERE IdClient = '" + ((Client)session.getAttribute("Client")).getIdClient() + "' "
                     + "ORDER BY DateTimePromesse, IdPromesse");
                         
+            Client.getPanier().clear();
             while(RS.next())
             {
-                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants"));                
+                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants")); 
                 Client.getPanier().add(Promesse);
             }        
             RS.close();
@@ -393,7 +399,7 @@ public class ControlDataCenter extends HttpServlet {
         }
     }
 
-    private void RetirerPanier(HttpServletRequest request, HttpSession session) throws IOException 
+    public void RetirerPanier(HttpServletRequest request, HttpSession session) throws IOException 
     {
         BD_airport.Connexion();
         try 
@@ -401,7 +407,10 @@ public class ControlDataCenter extends HttpServlet {
             int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdPromesse = '" + request.getParameter("IdPromesse") + "'");  
             
             if (Ok != 0)    
+            {
                 Client.RetirerPromesse(Integer.parseInt(request.getParameter("IdPromesse")));
+                BD_airport.DropEvent("Event_" + Integer.parseInt(request.getParameter("IdPromesse")));
+            }
             else
                 session.setAttribute("Error", "Une erreur interne s'est produite !");
         } 
@@ -417,13 +426,20 @@ public class ControlDataCenter extends HttpServlet {
 
     private void RetirerToutPanier(HttpSession session) throws IOException 
     {
+        BD_airport.Connexion();
         try 
         {
-            BD_airport.Connexion();
             int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdClient = '" + Client.getIdClient() + "'");             
                       
             if (Ok != 0)
-                Client.getPanier().clear();
+            {
+                ArrayList<Promesse> Panier = Client.getPanier();
+                Panier.clear();                
+                for (int i = 0 ; i < Panier.size() ; i++)
+                {                    
+                    BD_airport.DropEvent("Event_" + Panier.get(i).getIdPromesse());
+                }
+            }
         } 
         catch (SQLException ex) 
         {
@@ -437,47 +453,21 @@ public class ControlDataCenter extends HttpServlet {
 
     private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
-        /*ArrayList ArticlesAvant = new ArrayList<>(), ArticlesApres = new ArrayList<>();//, ArticlesPlusDisponibles = new ArrayList<>();
-
-        // On sauvegarde les articles
-        for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
-        {
-            ArticlesAvant.add(i-1, session.getAttribute("Article_" + i));          
-        }
+        ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>) Client.getPanier().clone();
+        System.out.println("ArticlesPlusDisponibles 1 = " + ArticlesPlusDisponibles);
+        // On met à jour
+        ChargerPanier(session);               
         
-        try
-        {
-            // On met à jour
-            BD_airport.Connexion();
-            ChargerPanier(session, BD_airport);            
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(ControlDataCenter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-            BD_airport.Deconnexion();
-        }
+        ArticlesPlusDisponibles.removeAll(Client.getPanier()); 
+        System.out.println("Client.getPanier() = " + Client.getPanier().toString());
+        System.out.println("ArticlesPlusDisponibles 2 = " + ArticlesPlusDisponibles.toString());
         
-        for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
+        
+        if (!ArticlesPlusDisponibles.isEmpty())
         {
-            ArticlesApres.add(i-1, session.getAttribute("Article_" + i));          
+            session.setAttribute("ButtonPressed", true);            
+            session.setAttribute("ArticlesPlusDisponibles", ArticlesPlusDisponibles);
         }
-        
-        System.out.println("ArticlesApres 1 = " + ArticlesApres);
-        System.out.println("ArticlesAvant 1 = " + ArticlesAvant);
-        ArticlesAvant.removeAll(ArticlesApres); // ArticlesAvant = différence s'il y en a ou rien s'il n'y a pas de différence donc si c'est OK
-        
-        System.out.println("ArticlesAvant 2 = " + ArticlesAvant);
-        for(int i = 0 ; i < ArticlesAvant.size() ; i++)
-        {    
-            System.out.println("Error = " + ArticlesAvant.get(i));
-            session.setAttribute("Error_Achat_" + (i+1), ArticlesAvant.get(i));
-        }
-        
-        if (!ArticlesAvant.isEmpty())
-            session.setAttribute("ButtonPressed", true);
         else
         {
             session.setAttribute("PaiementEffectue", true);
@@ -485,6 +475,6 @@ public class ControlDataCenter extends HttpServlet {
             //ChargerPanier()
         }
         
-        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");*/
+        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
     }
 }

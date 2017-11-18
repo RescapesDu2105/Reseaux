@@ -1,5 +1,6 @@
 package Classes;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Locale;
@@ -14,7 +15,7 @@ import java.util.Locale;
  *
  * @author Philippe
  */
-public class Vol
+public class Vol implements Serializable
 {
     private int IdVol;
     private int NumeroVol;
@@ -57,14 +58,14 @@ public class Vol
         this.PlacesRestantes = PlacesRestantes;
     }
     
-    public String getHeureDepart() 
+    public String getDateDepart(Locale locale) 
     {
-        return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(getDateDepart());
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale).format(getDateDepart());
     }
 
-    public String getHeureArrivee() 
+    public String getDateArrivee(Locale locale) 
     {
-        return DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(getDateArrivee());
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale).format(getDateArrivee());
     }
 
     public int getNumeroVol() {
