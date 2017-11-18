@@ -109,3 +109,55 @@ CREATE TABLE `bd_airport`.`promesses`(
 		FOREIGN KEY (`IdVol`)
 		REFERENCES `bd_airport`.`vols` (`IdVol`)
 );
+
+USE `bd_airport`;
+DROP procedure IF EXISTS `Payer`;
+
+DELIMITER $$
+USE `bd_airport`$$
+CREATE DEFINER=`Zeydax`@`%` PROCEDURE `Payer`(p_IdClient int)
+BEGIN
+	DECLARE v_IdPromesse INT;
+    DECLARE v_NbAccompagnants INT;
+    DECLARE v_IdClient INT;
+    DECLARE v_IdVol INT;
+    DECLARE v_NumeroVol INT;
+    DECLARE v_HeureDepart TIMESTAMP;
+    DECLARE v_IdBillet VARCHAR(17);
+    DECLARE v_Finished INT;
+    DECLARE v_EventName VARCHAR(15);
+    
+	DECLARE cur CURSOR FOR SELECT IdPromesse, NbAccompagnants, IdClient, IdVol, NumeroVol, HeureDepart FROM bd_airport.Promesses NATURAL JOIN bd_airport.Vols WHERE IdClient = p_IdClient; 
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_Finished = 1;
+    
+    SET v_Finished = 0;
+    
+    OPEN cur;
+    read_loop: LOOP
+		FETCH cur INTO v_IdPromesse, v_NbAccompagnants, v_IdClient, v_IdVol, v_NumeroVol, v_HeureDepart;
+        IF v_Finished = 1 THEN
+			LEAVE read_loop;		
+		ELSE
+			DELETE FROM bd_airport.Promesses WHERE IdPromesse = v_IdPromesse;
+            
+            SELECT CONCAT("Event_", v_IdPromesse) INTO v_EventName; 
+            DROP EVENT IF EXISTS v_EventName;
+            
+            SELECT CONCAT(concat_ws(date_format(v_HeureDepart, '%d%m%Y'), CONCAT(v_NumeroVol, '-'), '-'), LPAD(t.Numero, 4, '0')) AS IdBillet INTO v_IdBillet
+			FROM 
+			(
+				SELECT COALESCE(MAX(CONVERT(SUBSTRING(IdBillet, 14, 18) + 1, SIGNED INTEGER)), 1) AS Numero
+				FROM bd_airport.Vols NATURAL JOIN bd_airport.Billets
+				WHERE IdVol = v_IdVol
+				ORDER BY Numero
+			) t;
+                        
+            INSERT INTO bd_airport.Billets VALUES (v_IdBillet, v_NbAccompagnants, v_IdClient, v_IdVol);            
+		END IF;
+	END LOOP read_loop;
+    CLOSE cur;
+    
+    COMMIT;
+END$$
+
+DELIMITER ;

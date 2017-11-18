@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -185,9 +186,29 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         }
     }
     
-    public synchronized int doFunction(HashMap<String, Object> Parameters
+    public synchronized void doProcedure(String ProcedureName, ArrayList<Object> Parameters) throws SQLException
     {
+        String Requete = "CALL " + ProcedureName + " (";
         
+        for(int i = 0 ; i < Parameters.size() ; i++)
+        {            
+            Requete = Requete + "'" + Parameters.get(i) + "', ";
+        }
+        Requete = Requete.substring(0, Requete.length() - 2);
+        Requete = Requete + ")";
+        
+        System.out.println("Requete = " + Requete);
+        try
+        {
+            Statement.execute(Requete);
+                if(!getAutoCommit())
+                    Commit();
+        }
+        catch (SQLException Ex)
+        {
+            if (!Connection.getAutoCommit())
+                Rollback();
+        }
     }
     
     /* Commit - Rollback */

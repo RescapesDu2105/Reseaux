@@ -18,6 +18,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -354,7 +356,6 @@ public class ControlDataCenter extends HttpServlet {
                 
                     Client.getPanier().add(Promesse);
                 }
-
             }           
             RS.close();       
         } 
@@ -384,7 +385,7 @@ public class ControlDataCenter extends HttpServlet {
             Client.getPanier().clear();
             while(RS.next())
             {
-                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants")); 
+                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("NbAccompagnants"), RS.getInt("IdVol")); 
                 Client.getPanier().add(Promesse);
             }        
             RS.close();
@@ -454,13 +455,13 @@ public class ControlDataCenter extends HttpServlet {
     private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
         ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>) Client.getPanier().clone();
-        System.out.println("ArticlesPlusDisponibles 1 = " + ArticlesPlusDisponibles);
+        //System.out.println("ArticlesPlusDisponibles 1 = " + ArticlesPlusDisponibles);
         // On met à jour
         ChargerPanier(session);               
         
         ArticlesPlusDisponibles.removeAll(Client.getPanier()); 
-        System.out.println("Client.getPanier() = " + Client.getPanier().toString());
-        System.out.println("ArticlesPlusDisponibles 2 = " + ArticlesPlusDisponibles.toString());
+        //System.out.println("Client.getPanier() = " + Client.getPanier().toString());
+        //System.out.println("ArticlesPlusDisponibles 2 = " + ArticlesPlusDisponibles.toString());
         
         
         if (!ArticlesPlusDisponibles.isEmpty())
@@ -471,8 +472,18 @@ public class ControlDataCenter extends HttpServlet {
         else
         {
             session.setAttribute("PaiementEffectue", true);
-            // Procedure
-            //ChargerPanier()
+            try 
+            {
+                ArrayList<Object> Parameters = new ArrayList<>();
+                Parameters.add(Client.getIdClient());
+                BD_airport.doProcedure("Payer", Parameters);
+                //Client.getPanier().clear();
+                ChargerPanier(session);
+            } 
+            catch (SQLException ex) 
+            {
+                Logger.getLogger(ControlDataCenter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");

@@ -66,152 +66,153 @@
                 <div class="mx-auto col-md-2">
                     <div class="alert alert-success" role="alert"><i class="fa fa-check"></i> Le paiement a bien été effectué!</div>
                 </div>
-        <%  }   %>
-        
-        <%  
-            if(((Client)session.getAttribute("Client")).getPanier().isEmpty() || session.getAttribute("Error") != null)
-            { %>
-                <div class="mx-auto col-md-2">
-                    <%  if(session.getAttribute("Error") != null) 
-                        { %>
-                            <div class="alert alert-danger" role="alert"><% session.getAttribute("Error"); session.removeAttribute("Error"); %></div>
-                    <%  }
-                        else 
-                        { %>
-                            <div class="alert alert-danger" role="alert">Vous n'avez aucun article dans le panier</div>      
-                    <%  } %>                    
-                </div>
-                <div class="mx-auto col-md-1">
-                    <form action="ControlDataCenter" method="POST">
-                        <input type="hidden" name="action" value="RetourCaddie">
-                        <button type="submit" class ="btn btn-info"><i class="fa fa-chevron-left"></i> Retour au caddie</button> 
-                    </form>
-                </div>
-        <%
-            }
+        <%  }  
             else
             {
-        %>
-        <div class="mx-auto col-md-12">
-            <table class ="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>Commande</th>
-                        <th>Date de la commande</th>
-                        <th>Numéro du vol</th>
-                        <th>Nom compagnie</th>
-                        <th>Destination</th>
-                        <th>Heure de départ</th>
-                        <th>Heure d'arrivée</th>
-                        <th>Nombre d'accompagnants</th>
-<!--                        <th>Prix du billet unitaire</th>
-                        <th>Prix total</th>-->
-                    </tr>
-                </thead>
-                <tbody>
-                    <% 
-                        int i = 0;
-                        while(i < Client.getPanier().size())
-                        {
-                            Promesse Promesse = Client.getPanier().get(i);
-                            Vol Vol = Vols.getVol(Promesse.getIdVol());
-                    %>
-                            <tr>
-                                <th scope="row"><%= Promesse.getIdPromesse() %></th>
-                                <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
-                                <td><%= Vol.getNumeroVol() %></td>
-                                <td><%= Vol.getNomCompagnie() %></td>
-                                <td><%= Vol.getDestination() %></td>
-                                <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
-                                <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
-                                <td><%= Promesse.getNbAccompagnants() %></td>
-                                <form action="ControlDataCenter" method="POST">
-                                    <input type="hidden" name="action" value="RetirerPanier">
-                                    <input type="hidden" name="IdPromesse" value=<%= Promesse.getIdPromesse() %> >
-                                    <td><button class="btn btn-danger btn-block" type="submit" id="submit"><i class="fa fa-minus" aria-hidden="true"></i> Retirer du panier</button></td>
-                                </form>
-                            </tr>
-                    <%      i++;
-                        } 
-                    %>
-                </tbody>
-            </table>
-        </div>
-        <div class="mx-auto col-md-2">
-            <div class="form-inline">
-                <div class="form-group">
-                    <form action="ControlDataCenter" method="POST">
-                        <input type="hidden" name="action" value="Payer">
-                        <td><button class="btn btn-success btn-block" type="submit"><i class="fa fa-credit-card" aria-hidden="true"></i> Payer</button></td>
-                    </form>
-                    <form action="ControlDataCenter" method="POST">
-                        <input type="hidden" name="action" value="RetirerToutPanier">
-                        <td><button class="btn btn-danger btn-block" type="submit"><i class="fa fa-trash" aria-hidden="true"></i> Retirer tout du panier</button></td>
-                    </form>
-                </div>
-            </div>
-            <%  if(session.getAttribute("ButtonPressed") != null && (boolean)session.getAttribute("ButtonPressed"))
+                if(((Client)session.getAttribute("Client")).getPanier().isEmpty() || session.getAttribute("Error") != null)
+                { %>
+                    <div class="mx-auto col-md-2">
+                        <%  if(session.getAttribute("Error") != null) 
+                            { %>
+                                <div class="alert alert-danger" role="alert"><% session.getAttribute("Error"); session.removeAttribute("Error"); %></div>
+                        <%  }
+                            else 
+                            { %>
+                                <div class="alert alert-danger" role="alert">Vous n'avez aucun article dans le panier</div>      
+                        <%  } %>                    
+                    </div>
+                    <div class="mx-auto col-md-1">
+                        <form action="ControlDataCenter" method="POST">
+                            <input type="hidden" name="action" value="RetourCaddie">
+                            <button type="submit" class ="btn btn-info"><i class="fa fa-chevron-left"></i> Retour au caddie</button> 
+                        </form>
+                    </div>
+            <%
+                }
+                else
                 {
-                    response.setIntHeader("Refresh", Integer.MAX_VALUE);
             %>
-                    <div class="modal fade my-5" id="ModalPayer" role="dialog" data-backdrop="false">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel"><strong>Certains articles ne sont plus disponibles à l'achat !</strong></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <table class ="table table-sm table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Commande</th>
-                                                <th>Date</th>
-                                                <th>Numéro vol</th>
-                                                <th>Destination</th>
-                                                <th>Heure départ</th>
-                                                <th>Nombre d'accompagnants</th>
-                                                <th>Raison</th>
-                        <!--                        <th>Prix du billet unitaire</th>
-                                                <th>Prix total</th>-->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <%
-                                            ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>)session.getAttribute("ArticlesPlusDisponibles");
-                                            for(i = 0 ; i < ArticlesPlusDisponibles.size() ; i++)
-                                            {
-                                                Promesse Promesse = ArticlesPlusDisponibles.get(i);
-                                                Vol Vol = Vols.getVol(Promesse.getIdVol());
-                                            %>
-                                                <tr>
-                                                    <th scope="row"><%= Promesse.getIdPromesse() %></th>
-                                                    <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
-                                                    <td><%= Vol.getNumeroVol() %></td>
-                                                    <td><%= Vol.getDestination() %></td>
-                                                    <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
-                                                    <td><%= Promesse.getNbAccompagnants() %></td>
-                                                    <td>Expiré</td>
-                                                </tr>
-                                        <%  } %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-undo"></i> Annuler</button>
-                                    <form action="ControlDataCenter" method="POST">
-                                        <input type="hidden" name="action" value="ConfirmerPaiement">
-                                        <button type="button" class="btn btn-success"><i class="fa fa-check"></i> Confirmer le payement</button>
-                                    </form>
-                                </div>
+                    <div class="mx-auto col-md-12">
+                        <table class ="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Commande</th>
+                                    <th>Date de la commande</th>
+                                    <th>Numéro du vol</th>
+                                    <th>Nom compagnie</th>
+                                    <th>Destination</th>
+                                    <th>Heure de départ</th>
+                                    <th>Heure d'arrivée</th>
+                                    <th>Nombre d'accompagnants</th>
+            <!--                        <th>Prix du billet unitaire</th>
+                                    <th>Prix total</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% 
+                                    int i = 0;
+                                    while(i < Client.getPanier().size())
+                                    {
+                                        Promesse Promesse = Client.getPanier().get(i);
+                                        Vol Vol = Vols.getVol(Promesse.getIdVol());
+                                %>
+                                        <tr>
+                                            <th scope="row"><%= Promesse.getIdPromesse() %></th>
+                                            <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
+                                            <td><%= Vol.getNumeroVol() %></td>
+                                            <td><%= Vol.getNomCompagnie() %></td>
+                                            <td><%= Vol.getDestination() %></td>
+                                            <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                            <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
+                                            <td><%= Promesse.getNbAccompagnants() %></td>
+                                            <form action="ControlDataCenter" method="POST">
+                                                <input type="hidden" name="action" value="RetirerPanier">
+                                                <input type="hidden" name="IdPromesse" value=<%= Promesse.getIdPromesse() %> >
+                                                <td><button class="btn btn-danger btn-block" type="submit" id="submit"><i class="fa fa-minus" aria-hidden="true"></i> Retirer du panier</button></td>
+                                            </form>
+                                        </tr>
+                                <%      i++;
+                                    } 
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mx-auto col-md-2">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <form action="ControlDataCenter" method="POST">
+                                    <input type="hidden" name="action" value="Payer">
+                                    <td><button class="btn btn-success btn-block" type="submit"><i class="fa fa-credit-card" aria-hidden="true"></i> Payer</button></td>
+                                </form>
+                                <form action="ControlDataCenter" method="POST">
+                                    <input type="hidden" name="action" value="RetirerToutPanier">
+                                    <td><button class="btn btn-danger btn-block" type="submit"><i class="fa fa-trash" aria-hidden="true"></i> Retirer tout du panier</button></td>
+                                </form>
                             </div>
                         </div>
-                    </div>              
-            <%  }   %>
-        </div>
-        <% } %>
+                        <%  if(session.getAttribute("ButtonPressed") != null && (boolean)session.getAttribute("ButtonPressed"))
+                            {
+                                response.setIntHeader("Refresh", Integer.MAX_VALUE);
+                        %>
+                                <div class="modal fade my-5" id="ModalPayer" role="dialog" data-backdrop="false">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><strong>Certains articles ne sont plus disponibles à l'achat !</strong></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class ="table table-sm table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Commande</th>
+                                                            <th>Date</th>
+                                                            <th>Numéro vol</th>
+                                                            <th>Destination</th>
+                                                            <th>Heure départ</th>
+                                                            <th>Nombre d'accompagnants</th>
+                                                            <th>Raison</th>
+                                    <!--                        <th>Prix du billet unitaire</th>
+                                                            <th>Prix total</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <%
+                                                        ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>)session.getAttribute("ArticlesPlusDisponibles");
+                                                        for(i = 0 ; i < ArticlesPlusDisponibles.size() ; i++)
+                                                        {
+                                                            Promesse Promesse = ArticlesPlusDisponibles.get(i);
+                                                            Vol Vol = Vols.getVol(Promesse.getIdVol());
+                                                        %>
+                                                            <tr>
+                                                                <th scope="row"><%= Promesse.getIdPromesse() %></th>
+                                                                <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
+                                                                <td><%= Vol.getNumeroVol() %></td>
+                                                                <td><%= Vol.getDestination() %></td>
+                                                                <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                                                <td><%= Promesse.getNbAccompagnants() %></td>
+                                                                <td>Expiré</td>
+                                                            </tr>
+                                                    <%  } %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-undo"></i> Annuler</button>
+                                                <form action="ControlDataCenter" method="POST">
+                                                    <input type="hidden" name="action" value="ConfirmerPaiement">
+                                                    <button type="button" class="btn btn-success"><i class="fa fa-check"></i> Confirmer le payement</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>              
+                        <%  }   %>
+                    </div>
+        <%      }
+            } %>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
