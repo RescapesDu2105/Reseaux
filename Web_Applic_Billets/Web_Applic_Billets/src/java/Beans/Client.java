@@ -57,6 +57,21 @@ public class Client implements Serializable
         return (getNom().equals(MDC.getNom()) && getPrenom().equals(MDC.getPrenom()));
     }
 
+    public boolean RetirerPromesse(int IdPromesse)
+    {
+        boolean retire = false;
+        
+        for(int i = 0 ; i < getPanier().size() && !retire ; i++)
+        {
+            if (getPanier().get(i).getIdPromesse() == IdPromesse)
+            {
+                getPanier().remove(i);
+                retire = true;
+            }
+        }
+        
+        return retire;
+    }
     
     public String getNom() {
         return Nom;

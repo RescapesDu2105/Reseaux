@@ -4,6 +4,10 @@
     Author     : Philippe
 --%>
 
+<%@page import="Classes.Vol"%>
+<%@page import="Beans.Vols"%>
+<%@page import="Classes.Promesse"%>
+<%@page import="Beans.Client"%>
 <%@page import="Servlets.ControlDataCenter"%>
 <%@page import="database.utilities.Bean_DB_Access"%>
 <%@page import="java.text.DateFormat"%>
@@ -11,13 +15,10 @@
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="Vols" scope="application" class="Beans.Vols"/>
+<jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
     response.setIntHeader("Refresh", 60);
-    /*Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
-    BD_airport.Connexion();
-    ControlDataCenter.MAJ_Panier(session, BD_airport);
-    ControlDataCenter.ChargerPanier(session, BD_airport);
-    BD_airport.Deconnexion();*/
 %>
 <!DOCTYPE html>
 <html>
@@ -39,13 +40,13 @@
                 <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPCaddie.jsp"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item active">
-                        <a class="nav-link"><strong>Client : <% out.println(session.getAttribute("Prenom") + " " + session.getAttribute("Nom")); %></strong></a>
+                        <a class="nav-link"><strong>Client : <%= Client.getNom() + " " + Client.getPrenom() %></strong></a>
                     </li>
                 </ul>
                 <form action="ControlDataCenter" method="POST">
                     <input type="hidden" name="action" value="RetourCaddie">
                     <button type="submit" class ="btn btn-info"> 
-                        <% out.println(session.getAttribute("NbItemsPanier")); %>
+                        <%= Client.getPanier().size() %>
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         Retour au caddie                    
                     </button> 
@@ -67,7 +68,7 @@
         <%  }   %>
         
         <%  
-            if((int)session.getAttribute("NbItemsPanier") == 0 || session.getAttribute("Error") != null)
+            if(((Client)session.getAttribute("Client")).getPanier().isEmpty() || session.getAttribute("Error") != null)
             { %>
                 <div class="mx-auto col-md-2">
                     <%  if(session.getAttribute("Error") != null) 
@@ -108,25 +109,24 @@
                 </thead>
                 <tbody>
                     <% 
-                        int i = 1;
-                        //while(session.getAttribute("Article_" + i) != null)
-                        while(i <= (int)session.getAttribute("NbItemsPanier"))
+                        int i = 0;
+                        while(i < Client.getPanier().size())
                         {
-                            HashMap<String, Object> Billets = (HashMap<String, Object>) session.getAttribute("Article_" + i);
+                            Promesse Promesse = Client.getPanier().get(i);
+                            Vol Vol = Vols.getVol(Promesse.getIdVol());
                     %>
                             <tr>
-                                <th scope="row"><% out.println(Billets.get("IdPromesse")); %></th>
-                                <td><% out.println(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(Billets.get("DateTimePromesse"))); %></td>
-                                <td><% out.println(Billets.get("NumeroVol")); %></td>
-                                <td><% out.println(Billets.get("NomCompagnie")); %></td>
-                                <td><% out.println(Billets.get("Destination")); %></td>
-                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureDepart"))); %></td>
-                                <td><% out.println(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(Billets.get("HeureArrivee"))); %></td>
-                                <td><% out.println(Billets.get("NbAccompagnants")); %></td>
+                                <th scope="row"><%= Promesse.getIdPromesse() %></th>
+                                <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
+                                <td><%= Vol.getNumeroVol() %></td>
+                                <td><%= Vol.getNomCompagnie() %></td>
+                                <td><%= Vol.getDestination() %></td>
+                                <td><%= Vol.getHeureDepart() %></td>
+                                <td><%= Vol.getHeureArrivee() %></td>
+                                <td><%= Promesse.getNbAccompagnants() %></td>
                                 <form action="ControlDataCenter" method="POST">
                                     <input type="hidden" name="action" value="RetirerPanier">
-                                    <input type="hidden" name="IdPromesse" value=<% out.println(Billets.get("IdPromesse").toString()); %> >
-                                    <input type="hidden" name="NumeroArticle" value=<% out.println(i); %> >
+                                    <input type="hidden" name="IdPromesse" value=<%= Promesse.getIdPromesse() %> >
                                     <td><button class="btn btn-danger btn-block" type="submit" id="submit"><i class="fa fa-minus" aria-hidden="true"></i> Retirer du panier</button></td>
                                 </form>
                             </tr>

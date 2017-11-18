@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -33,6 +30,7 @@ import javax.servlet.http.HttpSession;
  */
 public class ControlDataCenter extends HttpServlet {
     private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+    private Client Client;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -78,7 +76,8 @@ public class ControlDataCenter extends HttpServlet {
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
                 break;
             case "AjoutPanier":
-                AjoutPanier(request, response, session);
+                AjoutPanier(request, session);
+                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
                 break;
             case "VoirPanier":
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
@@ -87,10 +86,12 @@ public class ControlDataCenter extends HttpServlet {
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
                 break;
             case "RetirerPanier":
-                RetirerPanier(request, response, session);
+                RetirerPanier(request, session);
+                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
                 break;
             case "RetirerToutPanier":
-                RetirerToutPanier(request, response, session);
+                RetirerToutPanier(session);
+                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
                 break;
             case "Payer":
                 Payer(request, response, session);
@@ -195,11 +196,7 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                Client Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));
-                //
-                /*session.setAttribute("IdClient", RS.getInt("IdClient")); 
-                session.setAttribute("Nom", RS.getString("Nom"));
-                session.setAttribute("Prenom", RS.getString("Prenom"));*/
+                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));
                 session.setAttribute("Client", Client);                
             }
             else
@@ -229,7 +226,7 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                Client Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));             
+                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));             
                 session.setAttribute("Client", Client);
             }
             else
@@ -252,21 +249,18 @@ public class ControlDataCenter extends HttpServlet {
     public void ChargerVols(HttpSession session) 
     {
         ResultSet RS;
-        int i;        
         Vols Vols = new Vols();
 
         BD_airport.Connexion();
         try
         {        
             RS = BD_airport.Select(""
-                    + "SELECT IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, PlacesRestantes "
-                    + "FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
-                    + "WHERE bd_airport.vols.HeureDepart >= current_time() "
-                    + "AND bd_airport.vols.PlacesRestantes > 0 "
-                    + "ORDER BY HeureDepart");
-            
-            i = 0;
-            
+                + "SELECT IdVol, NumeroVol, NomCompagnie, Destination, HeureDepart, HeureArrivee, PlacesRestantes "
+                + "FROM bd_airport.vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
+                + "WHERE bd_airport.vols.HeureDepart >= current_time() "
+                + "AND bd_airport.vols.PlacesRestantes > 0 "
+                + "ORDER BY HeureDepart");
+                        
             while(RS.next())
             {
                 Vol Vol = new Vol(RS.getInt("IdVol"), RS.getInt("NumeroVol"), RS.getString("NomCompagnie"), RS.getString("Destination"), RS.getTimestamp("HeureDepart"), RS.getTimestamp("HeureArrivee"), RS.getInt("PlacesRestantes"));
@@ -284,20 +278,20 @@ public class ControlDataCenter extends HttpServlet {
             BD_airport.Deconnexion();
         } 
 
-        session.setAttribute("Vols", Vols);
-        //
-        //session.setAttribute("NbVols", i);
+        getServletContext().removeAttribute("Vols");
+        getServletContext().setAttribute("Vols", Vols);
+        System.out.println("Vols = " + Vols.getVols());
         
-        if (session.getAttribute("Error") != null && Vols.getVols().size() == 0)//i == 0)
+        if (session.getAttribute("Error") != null && Vols.getVols().isEmpty())//i == 0)
             session.setAttribute("Error", "Aucun vol n'est prévu dans les prochaines 24 heures !");
     }
     
-    private void AjoutPanier(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
+    private void AjoutPanier(HttpServletRequest request, HttpSession session) throws IOException 
     {
-        int NbItemsPanier = (int) session.getAttribute("NbItemsPanier");
         ResultSet RS;
         Timestamp DateTimePromesse;
                 
+        System.out.println("Client.getIdClient() = " + Client.getIdClient());
         //String IdBilletDebut = request.getParameter("NumeroVol") + "-" + request.getParameter("HeureDepart").substring(8, 10) + request.getParameter("HeureDepart").substring(5, 7) + request.getParameter("HeureDepart").substring(0, 4) + "-";
         //System.out.println("IdBilletDebut = " + IdBilletDebut);
                 
@@ -330,40 +324,30 @@ public class ControlDataCenter extends HttpServlet {
         
                 hm.put("NbAccompagnants", Integer.parseInt(request.getParameter("NbAccompagnants")));
                 hm.put("DateTimePromesse", DateTimePromesse);
-                hm.put("IdClient", session.getAttribute("IdClient"));
+                hm.put("IdClient", Client.getIdClient());
                 hm.put("IdVol", Integer.parseInt(request.getParameter("IdVol")));
 
-                //System.out.println("hm = " + hm);
+                System.out.println("hm = " + hm);
                 
                 BD_airport.Insert("Promesses", hm);
                 RS = BD_airport.Select(""
                         + "SELECT *"
                         + "FROM bd_airport.Promesses "
-                        + "WHERE IdClient = " + session.getAttribute("IdClient") + " "
+                        + "WHERE IdClient = " + Client.getIdClient() + " "
                         + "AND DateTimePromesse = '" + DateTimePromesse + "'");
                                 
-                int IdPromesse = -1;
-                Promesse Promesse = null;
                 if(RS != null)
                 {
                     RS.next();
-                    IdPromesse = RS.getInt("IdPromesse");
-                    //
-                    Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("NbAccompagnants"), Integer.parseInt(request.getParameter("IdVol")));
-                }                
-                
-                if(IdPromesse != -1)
-                {
-                    BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
-                          "DELETE FROM bd_airport.Promesses "
-                        + "WHERE IdPromesse = " + IdPromesse);   
                     
-                    //Suite
-                }
-                
-                
-                session.removeAttribute("NbItemsPanier");
-                session.setAttribute("NbItemsPanier", NbItemsPanier + 1);
+                    Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), DateTimePromesse, RS.getInt("NbAccompagnants"), Integer.parseInt(request.getParameter("IdVol")));
+                    
+                    BD_airport.CreateEvent("Event_" + Promesse.getIdPromesse(), "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
+                          "DELETE FROM bd_airport.Promesses "
+                        + "WHERE IdPromesse = " + Promesse.getIdPromesse()); 
+                    
+                    Client.getPanier().add(Promesse);
+                }                             
             }           
             RS.close();       
         } 
@@ -372,21 +356,16 @@ public class ControlDataCenter extends HttpServlet {
             System.err.println("SQL Error : " + ex.getMessage());
             session.setAttribute("Error", "Une erreur interne s'est produite !");
         }
-         
-        BD_airport.Deconnexion();
-        
-        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
+        finally
+        {
+            BD_airport.Deconnexion();
+        }        
     }
 
     public void ChargerPanier(HttpSession session)
     {
         ResultSet RS;
-        
-        /*for(int i = 1 ; session.getAttribute("Article_" + i) != null ; i++)
-        {
-            session.removeAttribute("Article_" + i);
-        }*/
-        
+                
         BD_airport.Connexion();
         try
         {                
@@ -396,32 +375,10 @@ public class ControlDataCenter extends HttpServlet {
                     + "FROM bd_airport.Promesses NATURAL JOIN bd_airport.Vols NATURAL JOIN bd_airport.avions NATURAL JOIN bd_airport.compagnies "
                     + "WHERE IdClient = '" + ((Client)session.getAttribute("Client")).getIdClient() + "' "
                     + "ORDER BY DateTimePromesse, IdPromesse");
-
-            int i = 0;
-
-            
-            Client Client = (Client) session.getAttribute("Client");            
-            
+                        
             while(RS.next())
             {
-                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants"));
-                //
-                /*i++;
-                
-                HashMap<String, Object> hm = new HashMap<>();
-                hm.put("IdPromesse", RS.getInt("IdPromesse"));
-                hm.put("DateTimePromesse", RS.getTimestamp("DateTimePromesse"));
-                hm.put("IdVol", RS.getInt("IdVol"));
-                hm.put("NumeroVol", RS.getInt("NumeroVol"));
-                hm.put("NomCompagnie", RS.getString("NomCompagnie"));
-                hm.put("Destination", RS.getString("Destination"));
-                hm.put("HeureDepart", RS.getTimestamp("HeureDepart"));
-                hm.put("HeureArrivee", RS.getTimestamp("HeureArrivee"));
-                hm.put("NbAccompagnants", RS.getInt("NbAccompagnants"));
-                    
-                session.setAttribute("Article_" + i, hm);
-                System.out.println("Article_" + i + " = " + session.getAttribute("Article_" + i));*/
-                
+                Promesse Promesse = new Promesse(RS.getInt("IdPromesse"), RS.getTimestamp("DateTimePromesse"), RS.getInt("IdVol"), RS.getInt("NbAccompagnants"));                
                 Client.getPanier().add(Promesse);
             }        
             RS.close();
@@ -436,49 +393,46 @@ public class ControlDataCenter extends HttpServlet {
         }
     }
 
-    private void RetirerPanier(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
+    private void RetirerPanier(HttpServletRequest request, HttpSession session) throws IOException 
     {
+        BD_airport.Connexion();
         try 
         {
-            BD_airport.Connexion();
-            int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdPromesse = '" + request.getParameter("IdPromesse") + "'");   
-            if (Ok != 0)
-            {
-                int NbItemsPanier = (int)session.getAttribute("NbItemsPanier");
-                session.removeAttribute("NbItemsPanier");
-                session.setAttribute("NbItemsPanier", NbItemsPanier - 1);
-            }
+            int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdPromesse = '" + request.getParameter("IdPromesse") + "'");  
+            
+            if (Ok != 0)    
+                Client.RetirerPromesse(Integer.parseInt(request.getParameter("IdPromesse")));
             else
-            {
                 session.setAttribute("Error", "Une erreur interne s'est produite !");
-            }            
         } 
         catch (SQLException ex) 
         {
             session.setAttribute("Error", "Une erreur interne s'est produite !");
         }
-    
-        BD_airport.Deconnexion();        
-        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
+        finally
+        {
+            BD_airport.Deconnexion();   
+        }
     }    
 
-    private void RetirerToutPanier(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
+    private void RetirerToutPanier(HttpSession session) throws IOException 
     {
         try 
         {
             BD_airport.Connexion();
-            int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdClient = '" + session.getAttribute("IdClient") + "'");             
+            int Ok = BD_airport.Update("DELETE FROM bd_airport.Promesses WHERE IdClient = '" + Client.getIdClient() + "'");             
                       
-            session.removeAttribute("NbItemsPanier");
-            session.setAttribute("NbItemsPanier", 0);
-                    } 
+            if (Ok != 0)
+                Client.getPanier().clear();
+        } 
         catch (SQLException ex) 
         {
             session.setAttribute("Error", "Une erreur interne s'est produite !");
         }
-  
-        BD_airport.Deconnexion();        
-        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
+        finally
+        {
+            BD_airport.Deconnexion();    
+        }
     }
 
     private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 

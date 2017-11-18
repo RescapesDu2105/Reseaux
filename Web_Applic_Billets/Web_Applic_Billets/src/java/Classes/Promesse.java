@@ -44,6 +44,11 @@ public class Promesse
         this.IdPromesse = IdPromesse;
     }
 
+    public String getDatePromesse(Locale locale)
+    {
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale).format(DatePromesse);
+    }
+    
     public Timestamp getDatePromesse() {
         return DatePromesse;
     }

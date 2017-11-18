@@ -15,7 +15,7 @@
 <%@page import="Servlets.ControlDataCenter"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="Vols" scope="session" class="Beans.Vols"/>
+<jsp:useBean id="Vols" scope="application" class="Beans.Vols"/>
 <jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
     response.setIntHeader("Refresh", 60);
