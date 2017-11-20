@@ -293,28 +293,10 @@ public class ControlDataCenter extends HttpServlet {
         Timestamp DateTimePromesse;
            
         System.out.println("IdClient Panier = " + Client.getIdClient());
-        //String IdBilletDebut = request.getParameter("NumeroVol") + "-" + request.getParameter("HeureDepart").substring(8, 10) + request.getParameter("HeureDepart").substring(5, 7) + request.getParameter("HeureDepart").substring(0, 4) + "-";
-        //System.out.println("IdBilletDebut = " + IdBilletDebut);
                 
         BD_airport.Connexion();       
         try 
-        {    
-            /*RS = BD_airport.Select(""
-                    + "SELECT CONCAT('" + IdBilletDebut + "', LPAD(ids1.id + 1, 4, '0')) AS IdBillet, current_timestamp() AS DateTimePromesse "
-                    + "FROM ("
-                        + "SELECT CONVERT(SUBSTRING(IdBillet, 14, 18), SIGNED INTEGER) AS id "
-                        + "FROM bd_airport.billets "
-                        + "WHERE IdBillet LIKE '" + IdBilletDebut + "%') ids1 "
-                    + "WHERE NOT EXISTS("
-                        +"SELECT * "
-                        + "FROM ("
-                            + "SELECT CONVERT(SUBSTRING(IdBillet, 14, 18), SIGNED INTEGER) AS id "
-                            + "FROM bd_airport.billets "
-                            + "WHERE IdBillet LIKE '" + IdBilletDebut + "%') ids2 "
-                        + "WHERE ids2.id = ids1.id + 1 "
-                        + "ORDER BY ids1.id)"
-                    + "LIMIT 1");*/
-            
+        {                
             RS = BD_airport.Select("SELECT CURRENT_TIMESTAMP() FROM dual");
             //System.out.println("RS = " + RS.getObject(1));
             if(RS.next())
@@ -333,9 +315,11 @@ public class ControlDataCenter extends HttpServlet {
                 hm.put("IdClient", Client.getIdClient());
                 hm.put("IdVol", IdVol);
 
-                System.out.println("hm = " + hm);
+                //System.out.println("hm = " + hm);
                 
-                BD_airport.Insert("Promesses", hm);                                
+                BD_airport.Insert("Promesses", hm);     
+                System.out.println("Panier = " + Client.getPanier().get(Client.getPanier().size() - 1).getIdPromesse());
+                
                 RS = BD_airport.Select(""
                         + "SELECT * "
                         + "FROM bd_airport.Promesses "
@@ -350,9 +334,9 @@ public class ControlDataCenter extends HttpServlet {
                     IdPromesse = RS.getInt("IdPromesse");
                     Promesse Promesse = new Promesse(IdPromesse, DateTimePromesse, NbAccompagnants, IdVol);
 
-                    BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 2 HOUR", 
+                    /*BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 1 HOUR", 
                           "DELETE FROM bd_airport.Promesses "
-                        + "WHERE IdPromesse = " + IdPromesse); 
+                        + "WHERE IdPromesse = " + IdPromesse); */
                 
                     Client.getPanier().add(Promesse);
                 }
@@ -410,7 +394,7 @@ public class ControlDataCenter extends HttpServlet {
             if (Ok != 0)    
             {
                 Client.RetirerPromesse(Integer.parseInt(request.getParameter("IdPromesse")));
-                BD_airport.DropEvent("Event_" + Integer.parseInt(request.getParameter("IdPromesse")));
+                //BD_airport.DropEvent("Event_" + Integer.parseInt(request.getParameter("IdPromesse")));
             }
             else
                 session.setAttribute("Error", "Une erreur interne s'est produite !");
@@ -436,10 +420,10 @@ public class ControlDataCenter extends HttpServlet {
             {
                 ArrayList<Promesse> Panier = Client.getPanier();
                 Panier.clear();                
-                for (int i = 0 ; i < Panier.size() ; i++)
+                /*for (int i = 0 ; i < Panier.size() ; i++)
                 {                    
                     BD_airport.DropEvent("Event_" + Panier.get(i).getIdPromesse());
-                }
+                }*/
             }
         } 
         catch (SQLException ex) 
@@ -455,13 +439,10 @@ public class ControlDataCenter extends HttpServlet {
     private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
     {
         ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>) Client.getPanier().clone();
-        //System.out.println("ArticlesPlusDisponibles 1 = " + ArticlesPlusDisponibles);
-        // On met à jour
+        
         ChargerPanier(session);               
         
         ArticlesPlusDisponibles.removeAll(Client.getPanier()); 
-        //System.out.println("Client.getPanier() = " + Client.getPanier().toString());
-        //System.out.println("ArticlesPlusDisponibles 2 = " + ArticlesPlusDisponibles.toString());
         
         
         if (!ArticlesPlusDisponibles.isEmpty())
@@ -472,18 +453,22 @@ public class ControlDataCenter extends HttpServlet {
         else
         {
             session.setAttribute("PaiementEffectue", true);
+            BD_airport.Connexion();
             try 
             {
                 ArrayList<Object> Parameters = new ArrayList<>();
                 Parameters.add(Client.getIdClient());
                 BD_airport.doProcedure("Payer", Parameters);
-                //Client.getPanier().clear();
-                ChargerPanier(session);
+                Client.getPanier().clear();
             } 
             catch (SQLException ex) 
             {
                 Logger.getLogger(ControlDataCenter.class.getName()).log(Level.SEVERE, null, ex);
             }
+            finally
+            {
+                BD_airport.Deconnexion(); 
+            }            
         }
         
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");

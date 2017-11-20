@@ -6,6 +6,7 @@
 package database.utilities;
 
 import java.io.Serializable;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -188,24 +189,32 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
     
     public synchronized void doProcedure(String ProcedureName, ArrayList<Object> Parameters) throws SQLException
     {
-        String Requete = "CALL " + ProcedureName + " (";
+        String Requete = "{call " + ProcedureName + " (";
         
         for(int i = 0 ; i < Parameters.size() ; i++)
         {            
-            Requete = Requete + "'" + Parameters.get(i) + "', ";
+            Requete = Requete + "?,";
         }
-        Requete = Requete.substring(0, Requete.length() - 2);
-        Requete = Requete + ")";
+        Requete = Requete.substring(0, Requete.length() - 1);
+        Requete = Requete + ")}";
         
         System.out.println("Requete = " + Requete);
+        
+        CallableStatement CStatement = getConnection().prepareCall(Requete);
+        System.out.println("Omae wa mou shindeiru");
         try
         {
-            Statement.execute(Requete);
+            for (int i = 0 ; i < Parameters.size() ; i++)
+            {
+                CStatement.setObject(i+1, Parameters.get(i));
+            }
+            
+            CStatement.execute();
                 if(!getAutoCommit())
                     Commit();
         }
         catch (SQLException Ex)
-        {
+        {       
             if (!Connection.getAutoCommit())
                 Rollback();
         }

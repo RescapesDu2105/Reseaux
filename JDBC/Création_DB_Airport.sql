@@ -99,6 +99,7 @@ CREATE TABLE `bd_airport`.`promesses`(
 	`IdPromesse` INT NOT NULL AUTO_INCREMENT,
     `NbAccompagnants` INT NOT NULL,
     `DateTimePromesse` TIMESTAMP NOT NULL,
+    `DateExpiration` TIMESTAMP NOT NULL,
 	`IdClient` INT NOT NULL,
 	`IdVol` INT NOT NULL,
     CONSTRAINT IdPromesse_PK PRIMARY KEY (`IdPromesse`),
@@ -161,3 +162,14 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Trigger_DateExpiration 
+BEFORE INSERT ON bd_airport.Promesses
+FOR EACH ROW
+BEGIN
+	SET NEW.DateExpiration = ADDTIME(NEW.DateTimePromesse, '01:00:00');
+END$$
+DELIMITER ;
+
+CREATE EVENT Promesse_Expiration ON SCHEDULE EVERY 1 MINUTE DO DELETE FROM bd_airport.promesses WHERE DateExpiration < current_timestamp();
