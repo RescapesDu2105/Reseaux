@@ -99,7 +99,7 @@
                                             <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
                                             <td><%= Vol.getPlacesRestantes() %></td>                                
                                             <form action="ControlDataCenter" method="POST">
-                                                <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<%= Vol.getPlacesRestantes() %>" step="1" value="0" style="width: 75px;"></td>
+                                                <td><input class="form-control" type="number" name="NbAccompagnants" min="0" max="<%= Vol.getPlacesRestantes() < 10 ? Vol.getPlacesRestantes() : 10 %>" step="1" value="0" style="width: 75px;"></td>
                                                 <input type="hidden" name="action" value="AjoutPanier">
                                                 <input type="hidden" name="IdVol" value=<%= Vol.getIdVol() %> >
                                                 <td><button class="btn btn-success btn-block" type="submit" id="submit"><i class="fa fa-plus"></i> Ajouter au panier</button></td>

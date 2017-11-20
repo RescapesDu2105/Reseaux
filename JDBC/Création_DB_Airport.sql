@@ -47,9 +47,7 @@ CREATE TABLE `bd_airport`.`clients` (
 
 CREATE TABLE `bd_airport`.`billets` (
   `IdBillet` VARCHAR(17) NOT NULL,
-  /*`CarteIdentite` VARCHAR(14) NOT NULL,*/
-  /*`Classe` VARCHAR(12) NOT NULL,*/
-  `NbAccompagnants` INT NOT NULL,
+  -- `NbAccompagnants` INT NOT NULL,
   `IdClient` INT NOT NULL,
   `IdVol` INT NOT NULL,
   CONSTRAINT IdBillet_PK PRIMARY KEY (`IdBillet`),
@@ -59,9 +57,8 @@ CREATE TABLE `bd_airport`.`billets` (
     REFERENCES `bd_airport`.`vols` (`IdVol`),
   CONSTRAINT `Billets_Client_FK`
     FOREIGN KEY (`IdClient`)
-    REFERENCES `bd_airport`.`clients` (`IdClient`),
-  /*CONSTRAINT Classe_CK CHECK(Classe IN ('Premiere','Economique')),*/
-  CONSTRAINT NbAccompagnant_CK CHECK(NbAccompagnants >=0 AND NbAccompagnants<=10)
+    REFERENCES `bd_airport`.`clients` (`IdClient`)
+  -- , CONSTRAINT NbAccompagnant_CK CHECK(NbAccompagnants >=0 AND NbAccompagnants<=10)
   );
 
 CREATE TABLE `bd_airport`.`bagages` (
@@ -99,7 +96,6 @@ CREATE TABLE `bd_airport`.`promesses`(
 	`IdPromesse` INT NOT NULL AUTO_INCREMENT,
     `NbAccompagnants` INT NOT NULL,
     `DateTimePromesse` TIMESTAMP NOT NULL,
-    `DateExpiration` TIMESTAMP NOT NULL,
 	`IdClient` INT NOT NULL,
 	`IdVol` INT NOT NULL,
     CONSTRAINT IdPromesse_PK PRIMARY KEY (`IdPromesse`),
@@ -128,6 +124,8 @@ BEGIN
     DECLARE v_Finished INT;
     DECLARE v_EventName VARCHAR(15);
     
+    DECLARE i INT;
+    
 	DECLARE cur CURSOR FOR SELECT IdPromesse, NbAccompagnants, IdClient, IdVol, NumeroVol, HeureDepart FROM bd_airport.Promesses NATURAL JOIN bd_airport.Vols WHERE IdClient = p_IdClient; 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_Finished = 1;
     
@@ -141,19 +139,23 @@ BEGIN
 		ELSE
 			DELETE FROM bd_airport.Promesses WHERE IdPromesse = v_IdPromesse;
             
-            SELECT CONCAT("Event_", v_IdPromesse) INTO v_EventName; 
-            DROP EVENT IF EXISTS v_EventName;
-            
-            SELECT CONCAT(concat_ws(date_format(v_HeureDepart, '%d%m%Y'), CONCAT(v_NumeroVol, '-'), '-'), LPAD(t.Numero, 4, '0')) AS IdBillet INTO v_IdBillet
-			FROM 
-			(
-				SELECT COALESCE(MAX(CONVERT(SUBSTRING(IdBillet, 14, 18) + 1, SIGNED INTEGER)), 1) AS Numero
-				FROM bd_airport.Vols NATURAL JOIN bd_airport.Billets
-				WHERE IdVol = v_IdVol
-				ORDER BY Numero
-			) t;
-                        
-            INSERT INTO bd_airport.Billets VALUES (v_IdBillet, v_NbAccompagnants, v_IdClient, v_IdVol);            
+            SET i = 0;
+            WHILE i < v_NbAccompagnant DO
+                
+				SELECT CONCAT(concat_ws(date_format(v_HeureDepart, '%d%m%Y'), CONCAT(v_NumeroVol, '-'), '-'), LPAD(t.Numero, 4, '0')) AS IdBillet INTO v_IdBillet
+				FROM 
+				(
+					SELECT COALESCE(MAX(CONVERT(SUBSTRING(IdBillet, 14, 18) + 1, SIGNED INTEGER)), 1) AS Numero
+					FROM bd_airport.Vols NATURAL JOIN bd_airport.Billets
+					WHERE IdVol = v_IdVol
+					ORDER BY Numero
+				) t;
+							
+				INSERT INTO bd_airport.Billets VALUES (v_IdBillet, v_IdClient, v_IdVol); 
+				UPDATE bd_airport.Vols SET PlacesRestantes = PlacesRestantes - v_NbAccompagnant;
+				SET i = i + 1;
+                
+            END WHILE;
 		END IF;
 	END LOOP read_loop;
     CLOSE cur;
@@ -163,13 +165,9 @@ END$$
 
 DELIMITER ;
 
+DROP EVENT IF EXISTS Promesse_Expiration;
 DELIMITER $$
-CREATE TRIGGER Trigger_DateExpiration 
-BEFORE INSERT ON bd_airport.Promesses
-FOR EACH ROW
-BEGIN
-	SET NEW.DateExpiration = ADDTIME(NEW.DateTimePromesse, '01:00:00');
-END$$
-DELIMITER ;
-
-CREATE EVENT Promesse_Expiration ON SCHEDULE EVERY 1 MINUTE DO DELETE FROM bd_airport.promesses WHERE DateExpiration < current_timestamp();
+CREATE EVENT Promesse_Expiration
+ON SCHEDULE EVERY 1 MINUTE STARTS CURRENT_TIMESTAMP
+DO
+    DELETE FROM bd_airport.promesses WHERE TIMESTAMPDIFF(MINUTE, DateTimePromesse, CURRENT_TIMESTAMP) >= 1;
