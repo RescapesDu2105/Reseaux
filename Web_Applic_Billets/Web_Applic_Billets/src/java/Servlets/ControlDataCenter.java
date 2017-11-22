@@ -76,6 +76,7 @@ public class ControlDataCenter extends HttpServlet {
                 break;
             case "Deconnexion":
                 session.invalidate();
+                session = request.getSession(false);
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
                 break;
             case "AjoutPanier":
@@ -199,6 +200,7 @@ public class ControlDataCenter extends HttpServlet {
             {
                 Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));
                 session.setAttribute("Client", Client);                
+                session.setAttribute("isUserLoggedIn", true);
             }
             else
                 session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !");  
@@ -228,8 +230,9 @@ public class ControlDataCenter extends HttpServlet {
             if (isResults)                        
             {
                 Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));    
-            System.out.println("IdClient = " + Client.getIdClient());         
+            //System.out.println("IdClient = " + Client.getIdClient());         
                 session.setAttribute("Client", Client);
+                session.setAttribute("isUserLoggedIn", true);
             }
             else
                 session.setAttribute("ErrorLogin", "Le nom d'utilisateur ou le mot de passe est incorrect !"); 
@@ -251,7 +254,12 @@ public class ControlDataCenter extends HttpServlet {
     public void ChargerVols(HttpSession session) 
     {
         ResultSet RS;
-        Vols Vols = new Vols();
+        Vols Vols = (Vols) getServletContext().getAttribute("Vols");
+        if(Vols == null)
+        {
+            Vols = new Vols();
+            getServletContext().setAttribute("Vols", Vols);
+        }
 
         BD_airport.Connexion();
         try
@@ -280,8 +288,6 @@ public class ControlDataCenter extends HttpServlet {
             BD_airport.Deconnexion();
         } 
 
-        getServletContext().removeAttribute("Vols");
-        getServletContext().setAttribute("Vols", Vols);
         //System.out.println("Vols = " + Vols.getVols());
         
         if (session.getAttribute("Error") != null && Vols.getVols().isEmpty())//i == 0)

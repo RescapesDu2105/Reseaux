@@ -19,6 +19,10 @@
 <jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
     response.setIntHeader("Refresh", 60);
+    if (session.isNew() || session.getAttribute("isUserLoggedIn") == null) 
+    {
+        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets"); 
+    }
 %>
 <!DOCTYPE html>
 <html>

@@ -20,8 +20,8 @@ public class Promesse implements Serializable
 {
     private int IdPromesse;
     private Timestamp DatePromesse;
-    private int IdVol;
     private int NbAccompagnants;
+    private int IdVol;
 
     public Promesse(int IdPromesse, Timestamp DatePromesse, int NbAccompagnants, int IdVol) 
     {
