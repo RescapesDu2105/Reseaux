@@ -72,12 +72,12 @@ public class ControlDataCenter extends HttpServlet {
                     response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
                 }
                 else
-                    response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
+                    response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPInit.jsp");
                 break;
             case "Deconnexion":
                 session.invalidate();
                 session = request.getSession(false);
-                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets");
+                response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPInit.jsp");
                 break;
             case "AjoutPanier":
                 AjoutPanier(request, session);
@@ -99,9 +99,9 @@ public class ControlDataCenter extends HttpServlet {
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
                 break;
             case "Payer":
+            case "ConfirmerPaiement":
                 Payer(request, response, session);
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
-            case "ConfirmerPaiement":
                 break;
             default: System.out.println("DEFAULT");
                 break;
