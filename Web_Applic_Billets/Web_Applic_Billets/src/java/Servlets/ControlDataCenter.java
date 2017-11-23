@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -270,13 +271,22 @@ public class ControlDataCenter extends HttpServlet {
                 + "WHERE bd_airport.vols.HeureDepart >= current_time() "
                 + "AND bd_airport.vols.PlacesRestantes > 0 "
                 + "ORDER BY HeureDepart");
-                        
+            
+            //Vols.getVols().clear();    
             while(RS.next())
             {
                 Vol Vol = new Vol(RS.getInt("IdVol"), RS.getInt("NumeroVol"), RS.getString("NomCompagnie"), RS.getString("Destination"), RS.getTimestamp("HeureDepart"), RS.getTimestamp("HeureArrivee"), RS.getInt("PlacesRestantes"));
-                //System.out.println("Vol = " + Vol.getIdVol() + " " + Vol.getDateDepart());
-                Vols.getVols().add(Vol);
+                //System.out.println("Vol = " + Vol.getIdVol());
+                
+                if(Vols.getVol(RS.getInt("IdVol")) == null)
+                {
+                    Vols.getVols().add(Vol);
+                    System.out.println("J'ajoute bi1");
+                }
+                else
+                    System.out.println("J'ajoute pô");
             }               
+            System.out.println("Vols = " + Vols.getVols().size());
             RS.close();    
         }
         catch (SQLException ex) 

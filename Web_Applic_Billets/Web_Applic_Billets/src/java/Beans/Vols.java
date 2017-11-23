@@ -42,14 +42,21 @@ public class Vols implements Serializable
     {
         boolean Trouve = false;
         Vol Vol = null;
-        
-        for (Iterator<Vol> it = getVols().iterator(); !Trouve && it.hasNext();) 
+        System.out.println("IdVol = " + IdVol);
+        System.out.println("Trouve = " + Trouve);
+        Iterator<Vol> it = getVols().iterator();
+        System.out.println("it.hasNext() = " + it.hasNext());
+        for (; !Trouve && it.hasNext();) 
         {
             Vol = it.next();
+            System.out.println("Vol = " + Vol.getIdVol());
             Trouve = (Vol.getIdVol() == IdVol);
         }
         
-        return Vol;
+        if(!Trouve)
+            return null;
+        else
+            return Vol;
     }
     
     public ArrayList<Vol> getVols() {

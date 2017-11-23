@@ -1,3 +1,5 @@
+SET SQL_SAFE_UPDATES = 0;
+
 DROP SCHEMA `bd_airport` ;
 CREATE SCHEMA `bd_airport` ;
 
@@ -140,7 +142,7 @@ BEGIN
 			DELETE FROM bd_airport.Promesses WHERE IdPromesse = v_IdPromesse;
             
             SET i = 0;
-            WHILE i < v_NbAccompagnant DO
+            WHILE i <= v_NbAccompagnants DO
                 
 				SELECT CONCAT(concat_ws(date_format(v_HeureDepart, '%d%m%Y'), CONCAT(v_NumeroVol, '-'), '-'), LPAD(t.Numero, 4, '0')) AS IdBillet INTO v_IdBillet
 				FROM 
@@ -152,7 +154,11 @@ BEGIN
 				) t;
 							
 				INSERT INTO bd_airport.Billets VALUES (v_IdBillet, v_IdClient, v_IdVol); 
-				UPDATE bd_airport.Vols SET PlacesRestantes = PlacesRestantes - v_NbAccompagnant;
+                
+				UPDATE bd_airport.Vols 
+                SET PlacesRestantes = PlacesRestantes - v_NbAccompagnants
+                WHERE IdVol = v_IdVol;
+                
 				SET i = i + 1;
                 
             END WHILE;
