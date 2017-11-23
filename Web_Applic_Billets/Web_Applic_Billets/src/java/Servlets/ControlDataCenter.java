@@ -272,21 +272,15 @@ public class ControlDataCenter extends HttpServlet {
                 + "AND bd_airport.vols.PlacesRestantes > 0 "
                 + "ORDER BY HeureDepart");
             
-            //Vols.getVols().clear();    
             while(RS.next())
             {
                 Vol Vol = new Vol(RS.getInt("IdVol"), RS.getInt("NumeroVol"), RS.getString("NomCompagnie"), RS.getString("Destination"), RS.getTimestamp("HeureDepart"), RS.getTimestamp("HeureArrivee"), RS.getInt("PlacesRestantes"));
-                //System.out.println("Vol = " + Vol.getIdVol());
-                
+                                
                 if(Vols.getVol(RS.getInt("IdVol")) == null)
                 {
                     Vols.getVols().add(Vol);
-                    System.out.println("J'ajoute bi1");
                 }
-                else
-                    System.out.println("J'ajoute pô");
             }               
-            System.out.println("Vols = " + Vols.getVols().size());
             RS.close();    
         }
         catch (SQLException ex) 
@@ -309,33 +303,26 @@ public class ControlDataCenter extends HttpServlet {
         ResultSet RS;
         Timestamp DateTimePromesse;
            
-        System.out.println("IdClient Panier = " + Client.getIdClient());
                 
         BD_airport.Connexion();       
         try 
         {                
             RS = BD_airport.Select("SELECT CURRENT_TIMESTAMP() FROM dual");
-            //System.out.println("RS = " + RS.getObject(1));
             if(RS.next())
             {
-                //int IdPromesse = RS.getInt(1);
-                //System.out.println("IdPromesse = " + IdPromesse);
                 DateTimePromesse = RS.getTimestamp(1);
                 int NbAccompagnants = Integer.parseInt(request.getParameter("NbAccompagnants"));
                 int IdVol = Integer.parseInt(request.getParameter("IdVol"));
                 
                 HashMap<String, Object> hm = new HashMap<>();
         
-                //hm.put("IdPromesse", IdPromesse);
                 hm.put("DateTimePromesse", DateTimePromesse);
                 hm.put("NbAccompagnants", NbAccompagnants);
                 hm.put("IdClient", Client.getIdClient());
                 hm.put("IdVol", IdVol);
 
-                //System.out.println("hm = " + hm);
                 
                 BD_airport.Insert("Promesses", hm);     
-                //System.out.println("Panier = " + Client.getPanier().get(Client.getPanier().size() - 1).getIdPromesse());
                 
                 RS = BD_airport.Select(""
                         + "SELECT * "
@@ -350,10 +337,6 @@ public class ControlDataCenter extends HttpServlet {
                     RS.next();
                     IdPromesse = RS.getInt("IdPromesse");
                     Promesse Promesse = new Promesse(IdPromesse, DateTimePromesse, NbAccompagnants, IdVol);
-
-                    /*BD_airport.CreateEvent("Event_" + IdPromesse, "AT '" + DateTimePromesse + "' + INTERVAL 1 HOUR", 
-                          "DELETE FROM bd_airport.Promesses "
-                        + "WHERE IdPromesse = " + IdPromesse); */
                 
                     Client.getPanier().add(Promesse);
                 }
@@ -434,8 +417,7 @@ public class ControlDataCenter extends HttpServlet {
                       
             if (Ok != 0)
             {
-                ArrayList<Promesse> Panier = Client.getPanier();
-                Panier.clear();          
+                Client.getPanier().clear();
             }
         } 
         catch (SQLException ex) 

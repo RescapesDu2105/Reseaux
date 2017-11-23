@@ -197,11 +197,9 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         }
         Requete = Requete.substring(0, Requete.length() - 1);
         Requete = Requete + ")}";
-        
-        System.out.println("Requete = " + Requete);
-        
+                
         CallableStatement CStatement = getConnection().prepareCall(Requete);
-        System.out.println("Omae wa mou shindeiru");
+        
         try
         {
             for (int i = 0 ; i < Parameters.size() ; i++)

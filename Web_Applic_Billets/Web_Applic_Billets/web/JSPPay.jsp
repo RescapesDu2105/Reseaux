@@ -4,6 +4,7 @@
     Author     : Philippe
 --%>
 
+<%@page import="java.util.Calendar"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Classes.Vol"%>
 <%@page import="Beans.Vols"%>
@@ -114,28 +115,30 @@
                             </thead>
                             <tbody>
                                 <% 
-                                    int i = 0;
-                                    while(i < Client.getPanier().size())
+                                    for(int i = 0 ; i < Client.getPanier().size() ; i++)
                                     {
                                         Promesse Promesse = Client.getPanier().get(i);
                                         Vol Vol = Vols.getVol(Promesse.getIdVol());
+                                        
+                                        if (Vol.getDateDepart().compareTo(Calendar.getInstance().getTime()) > 0)
+                                        {
                                 %>
-                                        <tr>
-                                            <th scope="row"><%= Promesse.getIdPromesse() %></th>
-                                            <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
-                                            <td><%= Vol.getNumeroVol() %></td>
-                                            <td><%= Vol.getNomCompagnie() %></td>
-                                            <td><%= Vol.getDestination() %></td>
-                                            <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
-                                            <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
-                                            <td><%= Promesse.getNbAccompagnants() %></td>
-                                            <form action="ControlDataCenter" method="POST">
-                                                <input type="hidden" name="action" value="RetirerPanier">
-                                                <input type="hidden" name="IdPromesse" value=<%= Promesse.getIdPromesse() %> >
-                                                <td><button class="btn btn-danger btn-block" type="submit" id="submit"><i class="fa fa-minus" aria-hidden="true"></i> Retirer du panier</button></td>
-                                            </form>
-                                        </tr>
-                                <%      i++;
+                                            <tr>
+                                                <th scope="row"><%= Promesse.getIdPromesse() %></th>
+                                                <td><%= Promesse.getDatePromesse(Locale.FRANCE) %></td>
+                                                <td><%= Vol.getNumeroVol() %></td>
+                                                <td><%= Vol.getNomCompagnie() %></td>
+                                                <td><%= Vol.getDestination() %></td>
+                                                <td><%= Vol.getDateDepart(Locale.FRANCE) %></td>
+                                                <td><%= Vol.getDateArrivee(Locale.FRANCE) %></td>
+                                                <td><%= Promesse.getNbAccompagnants() %></td>
+                                                <form action="ControlDataCenter" method="POST">
+                                                    <input type="hidden" name="action" value="RetirerPanier">
+                                                    <input type="hidden" name="IdPromesse" value=<%= Promesse.getIdPromesse() %> >
+                                                    <td><button class="btn btn-danger btn-block" type="submit" id="submit"><i class="fa fa-minus" aria-hidden="true"></i> Retirer du panier</button></td>
+                                                </form>
+                                            </tr>
+                                <%      }
                                     } 
                                 %>
                             </tbody>
@@ -185,7 +188,7 @@
                                                     <tbody>
                                                     <%
                                                         ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>)session.getAttribute("ArticlesPlusDisponibles");
-                                                        for(i = 0 ; i < ArticlesPlusDisponibles.size() ; i++)
+                                                        for(int i = 0 ; i < ArticlesPlusDisponibles.size() ; i++)
                                                         {
                                                             Promesse Promesse = ArticlesPlusDisponibles.get(i);
                                                             Vol Vol = Vols.getVol(Promesse.getIdVol());
