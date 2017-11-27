@@ -18,18 +18,15 @@ INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('10','Sonnerie','DingDong','1977-01-07','Pilote');
 INSERT INTO bd_airport.Agents VALUES ('11','Dimartino','Philippe','1995-02-15','Analyste', 'Zey','123');
 
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-15 20:30:00', '2017-11-05 11:00:00','150','3');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-15 21:30:00', '2017-11-05 08:00:00','200','2');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-11-15 22:20:00', '2017-11-04 18:20:00','13','1');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-16 15:30:00', '2017-11-05 11:00:00','150','3');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-16 16:30:00', '2017-11-05 08:00:00','200','2');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-11-16 17:20:00', '2017-11-04 18:20:00','13','1');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-17 15:30:00', '2017-11-05 11:00:00','150','3');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-17 16:30:00', '2017-11-05 08:00:00','200','2');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-11-17 17:20:00', '2017-11-04 18:20:00','13','1');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2016-11-18 15:30:00', '2017-11-05 11:00:00','150','3');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2016-11-18 16:30:00', '2017-11-05 08:00:00','200','2');
-INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2015-11-18 17:20:00', '2017-11-04 18:20:00','13','1');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-23 15:30:00', '2017-11-24 11:00:00','150','3');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-23 16:30:00', '2017-11-24 08:00:00','200','2');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-11-23 17:20:00', '2017-11-23 18:20:00','13','1');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-24 15:30:00', '2017-11-25 11:00:00','150','3');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-24 16:30:00', '2017-11-25 08:00:00','200','2');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-11-24 17:20:00', '2017-11-24 18:20:00','13','1');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2016-11-25 15:30:00', '2017-11-26 11:00:00','150','3');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2016-11-25 16:30:00', '2017-11-26 08:00:00','200','2');
+INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2015-11-25 17:20:00', '2017-11-25 18:20:00','13','1');
 
 INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Zeydax', 'Dimartino', 'Philippe', '1234');
 INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Doublon', 'Tusset', 'Quentin', '1234');
@@ -42,28 +39,24 @@ INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Batman', '
 INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('MiyaHay', 'Miyazaki', 'Hayao', '1234');
 INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('ElvisRo', 'Elvis', 'Romeo', '1234');
 
-INSERT INTO bd_airport.Billets VALUES ('714-29102017-0030'/*,'000-0709199-01','Premiere'*/,'0','2','1');
-INSERT INTO bd_airport.Billets VALUES ('714-29102017-0031'/*,'000-5902781-01','Economique'*/,'8','1','1');
-INSERT INTO bd_airport.Billets VALUES ('362-29102017-0020'/*,'000-5687686-01','Economique'*/,'3','6','2');
-INSERT INTO bd_airport.Billets VALUES ('362-29102017-0024'/*,'000-9343373-01','Economique'*/,'1','4','2');
-INSERT INTO bd_airport.Billets VALUES ('152-29102017-0010'/*,'000-5902781-01','Premiere'*/,'9','8','6');
-INSERT INTO bd_airport.Billets VALUES ('152-29102017-0020'/*,'000-9878897-01','Premiere','7'*/,'8','9','6');
-INSERT INTO bd_airport.Billets VALUES ('152-29102017-0028'/*,'000-4649878-01','Economique'*/,'2','7','6');
-INSERT INTO bd_airport.Billets VALUES ('714-29102017-0010'/*,'000-3589748-01','Premiere'*/,'0','5','1');
-INSERT INTO bd_airport.Billets VALUES ('362-29102017-0026'/*,'000-6559595-01','Economique'*/,'5','3','2');
-INSERT INTO bd_airport.Billets VALUES ('362-29102017-0040'/*,'000-2554235-01','Premiere'*/,'10','10','2');
+INSERT INTO bd_airport.Billets VALUES ('714-23112017-0030'/*,'000-0709199-01','Premiere'*/,'0','2','1');
+INSERT INTO bd_airport.Billets VALUES ('714-23112017-0031'/*,'000-5902781-01','Economique'*/,'8','1','1');
+INSERT INTO bd_airport.Billets VALUES ('362-23112017-0020'/*,'000-5687686-01','Economique'*/,'3','6','2');
+INSERT INTO bd_airport.Billets VALUES ('362-23112017-0024'/*,'000-9343373-01','Economique'*/,'1','4','2');
+INSERT INTO bd_airport.Billets VALUES ('152-23112017-0010'/*,'000-5902781-01','Premiere'*/,'9','8','6');
+INSERT INTO bd_airport.Billets VALUES ('152-23112017-0020'/*,'000-9878897-01','Premiere','7'*/,'8','9','6');
+INSERT INTO bd_airport.Billets VALUES ('152-23112017-0028'/*,'000-4649878-01','Economique'*/,'2','7','6');
+INSERT INTO bd_airport.Billets VALUES ('714-23112017-0010'/*,'000-3589748-01','Premiere'*/,'0','5','1');
+INSERT INTO bd_airport.Billets VALUES ('362-23112017-0026'/*,'000-6559595-01','Economique'*/,'5','3','2');
+INSERT INTO bd_airport.Billets VALUES ('362-23112017-0040'/*,'000-2554235-01','Premiere'*/,'10','10','2');
 
-INSERT INTO bd_airport.Billets VALUES ('152-12112017-0028'/*,'000-4649878-01','Economique'*/,'2','7','3');
-
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-QUTUSSET-29102017-0030-1','PasValise','69','714-29102017-0030');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-PHDIMARTINO-29102017-0031-1','Valise','10','714-29102017-0031');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-ROELVIS-29102017-0040-1','Valise','10','362-29102017-0040');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-CLVILVENS-29102017-0010-1','Valise','12','714-29102017-0010');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('152-MAMURDOCK-29102017-0028-1','PasValise','54','152-29102017-0028');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-WACHARVILROM-29102017-0024-1','Valise','24','362-29102017-0024');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-WACHARVILROM-29102017-0024-2','PasValise','12','362-29102017-0024');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-HULAURIE-29102017-0020-1','PasValise','16','362-29102017-0020');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-BRWAYNE-29102017-0010-2','Valise','89','714-29102017-0010');
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-ROELVIS-29102017-0040-2','PasValise','23','362-29102017-0040');
-
-INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('152-MAMURDOCK-14112017-0028-1','PasValise','54','152-12112017-0028');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-QUTUSSET-23112017-0030-1','PasValise','69','714-23112017-0030');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-PHDIMARTINO-23112017-0031-1','Valise','10','714-23112017-0031');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-ROELVIS-23112017-0040-1','Valise','10','362-23112017-0040');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-CLVILVENS-23112017-0010-1','Valise','12','714-23112017-0010');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('152-MAMURDOCK-23112017-0028-1','PasValise','54','152-23112017-0028');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-WACHARVILROM-23112017-0024-1','Valise','24','362-23112017-0024');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-WACHARVILROM-23112017-0024-2','PasValise','12','362-23112017-0024');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-HULAURIE-23112017-0020-1','PasValise','16','362-23112017-0020');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('714-BRWAYNE-23112017-0010-2','Valise','89','714-23112017-0010');
+INSERT INTO bd_airport.Bagages(IdBagage, TypeBagage, Poids, IdBillet) VALUES ('362-ROELVIS-23112017-0040-2','PasValise','23','362-23112017-0040');

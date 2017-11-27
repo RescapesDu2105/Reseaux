@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
  * @author Philippe
  */
 public class ControlDataCenter extends HttpServlet {
-    private Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+    private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -195,9 +195,11 @@ public class ControlDataCenter extends HttpServlet {
             boolean isResults = RS.next();
             if (isResults)                        
             {
+                MemberDataCenter MDC = new MemberDataCenter()
                 session.setAttribute("IdClient", RS.getInt("IdClient")); 
                 session.setAttribute("Nom", RS.getString("Nom"));
                 session.setAttribute("Prenom", RS.getString("Prenom"));
+                
                 
                 RS = BD_airport.Select("SELECT COUNT(*) FROM Promesses WHERE IdClient = " + session.getAttribute("IdClient"));
                 if (RS.next())
