@@ -5,6 +5,7 @@
  */
 package serveur_iachat;
 
+import reponserequetemonothread.ConsoleServeur;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import javax.swing.table.DefaultTableModel;

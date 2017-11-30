@@ -5,6 +5,7 @@
  */
 package serveur_iachat;
 
+import reponserequetemonothread.ConsoleServeur;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
@@ -38,9 +39,7 @@ public class Serveur_IAChat
             this.Prop = (new ServerProperties()).getProp();
             this.Port_Con = 30050;//Integer.parseInt(this.Prop.getProperty("PORT_CON"));
             setSSocket_CON(new ServerSocket(Port_Con));
-            System.out.println("avant");
             CSocket=SSocket_CON.accept();
-            System.out.println("apres");
         } 
         catch (IOException ex) 
         {
@@ -53,18 +52,18 @@ public class Serveur_IAChat
             this.GUIApplication.TraceEvenements("serveur#initialisation#requeterecue");
             if (getOis() == null)
                 setOis(new ObjectInputStream(CSocket.getInputStream()));
-            test = (String)ois.readObject();
-            //DataInputStream dis = new DataInputStream(CSocket.getInputStream());
-            //DataOutputStream dos = new DataOutputStream(CSocket.getOutputStream());
+            String message = (String) getOis().readObject();
+            System.out.println("Message recu : "+message);
         } 
         catch (IOException ex)
         {
             Logger.getLogger(Serveur_IAChat.class.getName()).log(Level.SEVERE, null, ex);
             this.GUIApplication.TraceEvenements("serveur#initialisation#probleme de flux");
-            System.exit(1);
+           // System.exit(1);
         } catch (ClassNotFoundException ex)
         {
             Logger.getLogger(Serveur_IAChat.class.getName()).log(Level.SEVERE, null, ex);
+            this.GUIApplication.TraceEvenements("serveur#initialisation#probleme de lecture du message");
         }
     }
 

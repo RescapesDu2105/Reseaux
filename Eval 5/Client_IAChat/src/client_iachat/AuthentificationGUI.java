@@ -3,41 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clientpoolthreads;
+package client_iachat;
 
-import ProtocoleLUGAP.ReponseLUGAP;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import requetereponseIACOP.ReponseIACOP;
 
 /**
  *
- * @author Philippe
+ * @author Doublon
  */
-public class FenAuthentification extends javax.swing.JFrame {
+public class AuthentificationGUI extends javax.swing.JFrame
+{
     private Client Client;
+
     /**
-     * Creates new form Login_GUI
+     * Creates new form AuthentificationGUI
      */
-    public FenAuthentification() 
+    public AuthentificationGUI()
     {
-        setLocationRelativeTo(null); 
         initComponents();
-        this.getRootPane().setDefaultButton(jButton_Connexion);
-        
         try 
         {  
             this.Client = new Client();
         } 
-        catch (IOException ex) 
+        catch (IOException ex)
         {
-            JOptionPane.showMessageDialog(this, "Problème interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-        
-        //this.jButton_ConnexionActionPerformed(null);
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
 
     /**
@@ -50,19 +48,14 @@ public class FenAuthentification extends javax.swing.JFrame {
     private void initComponents()
     {
 
-        jLabelLogin = new javax.swing.JLabel();
-        jLabelPWD = new javax.swing.JLabel();
-        jButton_Connexion = new javax.swing.JButton();
-        jButton_Effacer = new javax.swing.JButton();
         jTF_Login = new javax.swing.JTextField();
+        jButton_Connexion = new javax.swing.JButton();
+        jLabelLogin = new javax.swing.JLabel();
         jPasswordField = new javax.swing.JPasswordField();
+        jButton_Effacer = new javax.swing.JButton();
+        jLabelPWD = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Connexion");
-
-        jLabelLogin.setText("Nom d'utilisateur");
-
-        jLabelPWD.setText("Mot de passe");
 
         jButton_Connexion.setText("Connexion");
         jButton_Connexion.addActionListener(new java.awt.event.ActionListener()
@@ -73,6 +66,8 @@ public class FenAuthentification extends javax.swing.JFrame {
             }
         });
 
+        jLabelLogin.setText("Nom d'utilisateur");
+
         jButton_Effacer.setText("Effacer");
         jButton_Effacer.addActionListener(new java.awt.event.ActionListener()
         {
@@ -81,6 +76,8 @@ public class FenAuthentification extends javax.swing.JFrame {
                 jButton_EffacerActionPerformed(evt);
             }
         });
+
+        jLabelPWD.setText("Mot de passe");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,7 +95,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                             .addComponent(jTF_Login)
                             .addComponent(jPasswordField)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 70, Short.MAX_VALUE)
+                        .addGap(0, 104, Short.MAX_VALUE)
                         .addComponent(jButton_Connexion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_Effacer)
@@ -125,48 +122,47 @@ public class FenAuthentification extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_EffacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EffacerActionPerformed
-        jTF_Login.setText("");
-        jPasswordField.setText("");
-    }//GEN-LAST:event_jButton_EffacerActionPerformed
+    private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton_ConnexionActionPerformed
+    {//GEN-HEADEREND:event_jButton_ConnexionActionPerformed
 
-    private void jButton_ConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConnexionActionPerformed
         if (jTF_Login.getText().isEmpty() || jPasswordField.getPassword().length == 0)
         {
-            JOptionPane.showMessageDialog(this, ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE, "Erreur", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ReponseIACOP.WRONG_USER_PASSWORD_MESSAGE, "Erreur", JOptionPane.ERROR_MESSAGE);
             jPasswordField.setText("");
         }
         else
         {
-            ReponseLUGAP Rep = null;
-            try 
-            {
+            ReponseIACOP Rep = null;
+            try
+            {            
                 Rep = getClient().Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
-                //ReponseLUGAP Rep = Client.Authenfication("Zeydax", "123");
-            } 
-            catch (IOException ex) 
+                //Rep = Client.Authenfication("Zeydax", "1234");
+            }
+            catch (IOException ex)
             {
                 JOptionPane.showMessageDialog(this, "Le serveur est déconnecté !", "Erreur", JOptionPane.ERROR_MESSAGE);
-            } 
-            catch (NoSuchAlgorithmException | NoSuchProviderException ex) 
+            }
+            catch (NoSuchAlgorithmException | NoSuchProviderException ex)
             {
                 JOptionPane.showMessageDialog(this, "Erreur interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
 
-            if (Rep != null) 
+            if (Rep != null)
             {
-                if(Rep.getCode() == ReponseLUGAP.LOGIN_OK)
+                if(Rep.getCode() == ReponseIACOP.LOGIN_OK)
                 {
                     getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
 
-                    this.dispose();
-                    FenAuthentification Test = this;
-                    
-                    java.awt.EventQueue.invokeLater(() -> {
+                    /*this.dispose();
+                    AuthentificationGUI Test = this;*/
+                    System.out.println("Connexion Reussie");
+
+                    /*java.awt.EventQueue.invokeLater(() ->
+                    {
                         new FlightsFrame(Test, getClient()).setVisible(true);
                     });
-                    this.jButton_EffacerActionPerformed(null);
+                    this.jButton_EffacerActionPerformed(null);*/
                 }
                 else
                 {
@@ -178,41 +174,58 @@ public class FenAuthentification extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ConnexionActionPerformed
 
-    
-    public static void main(String args[]) {
+    private void jButton_EffacerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton_EffacerActionPerformed
+    {//GEN-HEADEREND:event_jButton_EffacerActionPerformed
+        jTF_Login.setText("");
+        jPasswordField.setText("");
+    }//GEN-LAST:event_jButton_EffacerActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FenAuthentification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(AuthentificationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex)
+        {
+            java.util.logging.Logger.getLogger(AuthentificationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex)
+        {
+            java.util.logging.Logger.getLogger(AuthentificationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
+            java.util.logging.Logger.getLogger(AuthentificationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new FenAuthentification().setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                new AuthentificationGUI().setVisible(true);
+            }
         });
     }
     
-    public Client getClient() 
+   public Client getClient() 
     {
         return Client;
     }
@@ -227,7 +240,6 @@ public class FenAuthentification extends javax.swing.JFrame {
         return jButton_Connexion;
     }
 
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Connexion;
     private javax.swing.JButton jButton_Effacer;
