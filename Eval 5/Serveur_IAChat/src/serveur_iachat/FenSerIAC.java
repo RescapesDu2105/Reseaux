@@ -9,6 +9,8 @@ import java.io.IOException;
 import reponserequetemonothread.ConsoleServeur;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,7 +29,6 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
     {
         initComponents();
         setLocationRelativeTo(null); 
-        setServer(new Serveur_IAChat(this));   
         this.jButtonStartActionPerformed(null);
     }
 
@@ -97,15 +98,28 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
     {//GEN-HEADEREND:event_jButtonStartActionPerformed
         if(Started == false)
         {
-            TraceEvenements("Serveur#Start#FenSerIAC");
+            TraceEvenements("Serveur#Start#FenSerIAC");            
+            //setServer(null);
+            setServer(new Serveur_IAChat(this));
             getServer().start();
             Started = true;
             jButtonStart.setText("Stop");            
         }
         else // true
         {
-            Started = false;
-            getServer().interrupt();
+            Started = false;            
+            try
+            {
+                getServer().getSSocket_CON().close();
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(FenSerIAC.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(!getServer().isInterrupted())
+                getServer().interrupt();
+            
             jButtonStart.setText("Start");            
             TraceEvenements("Serveur#Stop#FenSerIAC");
         }

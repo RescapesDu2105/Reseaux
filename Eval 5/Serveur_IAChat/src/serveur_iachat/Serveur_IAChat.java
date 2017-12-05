@@ -21,7 +21,7 @@ import reponserequetemonothread.Requete;
  * @author Doublon
  */
 public class Serveur_IAChat extends Thread
-{
+{        
     private ConsoleServeur GUIApplication;
     private int Port_Con;
     private int Port_Fly;
@@ -30,7 +30,7 @@ public class Serveur_IAChat extends Thread
     private Socket CSocket;
 
     private ObjectInputStream ois = null;
-    private ObjectOutputStream oos = null;
+    private ObjectOutputStream oos = null;    
 
     public Serveur_IAChat(ConsoleServeur GUIApplication)
     {
@@ -60,7 +60,9 @@ public class Serveur_IAChat extends Thread
             } 
             catch (IOException ex) 
             {
-                this.GUIApplication.TraceEvenements("serveur#initialisation#failed to read properties file");
+                if (!ex.getMessage().equals("socket closed"))
+                    this.GUIApplication.TraceEvenements("serveur#initialisation#failed to read properties file");
+                
                 this.interrupt();
             }
 
@@ -91,6 +93,29 @@ public class Serveur_IAChat extends Thread
                 } 
             }
         }
+        
+        try
+        {
+            if (getOis() != null)
+            {                    
+                getOis().close();
+                setOis(null);
+            }
+
+            if (getOos() != null) 
+            {                    
+                getOos().close();
+                setOos(null);
+            }
+            
+            if(getCSocket() != null)
+                getCSocket().close();            
+        } 
+        catch (IOException ex) 
+        {
+            System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
+        }
+        System.out.println("Socket fermée !");
     }
     
 

@@ -156,17 +156,17 @@ public class AuthentificationGUI extends javax.swing.JFrame
             {
                 if(Rep.getCode() == ReponseIACOP.LOGIN_OK)
                 {
-                    getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
+                    //getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
+                    
+                    final String NomPrenom = Rep.getChargeUtile().get("Prenom").toString() + " " + Rep.getChargeUtile().get("Nom").toString();
+                    final int Port_Fly = Integer.parseInt(Rep.getChargeUtile().get("PORT_FLY").toString()); 
 
-                    /*this.dispose();
-                    AuthentificationGUI Test = this;*/
                     System.out.println("Connexion Reussie");
-
-                    /*java.awt.EventQueue.invokeLater(() ->
+                    this.dispose();
+                    java.awt.EventQueue.invokeLater(() ->
                     {
-                        new FlightsFrame(Test, getClient()).setVisible(true);
+                        new ClientChat(NomPrenom, Port_Fly).setVisible(true);
                     });
-                    this.jButton_EffacerActionPerformed(null);*/
                 }
                 else
                 {
