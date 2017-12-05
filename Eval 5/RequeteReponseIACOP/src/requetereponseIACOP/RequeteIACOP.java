@@ -30,8 +30,7 @@ import reponserequetemonothread.Requete;
  */
 public class RequeteIACOP implements Requete, Serializable
 {
-    public final static int REQUEST_LOG_OUT_PORTER = 0;
-    public final static int REQUEST_LOGIN_PORTER = 1;
+    public final static int REQUEST_LOGIN_GROUP = 1;
     
     private int Type;
     private HashMap<String, Object> chargeUtile;
@@ -59,21 +58,12 @@ public class RequeteIACOP implements Requete, Serializable
         
         switch(getType())
         {
-            case REQUEST_LOG_OUT_PORTER:
+            case REQUEST_LOGIN_GROUP:
                 return new Runnable() 
                 {
                     public void run() 
                     {
-                        //traiteRequeteLogOutPorter();
-                    }            
-                };
-                
-            case REQUEST_LOGIN_PORTER:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteLoginPorter();
+                        traiteRequeteLoginGroup();
                     }            
                 };
                   
@@ -81,24 +71,21 @@ public class RequeteIACOP implements Requete, Serializable
         }
     }
 
-    private void traiteRequeteLoginPorter()     
+    private void traiteRequeteLoginGroup()     
     {
-        System.out.println("cc");
         String user = getChargeUtile().get("Login").toString();
         long Temps = (long) getChargeUtile().get("Temps");
         double Random = (double) getChargeUtile().get("Random");
         byte[] msgD = (byte[]) getChargeUtile().get("Digest");
 
         // JBDC
-        System.out.println("cc1");
         String[] Champs = ChercheMotdePasse(user);
         if (Champs != null) 
         {
             MessageDigest md;
             try 
             {
-                Security.addProvider(new BouncyCastleProvider());   
-                System.out.println("cc2");
+                Security.addProvider(new BouncyCastleProvider());  
                 md = MessageDigest.getInstance("SHA-256", "BC");                    
                 md.update(user.getBytes());
                 md.update(Champs[0].getBytes());
@@ -108,16 +95,28 @@ public class RequeteIACOP implements Requete, Serializable
                 bdos.writeDouble(Random);
                 md.update(baos.toByteArray());
                 byte[] msgDLocal = md.digest();
-                System.out.println("cc3");
-                if (MessageDigest.isEqual(msgD, msgDLocal)) 
+                
+                if (MessageDigest.isEqual(msgD, msgDLocal))  
                 {
-                    Reponse = new ReponseIACOP(ReponseIACOP.LOGIN_OK);
-                    Reponse.getChargeUtile().put("Message", ReponseIACOP.LOGIN_OK_MESSAGE);
-                    Reponse.getChargeUtile().put("Nom", Champs[1]);
-                    Reponse.getChargeUtile().put("Prenom", Champs[2]);
+                    if(Integer.parseInt(Champs[3]) > 0)
+                    {
+                        Reponse = new ReponseIACOP(ReponseIACOP.LOGIN_OK);
+                        Reponse.getChargeUtile().put("Message", ReponseIACOP.LOGIN_OK_MESSAGE);
+                        Reponse.getChargeUtile().put("Nom", Champs[1]);
+                        Reponse.getChargeUtile().put("Prenom", Champs[2]);
+                        Reponse.getChargeUtile().put("PortFly", getProp().getProperty("PORT_FLY"));
+                    }
+                    else
+                    {
+                        // Pas de billets commandés
+                        Reponse = new ReponseIACOP(ReponseIACOP.LOGIN_KO);
+                        Reponse.getChargeUtile().put("Message", ReponseIACOP.WRONG_USER_PASSWORD_MESSAGE);                        
+                        System.out.println(ReponseIACOP.WRONG_USER_PASSWORD_MESSAGE);
+                    }
                 }
                 else 
                 {
+                    // Tentative de baisage
                     Reponse = new ReponseIACOP(ReponseIACOP.LOGIN_KO);
                     Reponse.getChargeUtile().put("Message", ReponseIACOP.WRONG_USER_PASSWORD_MESSAGE);                        
                     System.out.println(ReponseIACOP.WRONG_USER_PASSWORD_MESSAGE);
@@ -143,25 +142,21 @@ public class RequeteIACOP implements Requete, Serializable
         Bean_DB_Access BD_airport;
         ResultSet RS;
         String[] Champs = null;
-        System.out.println("mdp");
         BD_airport = Connexion_DB();
-        System.out.println("mdp1");
         if (BD_airport != null)
         {
             try 
             {                        
-                //RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Login = \"" + user + "\"");
-                System.out.println("mdp2");
-                RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.clients WHERE Login = \"" + user + "\"");
-                System.out.println("mdp3");
+                RS = BD_airport.Select("SELECT (SELECT COUNT(*) FROM bd_airport.billets WHERE bd_airport.billets.IdClient = c.IdClient) NbBillets, Password, Nom, Prenom FROM bd_airport.clients c WHERE Login = \"" + user + "\"");
                 if (RS != null) 
                 {
                     if(RS.next())
                     {
-                        Champs = new String[3];
+                        Champs = new String[4];
                         Champs[0] = RS.getString("Password");  
                         Champs[1] = RS.getString("Nom");
                         Champs[2] = RS.getString("Prenom");
+                        Champs[3] = Integer.toString(RS.getInt("NbBillets"));  
                     }
                 }            
             } 
@@ -182,10 +177,8 @@ public class RequeteIACOP implements Requete, Serializable
     {
         Bean_DB_Access BD_airport;
         String Error;
-        System.out.println("co");
         //BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, getProp().getProperty("HOST_BD"), getProp().getProperty("PORT_BD"), "Zeydax", "1234", getProp().getProperty("SCHEMA_BD"));
         BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
-        System.out.println("co1");
         
         if (BD_airport != null)
         {
@@ -206,12 +199,8 @@ public class RequeteIACOP implements Requete, Serializable
     {
         switch(getType()) 
         {
-            case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
-            case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
-            //case REQUEST_LOAD_FLIGHTS: return "REQUEST_LOAD_FLIGHTS";
-            //case REQUEST_LOAD_LUGAGES: return "REQUEST_LOAD_LUGAGES";
-            //case REQUEST_SAVE_LUGAGES: return "REQUEST_SAVE_LUGAGES";
-            default : return null;
+            case REQUEST_LOGIN_GROUP: return "REQUEST_LOGIN_GROUP";      
+            default : return "UNKNOWN REQUEST";
         }
     }
     

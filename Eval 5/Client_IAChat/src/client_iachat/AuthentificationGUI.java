@@ -27,7 +27,10 @@ public class AuthentificationGUI extends javax.swing.JFrame
      */
     public AuthentificationGUI()
     {
+        setLocationRelativeTo(null); 
         initComponents();
+        this.getRootPane().setDefaultButton(jButton_Connexion);
+        
         try 
         {  
             this.Client = new Client();
@@ -56,6 +59,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
         jLabelPWD = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jButton_Connexion.setText("Connexion");
         jButton_Connexion.addActionListener(new java.awt.event.ActionListener()
@@ -216,12 +220,9 @@ public class AuthentificationGUI extends javax.swing.JFrame
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
+        java.awt.EventQueue.invokeLater(() ->
         {
-            public void run()
-            {
-                new AuthentificationGUI().setVisible(true);
-            }
+            new AuthentificationGUI().setVisible(true);
         });
     }
     

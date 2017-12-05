@@ -56,7 +56,7 @@ public class Client
     {
         FileInputStream fis = null;
         FileOutputStream fos = null;
-        String nomFichier = "D:\\GitHub\\Reseaux\\Eval 5\\Client_IAChat\\src\\client_iachat\\config.properties";
+        String nomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
                 
         try 
         {
@@ -68,8 +68,6 @@ public class Client
         {    
             try
             {           
-                nomFichier = "D:\\GitHub\\Reseaux\\Eval 5\\Client_IAChat\\src\\client_iachat";
-                
                 fis = new FileInputStream(nomFichier);
                 getProp().load(fis);
                 fis.close();
@@ -94,7 +92,6 @@ public class Client
             System.out.println("Port : " + getPort());
             System.out.println("IP : " + getIP());
         }
-        Connexion();
     }
     
      public void Connexion() throws IOException
@@ -126,51 +123,28 @@ public class Client
         }
     }
   
-    public String Deconnexion() 
+    public void Deconnexion() 
     {
-        RequeteIACOP Req = new RequeteIACOP(RequeteIACOP.REQUEST_LOG_OUT_PORTER);
-        ReponseIACOP Rep;
-        
-        EnvoyerRequete(Req);
-        Rep = RecevoirReponse();
-        
-        if (Rep != null)
+        try 
         {
-            if (Rep.getCode() == ReponseIACOP.LOG_OUT_OK)
-            {
-                try 
-                {
-                    getOis().close();
-                    setOis(null);
-                    getOos().close();
-                    setOos(null);
-                    getCliSocket().close();
-                    setCliSocket(null);            
-                    setNomUtilisateur("");                
-                } 
-                catch (IOException ex) 
-                {
-                    System.exit(1);
-                }
-                setConnectedToServer(false);
-
-                return null;
-            }
-            else
-            {
-                return Rep.getChargeUtile().get("Message").toString();
-            }
-        }
-        else
+            getOis().close();
+            setOis(null);
+            getOos().close();
+            setOos(null);
+            getCliSocket().close();
+            setCliSocket(null);            
+            setNomUtilisateur("");                
+        } 
+        catch (IOException ex) 
         {
-            setConnectedToServer(false);
-            return null;
+            //System.exit(1);
         }
+        setConnectedToServer(false);
     }
     
     public ReponseIACOP Authenfication(String Login, String Password) throws IOException, NoSuchAlgorithmException, NoSuchProviderException 
     {
-        RequeteIACOP Req = new RequeteIACOP(RequeteIACOP.REQUEST_LOGIN_PORTER);
+        RequeteIACOP Req = new RequeteIACOP(RequeteIACOP.REQUEST_LOGIN_GROUP);
         ReponseIACOP Rep = null;
         
         Connexion();        

@@ -14,11 +14,13 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
+import reponserequetemonothread.Reponse;
+import reponserequetemonothread.Requete;
 /**
  *
  * @author Doublon
  */
-public class Serveur_IAChat
+public class Serveur_IAChat extends Thread
 {
     private ConsoleServeur GUIApplication;
     private int Port_Con;
@@ -29,44 +31,136 @@ public class Serveur_IAChat
 
     private ObjectInputStream ois = null;
     private ObjectOutputStream oos = null;
-    private String test;
 
-    public Serveur_IAChat(ConsoleServeur GUIApplication) 
+    public Serveur_IAChat(ConsoleServeur GUIApplication)
     {
-        this.GUIApplication = GUIApplication;
-        try 
-        {
-            this.Prop = (new ServerProperties()).getProp();
-            this.Port_Con = 30050;//Integer.parseInt(this.Prop.getProperty("PORT_CON"));
-            setSSocket_CON(new ServerSocket(Port_Con));
-            CSocket=SSocket_CON.accept();
-        } 
-        catch (IOException ex) 
-        {
-            this.GUIApplication.TraceEvenements("serveur#initialisation#failed to read properties file");
-            System.exit(1);
-        }
-        
         try
         {
-            this.GUIApplication.TraceEvenements("serveur#initialisation#requeterecue");
-            if (getOis() == null)
-                setOis(new ObjectInputStream(CSocket.getInputStream()));
-            String message = (String) getOis().readObject();
-            System.out.println("Message recu : "+message);
-        } 
+            this.GUIApplication = GUIApplication;
+            this.Prop = (new ServerProperties()).getProp();
+            this.Port_Con = Integer.parseInt(this.Prop.getProperty("PORT_CON"));
+            setSSocket_CON(new ServerSocket(Port_Con));
+        }
         catch (IOException ex)
         {
             Logger.getLogger(Serveur_IAChat.class.getName()).log(Level.SEVERE, null, ex);
-            this.GUIApplication.TraceEvenements("serveur#initialisation#probleme de flux");
-           // System.exit(1);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(Serveur_IAChat.class.getName()).log(Level.SEVERE, null, ex);
-            this.GUIApplication.TraceEvenements("serveur#initialisation#probleme de lecture du message");
         }
     }
 
+    @Override
+    public void run()
+    {  
+        while(!isInterrupted()) 
+        {            
+            try 
+            {
+                GUIApplication.TraceEvenements("ThreadServeur#En attente#");
+                CSocket=SSocket_CON.accept();
+                GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#");
+            } 
+            catch (IOException ex) 
+            {
+                this.GUIApplication.TraceEvenements("serveur#initialisation#failed to read properties file");
+                this.interrupt();
+            }
+
+            if (getCSocket() != null && !getCSocket().isClosed())
+            {               
+                Requete req = RecevoirRequete(); 
+                if (req != null)
+                {
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + "Thread");                    
+                    
+                    Runnable runnable = req.createRunnable(getProp());
+                    runnable.run();  
+                    
+                    EnvoyerReponse(CSocket, req.getReponse());
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getReponse().getChargeUtile().get("Message")+ "#" + "Thread");
+                    if (req.getReponse().getCode() == Reponse.LOG_OUT_OK)
+                    {                        
+                        try 
+                        {
+                            CSocket.close();
+                        } 
+                        catch (IOException ex) 
+                        {
+                            req.getReponse().setCode(Reponse.INTERNAL_SERVER_ERROR);
+                            req.getReponse().getChargeUtile().put("Message", Reponse.INTERNAL_SERVER_ERROR_MESSAGE);
+                        }
+                    }
+                } 
+            }
+        }
+    }
+    
+
+    public Requete RecevoirRequete()
+    {        
+        Requete req;
+        
+        try 
+        {
+            if (getOis() == null)
+                setOis(new ObjectInputStream(CSocket.getInputStream()));
+            
+            req = (Requete)ois.readObject();
+            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
+        } 
+        catch (IOException ex) 
+        {
+            try 
+            {
+                CSocket.close();
+            } 
+            catch (IOException ex1) 
+            {
+                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
+            }
+            return null;
+        } 
+        catch (ClassNotFoundException ex) 
+        {
+            System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
+            try 
+            {
+                CSocket.close();
+            } 
+            catch (IOException ex1) 
+            {
+                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
+            }
+            return null;
+        }
+        
+        return req;
+    }   
+    
+    public void EnvoyerReponse(Socket s, Reponse Rep)
+    {
+        try 
+        {   
+            if (oos == null)
+                oos = new ObjectOutputStream(s.getOutputStream());
+            
+            oos.writeObject(Rep); 
+            oos.flush();
+        } 
+        catch (IOException ex) 
+        {
+            System.err.println("Erreur d'envoi de la réponse ! [" + ex.getMessage() + "]");
+        }
+    }
+    
+    public Socket getCSocket()
+    {
+        return CSocket;
+    }
+
+    public void setCSocket(Socket CSocket)
+    {
+        this.CSocket = CSocket;
+    }
+    
     public ObjectInputStream getOis()
     {
         return ois;
