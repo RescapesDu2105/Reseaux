@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import requetereponseIACOP.RequeteIACOP;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -51,7 +52,7 @@ public class ClientChat extends javax.swing.JFrame
             adresseGroupe = InetAddress.getByName("234.5.5.9");
             socketGroupe = new MulticastSocket(port);
             socketGroupe.joinGroup(adresseGroupe);
-            thread = new ThreadReception (nomPrenomClient, socketGroupe, Questions, jTA_Chat);
+            thread = new ThreadReception (nomPrenomClient, socketGroupe, Questions, jList_Questions, jTA_Chat);
             thread.start();
             
             this.setTitle("Client : " + nomPrenomClient);
@@ -112,6 +113,7 @@ public class ClientChat extends javax.swing.JFrame
 
         jCB_Type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Information", "Question", "Réponse" }));
 
+        jList_Questions.setModel(new DefaultListModel());
         jScrollPane3.setViewportView(jList_Questions);
 
         jLabel1.setText("Questions");

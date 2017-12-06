@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -26,6 +27,9 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import reponserequetemonothread.Reponse;
@@ -307,19 +311,19 @@ public class RequeteIACOP implements Requete, Serializable
             long Temps = (new Date()).getTime();
             double Random = Math.random();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            DataOutputStream bdos = new DataOutputStream(baos);
+            /*DataOutputStream bdos = new DataOutputStream(baos);
             bdos.writeLong(Temps); 
             bdos.writeDouble(Random);
-            md.update(baos.toByteArray());
+            md.update(baos.toByteArray());*/
             byte[] msgD = md.digest();
-            System.out.println("msgD = " + Arrays.toString(msgD));
+            //System.out.println("msgD = " + Arrays.toString(msgD));
             
             String MessageToSend = RequeteIACOP.POST_QUESTION + rand.nextInt(Integer.MAX_VALUE) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg + RequeteIACOP.SEPARATOR + Temps + RequeteIACOP.SEPARATOR + Random + RequeteIACOP.SEPARATOR;
-            
+                                   
+            baos.flush();
             baos = new ByteArrayOutputStream();
-            DataOutputStream dos = new DataOutputStream(baos);
-            dos.writeUTF(MessageToSend);
-            dos.write(msgD);
+            baos.write(MessageToSend.getBytes());
+            baos.write(msgD);
             
             EnvoyerMessage(baos.toByteArray(), AdresseGroupe, Port, SocketGroupe);            
         }
@@ -331,11 +335,11 @@ public class RequeteIACOP implements Requete, Serializable
     
     public static void EnvoyerReponse(String NomPrenomClient, String Tag, String Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
     {       
-        String MessageToSend = RequeteIACOP.ANSWER_QUESTION + Tag.substring(1) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg;
+        String MessageToSend = RequeteIACOP.ANSWER_QUESTION + Tag.substring(3, Tag.length() - 1) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg;
         EnvoyerMessage(MessageToSend.getBytes(), AdresseGroupe, Port, SocketGroupe);
     }
     
-    public static void RecevoirMessage(ArrayList<String> Questions, JTextArea Chat, MulticastSocket SocketGroupe) throws NoSuchAlgorithmException, NoSuchProviderException, IOException
+    public static void RecevoirMessage(ArrayList<String> Questions, JList QList, JTextArea Chat, MulticastSocket SocketGroupe) throws NoSuchAlgorithmException, NoSuchProviderException, IOException
     {
         boolean Ok = true;
         
@@ -343,9 +347,9 @@ public class RequeteIACOP implements Requete, Serializable
         DatagramPacket dtg = new DatagramPacket(buf, buf.length);
         SocketGroupe.receive(dtg);
 
-        String str = new String(buf).trim();
+        String str = new String(buf);
         System.err.println(str);
-        String[] parts = str.split("#");
+        String[] parts = str.split(RequeteIACOP.SEPARATOR);
         System.out.println("parts = " + Arrays.toString(parts));
         
         if (parts.length < 4)
@@ -364,7 +368,7 @@ public class RequeteIACOP implements Requete, Serializable
         else
         {
             if (parts[0].charAt(0) == 'Q')
-            {
+            {                           
                 Security.addProvider(new BouncyCastleProvider());  
                 MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");                    
                 md.update(parts[2].getBytes());
@@ -374,17 +378,23 @@ public class RequeteIACOP implements Requete, Serializable
                 bdos.writeDouble(Double.valueOf(parts[4]));
                 md.update(baos.toByteArray());
                 byte[] msgDLocal = md.digest();
-                System.out.println("parts[5] = " + parts[5]);
-                System.out.println("msgDLocal = " + Arrays.toString(msgDLocal));
+                byte[] msgD = msgDLocal;
                 
-                if (MessageDigest.isEqual(parts[5].getBytes(), msgDLocal)) 
+                //System.out.println("parts[5] = " + Arrays.toString(parts[5].getBytes()));
+                //System.out.println("msgDLocal = " + Arrays.toString(msgDLocal));
+                if (MessageDigest.isEqual(msgD, msgDLocal)) 
                 {
+                    //System.out.println("Digest equals");
+                    
                     Questions.add(Questions.size(), parts[0]);
-                    Chat.append("[" + DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.FRANCE).format(Calendar.getInstance().getTime()) + "] " + parts[1] + " > (" + parts[0] + ") " + parts[2] + "\n");
+                    DefaultListModel lm = (DefaultListModel) QList.getModel();
+                    lm.addElement(parts[0]);
+                    Chat.append("[" + DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.FRANCE).format(Calendar.getInstance().getTime()) + "] " + parts[1] + " > (" + parts[0] + ") " + parts[2] + "\n");                    
+                    //Chat.updateUI();
                 }
                 else
                 {
-                    System.out.println("Digest pas equal");
+                    //System.out.println("Digest pas equals");
                 }
             }
             else

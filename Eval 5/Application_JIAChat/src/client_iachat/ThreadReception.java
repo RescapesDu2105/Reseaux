@@ -16,6 +16,7 @@ import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import requetereponseIACOP.RequeteIACOP;
 
@@ -24,14 +25,16 @@ public class ThreadReception extends Thread
     private final String nom;
     private final MulticastSocket socketGroupe;
     private final ArrayList<String> Questions;
+    private final JList QList;
     private final JTextArea Chat;
     
-    public ThreadReception (String n, MulticastSocket ms, ArrayList<String> Questions, JTextArea Chat)
+    public ThreadReception (String n, MulticastSocket ms, ArrayList<String> Questions, JList QList, JTextArea Chat)
     {
         this.nom = n; 
         this.socketGroupe = ms; 
         this.Chat = Chat;
         this.Questions = Questions;
+        this.QList = QList;
     }
     
     @Override
@@ -42,7 +45,7 @@ public class ThreadReception extends Thread
         {
             try
             {
-                RequeteIACOP.RecevoirMessage(Questions, Chat, socketGroupe);
+                RequeteIACOP.RecevoirMessage(Questions, QList, Chat, socketGroupe);
             }
             catch (IOException e)
             {
