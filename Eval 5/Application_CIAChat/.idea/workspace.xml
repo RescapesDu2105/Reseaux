@@ -11,64 +11,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-<<<<<<< HEAD
     <list default="true" id="941a1717-faef-4db3-b197-7c27b7546d10" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Chat.c" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Chat.h" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ProtocoleIACOP.c" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ProtocoleIACOP.h" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/SocketUDP.c" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/SocketUDP.h" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ThreadReception.c" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ThreadReception.h" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/Application_CIAChat.cbp" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeCCompiler.cmake" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeDetermineCompilerABI_C.bin" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo.cmake" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/build.make" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/cmake_clean.cmake" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.make" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/flags.make" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/link.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/linklibs.rsp" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/objects1.rsp" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/progress.make" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.c" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CMakeRCCompiler.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeRCCompiler.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CMakeSystem.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeSystem.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CompilerIdC/CMakeCCompilerId.c" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CompilerIdC/CMakeCCompilerId.c" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CompilerIdC/a.exe" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CompilerIdC/a.exe" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.8.2/CompilerIdCXX/a.exe" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/AuthentificationGUI.form" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/AuthentificationGUI.form" />
-      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/AuthentificationGUI.java" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/AuthentificationGUI.java" />
-      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.form" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.form" />
-      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.java" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.java" />
-      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ThreadReception.java" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ThreadReception.java" />
-      <change beforePath="$PROJECT_DIR$/../RequeteReponseIACOP/src/requetereponseIACOP/RequeteIACOP.java" afterPath="$PROJECT_DIR$/../RequeteReponseIACOP/src/requetereponseIACOP/RequeteIACOP.java" />
-      <change beforePath="$PROJECT_DIR$/../Serveur_IAChat/src/serveur_iachat/Serveur_IAChat.java" afterPath="$PROJECT_DIR$/../Serveur_IAChat/src/serveur_iachat/Serveur_IAChat.java" />
     </list>
-=======
-    <list default="true" id="941a1717-faef-4db3-b197-7c27b7546d10" name="Default" comment="" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -85,13 +30,8 @@
           <file leaf-file-name="SocketUDP.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/SocketUDP.h">
               <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
                 <state relative-caret-position="437">
                   <caret line="23" column="83" lean-forward="false" selection-start-line="23" selection-start-column="70" selection-end-line="23" selection-end-column="83" />
-=======
-                <state relative-caret-position="456">
-                  <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
                   <folding />
                 </state>
               </provider>
@@ -100,17 +40,10 @@
           <file leaf-file-name="Chat.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Chat.h">
               <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
                 <state relative-caret-position="247">
                   <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
                   <folding>
                     <element signature="e#71#98#0" expanded="true" />
-=======
-                <state relative-caret-position="114">
-                  <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#71#98#0" expanded="false" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
                   </folding>
                 </state>
               </provider>
@@ -119,9 +52,8 @@
           <file leaf-file-name="Chat.c" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Chat.c">
               <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
                 <state relative-caret-position="285">
-                  <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+                  <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -132,10 +64,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="95">
                   <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-=======
-                <state relative-caret-position="475">
-                  <caret line="25" column="1" lean-forward="true" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
                   <folding />
                 </state>
               </provider>
@@ -145,25 +73,16 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-<<<<<<< HEAD
           <file leaf-file-name="SocketUDP.c" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/SocketUDP.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="190">
-                  <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-=======
-          <file leaf-file-name="SocketUDP.c" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/SocketUDP.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="722">
-                  <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+                <state relative-caret-position="361">
+                  <caret line="19" column="1" lean-forward="false" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-<<<<<<< HEAD
           <file leaf-file-name="ProtocoleIACOP.c" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.c">
               <provider selected="true" editor-type-id="text-editor">
@@ -178,14 +97,7 @@
             <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.h">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="152">
-                  <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-=======
-          <file leaf-file-name="ProtocoleIACOP.h" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="247">
-                  <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+                  <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -195,18 +107,14 @@
       </split-second>
     </splitter>
   </component>
-<<<<<<< HEAD
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-=======
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/main.c" />
         <option value="$PROJECT_DIR$/Chat.cpp" />
-<<<<<<< HEAD
         <option value="$PROJECT_DIR$/ThreadReception.c" />
         <option value="$PROJECT_DIR$/SocketUDP.c" />
         <option value="$PROJECT_DIR$/SocketUDP.h" />
@@ -215,16 +123,6 @@
         <option value="$PROJECT_DIR$/Chat.h" />
         <option value="$PROJECT_DIR$/Chat.c" />
         <option value="$PROJECT_DIR$/ThreadReception.h" />
-=======
-        <option value="$PROJECT_DIR$/ProtocoleIACOP.c" />
-        <option value="$PROJECT_DIR$/ThreadReception.c" />
-        <option value="$PROJECT_DIR$/ThreadReception.h" />
-        <option value="$PROJECT_DIR$/ProtocoleIACOP.h" />
-        <option value="$PROJECT_DIR$/Chat.h" />
-        <option value="$PROJECT_DIR$/SocketUDP.c" />
-        <option value="$PROJECT_DIR$/SocketUDP.h" />
-        <option value="$PROJECT_DIR$/Chat.c" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
       </list>
     </option>
   </component>
@@ -270,11 +168,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.web.browsers" />
-=======
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -314,19 +208,12 @@
       <updated>1512518038701</updated>
       <workItem from="1512518040431" duration="443000" />
       <workItem from="1512518500847" duration="5874000" />
-<<<<<<< HEAD
-=======
-      <workItem from="1512524451377" duration="67000" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+      <workItem from="1512559360905" duration="395000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< HEAD
-    <option name="totallyTimeSpent" value="8192000" />
-=======
-    <option name="totallyTimeSpent" value="6384000" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+    <option name="totallyTimeSpent" value="8587000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -334,35 +221,20 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1078125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-<<<<<<< HEAD
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-=======
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-<<<<<<< HEAD
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-=======
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-<<<<<<< HEAD
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1078125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-=======
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -380,28 +252,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/SocketUDP.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Chat.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-<<<<<<< HEAD
-            <element signature="e#71#98#0" expanded="true" />
-=======
-            <element signature="e#71#98#0" expanded="false" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Chat.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
@@ -439,7 +289,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#71#98#0" expanded="false" />
+            <element signature="e#71#98#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -452,7 +302,6 @@
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/main.c" />
     <entry file="file://$PROJECT_DIR$/Chat.h">
       <provider selected="true" editor-type-id="text-editor">
@@ -473,23 +322,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.c">
-=======
-    <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ThreadReception.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ThreadReception.c">
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -546,7 +378,6 @@
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/ThreadReception.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -573,7 +404,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -613,24 +443,17 @@
         </state>
       </provider>
     </entry>
-=======
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
     <entry file="file://$PROJECT_DIR$/main.c" />
     <entry file="file://$PROJECT_DIR$/Chat.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
-<<<<<<< HEAD
             <element signature="e#71#98#0" expanded="true" />
-=======
-            <element signature="e#71#98#0" expanded="false" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/SocketUDP.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="456">
@@ -659,7 +482,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -700,17 +522,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-=======
-    <entry file="file://$PROJECT_DIR$/SocketUDP.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="722">
-          <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
-          <folding />
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -758,8 +572,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SocketUDP.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+        <state relative-caret-position="361">
+          <caret line="19" column="1" lean-forward="false" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -767,7 +581,7 @@
     <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -786,25 +600,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-=======
-    <entry file="file://$PROJECT_DIR$/SocketUDP.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Chat.c">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
         <state relative-caret-position="285">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-=======
-        <state relative-caret-position="475">
-          <caret line="25" column="1" lean-forward="true" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
         </state>
       </provider>

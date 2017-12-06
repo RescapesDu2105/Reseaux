@@ -23,9 +23,9 @@ import reponserequetemonothread.Requete;
 public class Serveur_IAChat extends Thread
 {        
     private ConsoleServeur GUIApplication;
-    private int Port_Con;
+    private int Port_Chat;
     private int Port_Fly;
-    private ServerSocket SSocket_CON ;
+    private ServerSocket SSocket_Fly ;
     private Properties Prop = null;
     private Socket CSocket;
 
@@ -38,8 +38,8 @@ public class Serveur_IAChat extends Thread
         {
             this.GUIApplication = GUIApplication;
             this.Prop = (new ServerProperties()).getProp();
-            this.Port_Con = Integer.parseInt(this.Prop.getProperty("PORT_CON"));
-            setSSocket_CON(new ServerSocket(Port_Con));
+            this.Port_Chat = Integer.parseInt(this.Prop.getProperty("PORT_FLY"));
+            setSSocket_Fly(new ServerSocket(Port_Fly));
         }
         catch (IOException ex)
         {
@@ -55,7 +55,7 @@ public class Serveur_IAChat extends Thread
             try 
             {
                 GUIApplication.TraceEvenements("ThreadServeur#En attente#");
-                CSocket=SSocket_CON.accept();
+                CSocket = SSocket_Fly.accept();
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#");
             } 
             catch (IOException ex) 
@@ -65,18 +65,12 @@ public class Serveur_IAChat extends Thread
                 
                 this.interrupt();
             }
-
-            System.out.println("CSocket = " + CSocket.isClosed());
             
             if (getCSocket() != null && !getCSocket().isClosed())
             {               
-                System.out.println("test 1");
                 Requete req = RecevoirRequete(); 
-                System.out.println("test 2");
                 if (req != null)
-                {
-                    
-                System.out.println("test 3");
+                {                   
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + "Thread");                    
                     
                     Runnable runnable = req.createRunnable(getProp());
@@ -224,14 +218,14 @@ public class Serveur_IAChat extends Thread
         this.GUIApplication = GUIApplication;
     }
 
-    public int getPort_Con()
+    public int getPort_Chat()
     {
-        return Port_Con;
+        return Port_Chat;
     }
 
-    public void setPort_Con(int Port_Con)
+    public void setPort_Chat(int Port_Chat)
     {
-        this.Port_Con = Port_Con;
+        this.Port_Chat = Port_Chat;
     }
 
     public int getPort_Fly()
@@ -244,14 +238,14 @@ public class Serveur_IAChat extends Thread
         this.Port_Fly = Port_Fly;
     }
 
-    public ServerSocket getSSocket_CON()
+    public ServerSocket getSSocket_Fly()
     {
-        return SSocket_CON;
+        return SSocket_Fly;
     }
 
-    public void setSSocket_CON(ServerSocket SSocket_CON)
+    public void setSSocket_Fly(ServerSocket SSocket_Fly)
     {
-        this.SSocket_CON = SSocket_CON;
+        this.SSocket_Fly = SSocket_Fly;
     }
 
     public Properties getProp()
