@@ -1,8 +1,11 @@
 #ifndef APPLICATION_CIACHAT_THREADRECEPTION_H
 #define APPLICATION_CIACHAT_THREADRECEPTION_H
 
+<<<<<<< HEAD
 #include <pthread.h>
 
 pthread_t InitThread();
 
+=======
+>>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 #endif //APPLICATION_CIACHAT_THREADRECEPTION_H

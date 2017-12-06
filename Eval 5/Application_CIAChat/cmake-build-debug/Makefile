@@ -47,10 +47,17 @@ RM = "D:\Programmes\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat"
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug"
+=======
+CMAKE_SOURCE_DIR = "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat"
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug"
+>>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +86,15 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles" "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles\progress.marks"
 	$(MAKE) -f CMakeFiles\Makefile2 all
 	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles" 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles" "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles\progress.marks"
+	$(MAKE) -f CMakeFiles\Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat\cmake-build-debug\CMakeFiles" 0
+>>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 .PHONY : all
 
 # The main clean target
@@ -230,6 +243,7 @@ ThreadReception.c.s:
 	$(MAKE) -f CMakeFiles\Application_CIAChat.dir\build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.c.s
 .PHONY : ThreadReception.c.s
 
+<<<<<<< HEAD
 main.obj: main.c.obj
 
 .PHONY : main.obj
@@ -257,6 +271,8 @@ main.c.s:
 	$(MAKE) -f CMakeFiles\Application_CIAChat.dir\build.make CMakeFiles/Application_CIAChat.dir/main.c.s
 .PHONY : main.c.s
 
+=======
+>>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -278,9 +294,12 @@ help:
 	@echo ... ThreadReception.obj
 	@echo ... ThreadReception.i
 	@echo ... ThreadReception.s
+<<<<<<< HEAD
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+=======
+>>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 .PHONY : help
 
 
