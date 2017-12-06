@@ -11,19 +11,27 @@ package client_iachat;
  */
 import java.net.*;
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
+import requetereponseIACOP.RequeteIACOP;
 
 public class ThreadReception extends Thread
 {
     private final String nom;
     private final MulticastSocket socketGroupe;
+    private final ArrayList<String> Questions;
     private final JTextArea Chat;
     
-    public ThreadReception (String n, MulticastSocket ms, JTextArea Chat)
+    public ThreadReception (String n, MulticastSocket ms, ArrayList<String> Questions, JTextArea Chat)
     {
         this.nom = n; 
         this.socketGroupe = ms; 
         this.Chat = Chat;
+        this.Questions = Questions;
     }
     
     @Override
@@ -34,15 +42,16 @@ public class ThreadReception extends Thread
         {
             try
             {
-                byte[] buf = new byte[1000];
-                DatagramPacket dtg = new DatagramPacket(buf, buf.length);
-                socketGroupe.receive(dtg);
-                Chat.insert(new String (buf).trim(), Chat.getLineCount());
+                RequeteIACOP.RecevoirMessage(Questions, Chat, socketGroupe);
             }
             catch (IOException e)
             {
                 System.out.println("Erreur dans le thread :-( :" + e.getMessage());
                 enMarche = false; // fin
+            }
+            catch (NoSuchAlgorithmException | NoSuchProviderException ex)
+            {
+                Logger.getLogger(ThreadReception.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

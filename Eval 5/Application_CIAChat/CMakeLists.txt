@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.8)
-project(Application_CIAChat)
+cmake_minimum_required(VERSION 3.9)
+project(Application_CIAChat C)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
-add_executable(Application_CIAChat ${SOURCE_FILES})
+add_executable(Application_CIAChat Chat.h Chat.c ProtocoleIACOP.h ProtocoleIACOP.c SocketUDP.h SocketUDP.c ThreadReception.h ThreadReception.c)
