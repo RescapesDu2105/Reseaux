@@ -57,8 +57,10 @@ public class AuthentificationGUI extends javax.swing.JFrame
         jPasswordField = new javax.swing.JPasswordField();
         jButton_Effacer = new javax.swing.JButton();
         jLabelPWD = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Connexion");
         setResizable(false);
 
         jButton_Connexion.setText("Connexion");
@@ -83,14 +85,24 @@ public class AuthentificationGUI extends javax.swing.JFrame
 
         jLabelPWD.setText("Mot de passe");
 
+        jButton1.setText("Ignorer");
+        jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelLogin)
                             .addComponent(jLabelPWD))
@@ -99,11 +111,12 @@ public class AuthentificationGUI extends javax.swing.JFrame
                             .addComponent(jTF_Login)
                             .addComponent(jPasswordField)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 104, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                         .addComponent(jButton_Connexion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_Effacer)
-                        .addGap(60, 60, 60)))
+                        .addGap(35, 35, 35)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -120,7 +133,8 @@ public class AuthentificationGUI extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Connexion)
-                    .addComponent(jButton_Effacer)))
+                    .addComponent(jButton_Effacer)
+                    .addComponent(jButton1)))
         );
 
         pack();
@@ -162,6 +176,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     final int Port_Fly = Integer.parseInt(Rep.getChargeUtile().get("PORT_FLY").toString()); 
 
                     System.out.println("Connexion Reussie");
+                    Client.Deconnexion();
                     this.dispose();
                     java.awt.EventQueue.invokeLater(() ->
                     {
@@ -183,6 +198,16 @@ public class AuthentificationGUI extends javax.swing.JFrame
         jTF_Login.setText("");
         jPasswordField.setText("");
     }//GEN-LAST:event_jButton_EffacerActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        
+        this.dispose();
+        java.awt.EventQueue.invokeLater(() ->
+        {
+            new ClientChat("Philippe Dimartino", 30051).setVisible(true);
+        });
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,6 +267,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Connexion;
     private javax.swing.JButton jButton_Effacer;
     private javax.swing.JLabel jLabelLogin;

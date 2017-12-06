@@ -66,11 +66,17 @@ public class Serveur_IAChat extends Thread
                 this.interrupt();
             }
 
+            System.out.println("CSocket = " + CSocket.isClosed());
+            
             if (getCSocket() != null && !getCSocket().isClosed())
             {               
+                System.out.println("test 1");
                 Requete req = RecevoirRequete(); 
+                System.out.println("test 2");
                 if (req != null)
                 {
+                    
+                System.out.println("test 3");
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + "Thread");                    
                     
                     Runnable runnable = req.createRunnable(getProp());
@@ -125,8 +131,7 @@ public class Serveur_IAChat extends Thread
         
         try 
         {
-            if (getOis() == null)
-                setOis(new ObjectInputStream(CSocket.getInputStream()));
+            setOis(new ObjectInputStream(CSocket.getInputStream()));
             
             req = (Requete)ois.readObject();
             System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
@@ -157,6 +162,8 @@ public class Serveur_IAChat extends Thread
             return null;
         }
         
+        setOis(null);
+        
         return req;
     }   
     
@@ -164,16 +171,17 @@ public class Serveur_IAChat extends Thread
     {
         try 
         {   
-            if (oos == null)
-                oos = new ObjectOutputStream(s.getOutputStream());
+            setOos(new ObjectOutputStream(s.getOutputStream()));
             
-            oos.writeObject(Rep); 
-            oos.flush();
+            getOos().writeObject(Rep); 
+            getOos().flush();
         } 
         catch (IOException ex) 
         {
             System.err.println("Erreur d'envoi de la réponse ! [" + ex.getMessage() + "]");
         }
+        
+        setOos(null);
     }
     
     public Socket getCSocket()

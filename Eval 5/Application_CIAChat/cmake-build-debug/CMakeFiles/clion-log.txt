@@ -1,67 +1,11 @@
-"D:\Programmes\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "E:\Dropbox\B3\Réseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat"
+"D:\Programmes\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat"
 -- The C compiler identification is GNU 4.9.2
--- The CXX compiler identification is GNU 4.9.2
 -- Check for working C compiler: D:/Programmes/CodeBlocks/MinGW/bin/gcc.exe
--- Check for working C compiler: D:/Programmes/CodeBlocks/MinGW/bin/gcc.exe -- broken
-CMake Error at D:/Programmes/CLion 2017.2.2/bin/cmake/share/cmake-3.8/Modules/CMakeTestCCompiler.cmake:51 (message):
-  The C compiler "D:/Programmes/CodeBlocks/MinGW/bin/gcc.exe" is not able to
-  compile a simple test program.
-
-  It fails with the following output:
-
-   Change Dir: E:/Dropbox/B3/RÃ©seaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/CMakeTmp
-
-  
-
-  Run Build Command:"D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe"
-  "cmTC_71f4b/fast"
-
-  D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f
-  CMakeFiles\cmTC_71f4b.dir\build.make CMakeFiles/cmTC_71f4b.dir/build
-
-  mingw32-make.exe[1]: Entering directory
-  'E:/Dropbox/B3/RÃšseaux/2017-2018/Reseaux/Eval
-  5/Application_CIAChat/cmake-build-debug/CMakeFiles/CMakeTmp'
-
-  Building C object CMakeFiles/cmTC_71f4b.dir/testCCompiler.c.obj
-
-  D:\Programmes\CodeBlocks\MinGW\bin\gcc.exe -o
-  CMakeFiles\cmTC_71f4b.dir\testCCompiler.c.obj -c
-  "E:\Dropbox\B3\Râ”œÂ®seaux\2017-2018\Reseaux\Eval
-  5\Application_CIAChat\cmake-build-debug\CMakeFiles\CMakeTmp\testCCompiler.c"
-
-
-  gcc.exe: error: E:\Dropbox\B3\R+Â«seaux\2017-2018\Reseaux\Eval
-  5\Application_CIAChat\cmake-build-debug\CMakeFiles\CMakeTmp\testCCompiler.c:
-  No such file or directory
-
-  gcc.exe: fatal error: no input files
-
-  compilation terminated.
-
-  CMakeFiles\cmTC_71f4b.dir\build.make:64: recipe for target
-  'CMakeFiles/cmTC_71f4b.dir/testCCompiler.c.obj' failed
-
-  mingw32-make.exe[1]: *** [CMakeFiles/cmTC_71f4b.dir/testCCompiler.c.obj]
-  Error 1
-
-  mingw32-make.exe[1]: Leaving directory
-  'E:/Dropbox/B3/RÃšseaux/2017-2018/Reseaux/Eval
-  5/Application_CIAChat/cmake-build-debug/CMakeFiles/CMakeTmp'
-
-  Makefile:125: recipe for target 'cmTC_71f4b/fast' failed
-
-  mingw32-make.exe: *** [cmTC_71f4b/fast] Error 2
-
-  
-
-  
-
-  CMake will not be able to correctly generate this project.
-Call Stack (most recent call first):
-  CMakeLists.txt:2 (project)
-
-
--- Configuring incomplete, errors occurred!
-See also "E:/Dropbox/B3/RÃ©seaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/CMakeOutput.log".
-See also "E:/Dropbox/B3/RÃ©seaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/CMakeError.log".
+-- Check for working C compiler: D:/Programmes/CodeBlocks/MinGW/bin/gcc.exe -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug

@@ -5,6 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,8 +15,18 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextArea;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import reponserequetemonothread.Reponse;
 import reponserequetemonothread.Requete;
@@ -30,7 +43,12 @@ import reponserequetemonothread.Requete;
  */
 public class RequeteIACOP implements Requete, Serializable
 {
-    public final static int REQUEST_LOGIN_GROUP = 1;
+    public final static int REQUEST_LOGIN_GROUP = 0;
+    public final static String POST_QUESTION = "Q";
+    public final static String ANSWER_QUESTION = "RQ";
+    public final static String POST_EVENT = "I";
+    
+    public static String SEPARATOR = "#";
     
     private int Type;
     private HashMap<String, Object> chargeUtile;
@@ -244,5 +262,133 @@ public class RequeteIACOP implements Requete, Serializable
     public void setChargeUtile(HashMap chargeUtile) 
     {
         this.chargeUtile = chargeUtile;
+    }
+    
+    
+    public static String getSeparator()
+    {
+        return RequeteIACOP.SEPARATOR;
+    }
+    
+    public static void setSeparator(String separator)
+    {
+        RequeteIACOP.SEPARATOR = separator;
+    }
+    
+    public static void EnvoyerMessage(byte[] Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
+    {
+        DatagramPacket dtg = new DatagramPacket(Msg, Msg.length, AdresseGroupe, Port);
+        try
+        {
+            SocketGroupe.send(dtg);
+        }
+        catch (IOException e) 
+        { 
+            System.out.println("Erreur :-( : " + e.getMessage()); 
+        }
+    }
+        
+    public static void EnvoyerInformation(String NomPrenomClient, String Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
+    {
+        Random rand = new Random();
+        String MessageToSend = RequeteIACOP.POST_EVENT + rand.nextInt(Integer.MAX_VALUE) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg;        
+        EnvoyerMessage(MessageToSend.getBytes(), AdresseGroupe, Port, SocketGroupe);
+    }
+    
+    public static void EnvoyerQuestion(String NomPrenomClient, String Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
+    {        
+        Random rand = new Random();
+        MessageDigest md;
+        try
+        {
+            Security.addProvider(new BouncyCastleProvider());  
+            md = MessageDigest.getInstance("SHA-256", "BC");
+            md.update(Msg.getBytes());
+            long Temps = (new Date()).getTime();
+            double Random = Math.random();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            DataOutputStream bdos = new DataOutputStream(baos);
+            bdos.writeLong(Temps); 
+            bdos.writeDouble(Random);
+            md.update(baos.toByteArray());
+            byte[] msgD = md.digest();
+            System.out.println("msgD = " + Arrays.toString(msgD));
+            
+            String MessageToSend = RequeteIACOP.POST_QUESTION + rand.nextInt(Integer.MAX_VALUE) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg + RequeteIACOP.SEPARATOR + Temps + RequeteIACOP.SEPARATOR + Random + RequeteIACOP.SEPARATOR;
+            
+            baos = new ByteArrayOutputStream();
+            DataOutputStream dos = new DataOutputStream(baos);
+            dos.writeUTF(MessageToSend);
+            dos.write(msgD);
+            
+            EnvoyerMessage(baos.toByteArray(), AdresseGroupe, Port, SocketGroupe);            
+        }
+        catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex)
+        {
+            Logger.getLogger(RequeteIACOP.class.getName()).log(Level.SEVERE, null, ex);
+        }            
+    }
+    
+    public static void EnvoyerReponse(String NomPrenomClient, String Tag, String Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
+    {       
+        String MessageToSend = RequeteIACOP.ANSWER_QUESTION + Tag.substring(1) + RequeteIACOP.SEPARATOR + NomPrenomClient + RequeteIACOP.SEPARATOR + Msg;
+        EnvoyerMessage(MessageToSend.getBytes(), AdresseGroupe, Port, SocketGroupe);
+    }
+    
+    public static void RecevoirMessage(ArrayList<String> Questions, JTextArea Chat, MulticastSocket SocketGroupe) throws NoSuchAlgorithmException, NoSuchProviderException, IOException
+    {
+        boolean Ok = true;
+        
+        byte[] buf = new byte[1000];
+        DatagramPacket dtg = new DatagramPacket(buf, buf.length);
+        SocketGroupe.receive(dtg);
+
+        String str = new String(buf).trim();
+        System.err.println(str);
+        String[] parts = str.split("#");
+        System.out.println("parts = " + Arrays.toString(parts));
+        
+        if (parts.length < 4)
+        {
+            switch (parts[0].charAt(0))
+            {
+                case 'I':  
+                case 'R':                    
+                    Chat.append("[" + DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.FRANCE).format(Calendar.getInstance().getTime()) + "] " + parts[1] + " > (" + parts[0] + ") " + parts[2] + "\n");
+                    break;
+                default:
+                    Ok = false;
+                    break;
+            }
+        }
+        else
+        {
+            if (parts[0].charAt(0) == 'Q')
+            {
+                Security.addProvider(new BouncyCastleProvider());  
+                MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");                    
+                md.update(parts[2].getBytes());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                DataOutputStream bdos = new DataOutputStream(baos);
+                bdos.writeLong(Long.valueOf(parts[3]));
+                bdos.writeDouble(Double.valueOf(parts[4]));
+                md.update(baos.toByteArray());
+                byte[] msgDLocal = md.digest();
+                System.out.println("parts[5] = " + parts[5]);
+                System.out.println("msgDLocal = " + Arrays.toString(msgDLocal));
+                
+                if (MessageDigest.isEqual(parts[5].getBytes(), msgDLocal)) 
+                {
+                    Questions.add(Questions.size(), parts[0]);
+                    Chat.append("[" + DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.FRANCE).format(Calendar.getInstance().getTime()) + "] " + parts[1] + " > (" + parts[0] + ") " + parts[2] + "\n");
+                }
+                else
+                {
+                    System.out.println("Digest pas equal");
+                }
+            }
+            else
+                Ok = false;
+        }
     }
 }
