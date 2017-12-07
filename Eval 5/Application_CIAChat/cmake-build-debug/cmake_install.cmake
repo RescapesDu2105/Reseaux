@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# Install script for directory: E:/Dropbox/B3/Réseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat
-=======
 # Install script for directory: E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,9 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-<<<<<<< HEAD
-file(WRITE "E:/Dropbox/B3/Réseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
-=======
 file(WRITE "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
->>>>>>> 9e9fe1426f9f6ea8246851cdaecd403903fff0e5
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

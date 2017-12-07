@@ -14,6 +14,6 @@ void EnvoyerMessage(char* Message);
 
 char* LireRequete();
 
-void InitSockets(int *hSocketRecv, int *hSocketSend, struct hostent **infosHost, struct in_addr *adresseIP, struct sockaddr_in *adresseSocket, unsigned int *tailleSockaddr_in, int Port);
+void InitSockets(int *hSocketRecv, int *hSocketSend, struct hostent **infosHost, struct in_addr *adresseIP, struct sockaddr_in *adresseSocket, unsigned int *tailleSockaddr_in, struct ip_mreq mreq, int Port);
 
 #endif //APPLICATION_CIACHAT_PROTOCOLEIACOP_H

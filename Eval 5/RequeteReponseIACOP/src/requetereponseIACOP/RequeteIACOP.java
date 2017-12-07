@@ -279,6 +279,22 @@ public class RequeteIACOP implements Requete, Serializable
         RequeteIACOP.SEPARATOR = separator;
     }
     
+    public static void Connexion(String NomPrenomClient, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe) throws IOException
+    {
+        String msgDeb = NomPrenomClient + " a rejoint le groupe";
+        System.out.println("msgDeb = " + msgDeb);
+        DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), AdresseGroupe, Port);
+        SocketGroupe.send(dtg);
+    }
+    
+    public static void Deconnexion(String NomPrenomClient, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe) throws IOException
+    {
+        String msgDeb = NomPrenomClient + " a quitté le groupe";
+        System.out.println("msgDeb = " + msgDeb);
+        DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), AdresseGroupe, Port);
+        SocketGroupe.send(dtg);
+    }
+    
     public static void EnvoyerMessage(byte[] Msg, InetAddress AdresseGroupe, int Port, MulticastSocket SocketGroupe)
     {
         DatagramPacket dtg = new DatagramPacket(Msg, Msg.length, AdresseGroupe, Port);

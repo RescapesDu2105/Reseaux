@@ -17,6 +17,8 @@ ThreadReception.h
 E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.h
 
 E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.c
+ProtocoleIACOP.h
+E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h
 
 E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h
 SocketUDP.h
@@ -35,24 +37,18 @@ string.h
 -
 sys/types.h
 -
-sys/socket.h
--
 sys/time.h
--
-netdb.h
 -
 errno.h
 -
-netinet/in.h
--
-netinet/tcp.h
--
-arpa/inet.h
--
 Winsock2.h
+-
+ws2tcpip.h
 -
 
 E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.c
 
 E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.h
+pthread.h
+-
 

@@ -56,6 +56,8 @@ public class ClientChat extends javax.swing.JFrame
             thread.start();
             
             this.setTitle("Client : " + nomPrenomClient);
+            
+            //RequeteIACOP.Connexion(nomPrenomClient, adresseGroupe, port, socketGroupe);
             String msgDeb = nomPrenomClient + " a rejoint le groupe";
             System.out.println("msgDeb = " + msgDeb);
             DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), adresseGroupe, port);
@@ -69,6 +71,20 @@ public class ClientChat extends javax.swing.JFrame
         {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void Stop()
+    {
+        try
+        {
+            RequeteIACOP.Deconnexion(nomPrenomClient, adresseGroupe, port, socketGroupe);
+            socketGroupe.leaveGroup(adresseGroupe);
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        thread.interrupt();
     }
 
     /**
@@ -92,6 +108,13 @@ public class ClientChat extends javax.swing.JFrame
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
+                formWindowClosed(evt);
+            }
+        });
 
         jTA_Chat.setEditable(false);
         jTA_Chat.setColumns(20);
@@ -191,6 +214,11 @@ public class ClientChat extends javax.swing.JFrame
                 break;
         }       
     }//GEN-LAST:event_jButtonEnvoyerActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
+    {//GEN-HEADEREND:event_formWindowClosed
+        Stop();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

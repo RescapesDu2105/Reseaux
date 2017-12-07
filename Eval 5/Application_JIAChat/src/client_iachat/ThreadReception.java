@@ -40,8 +40,7 @@ public class ThreadReception extends Thread
     @Override
     public void run()
     {
-        boolean enMarche = true;
-        while (enMarche)
+        while (isInterrupted())
         {
             try
             {
@@ -50,7 +49,7 @@ public class ThreadReception extends Thread
             catch (IOException e)
             {
                 System.out.println("Erreur dans le thread :-( :" + e.getMessage());
-                enMarche = false; // fin
+                interrupt();
             }
             catch (NoSuchAlgorithmException | NoSuchProviderException ex)
             {

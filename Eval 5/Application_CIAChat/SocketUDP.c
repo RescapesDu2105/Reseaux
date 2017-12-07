@@ -50,7 +50,7 @@ void BindSocket(int hSocket, struct sockaddr_in adresseSocket, unsigned int tail
     else printf("Bind adresse et port socket OK\n");
 }
 
-void SettingUpSocket(int hSocket, struct sockaddr_in adresseSocket, unsigned int tailleSockaddr_in)
+void SettingUpSocket(int hSocket, struct ip_mreq mreq, struct sockaddr_in adresseSocket, unsigned int tailleSockaddr_in)
 {
     memcpy(&mreq.imr_multiaddr, &adresseSocket.sin_addr, tailleSockaddr_in);
     mreq.imr_interface.s_addr = htonl(INADDR_ANY);

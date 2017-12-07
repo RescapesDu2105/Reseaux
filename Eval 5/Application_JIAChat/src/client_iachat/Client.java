@@ -76,7 +76,7 @@ public class Client
             {       
                 fos = new FileOutputStream(nomFichier);
                 
-                getProp().setProperty("PORT_CON", Integer.toString(30050));
+                getProp().setProperty("PORT_FLY", Integer.toString(30050));
                 //getProp().setProperty("ADRESSEIP", "192.168.0.3");
                 getProp().setProperty("ADRESSEIP", "127.0.0.1");
 
@@ -86,7 +86,7 @@ public class Client
         
         if (fis != null || fos != null) 
         {
-            setPort(Integer.parseInt(getProp().getProperty("PORT_CON")));            
+            setPort(Integer.parseInt(getProp().getProperty("PORT_FLY")));            
             setIP(InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
             
             System.out.println("Port : " + getPort());
