@@ -110,7 +110,7 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
             Started = false;            
             try
             {
-                getServer().getSSocket_CON().close();
+                getServer().getSSocket_Fly().close();
             }
             catch (IOException ex)
             {
