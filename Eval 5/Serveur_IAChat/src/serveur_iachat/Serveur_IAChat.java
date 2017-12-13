@@ -23,7 +23,6 @@ import reponserequetemonothread.Requete;
 public class Serveur_IAChat extends Thread
 {        
     private ConsoleServeur GUIApplication;
-    private int Port_Chat;
     private int Port_Fly;
     private ServerSocket SSocket_Fly ;
     private Properties Prop = null;
@@ -38,7 +37,7 @@ public class Serveur_IAChat extends Thread
         {
             this.GUIApplication = GUIApplication;
             this.Prop = (new ServerProperties()).getProp();
-            this.Port_Chat = Integer.parseInt(this.Prop.getProperty("PORT_FLY"));
+            this.Port_Fly = Integer.parseInt(this.Prop.getProperty("PORT_FLY"));
             setSSocket_Fly(new ServerSocket(Port_Fly));
         }
         catch (IOException ex)
@@ -216,16 +215,6 @@ public class Serveur_IAChat extends Thread
     public void setGUIApplication(ConsoleServeur GUIApplication)
     {
         this.GUIApplication = GUIApplication;
-    }
-
-    public int getPort_Chat()
-    {
-        return Port_Chat;
-    }
-
-    public void setPort_Chat(int Port_Chat)
-    {
-        this.Port_Chat = Port_Chat;
     }
 
     public int getPort_Fly()

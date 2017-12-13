@@ -14,6 +14,7 @@ import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
@@ -44,17 +45,26 @@ public class ThreadReception extends Thread
         {
             try
             {
-                RequeteIACOP.RecevoirMessage(Questions, QList, Chat, socketGroupe);
+                //RequeteIACOP.RecevoirMessage(Questions, QList, Chat, socketGroupe);
+                
+                byte[] buf = new byte[1000];
+                DatagramPacket dtg = new DatagramPacket(buf, buf.length);
+                socketGroupe.receive(dtg);
+
+                String str = new String(buf);
+                System.err.println(str);
+                String[] parts = str.split(RequeteIACOP.SEPARATOR);
+                System.out.println("parts = " + Arrays.toString(parts));
             }
             catch (IOException e)
             {
                 System.out.println("Erreur dans le thread :-( :" + e.getMessage());
                 interrupt();
             }
-            catch (NoSuchAlgorithmException | NoSuchProviderException ex)
+            /*catch (NoSuchAlgorithmException | NoSuchProviderException ex)
             {
                 Logger.getLogger(ThreadReception.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
     }
 }

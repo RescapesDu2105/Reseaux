@@ -178,9 +178,13 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     System.out.println("Connexion Reussie");
                     Client.Deconnexion();
                     this.dispose();
-                    java.awt.EventQueue.invokeLater(() ->
+                    java.awt.EventQueue.invokeLater(new Runnable()
                     {
-                        new ClientChat(NomPrenom, Port_Fly).setVisible(true);
+                        @Override
+                        public void run()
+                        {
+                            new ClientChat(NomPrenom, Port_Fly).setVisible(true);
+                        }
                     });
                 }
                 else

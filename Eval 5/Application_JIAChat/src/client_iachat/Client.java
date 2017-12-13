@@ -94,13 +94,20 @@ public class Client
         }
     }
     
-     public void Connexion() throws IOException
+    public void Connexion() throws IOException
     {
-        setCliSocket(new Socket(getIP(), getPort()));
+        try
+        {
+            setCliSocket(new Socket(getIP(), getPort()));
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
         
         if (getCliSocket().isConnected()) 
         {
-            System.out.println("Connexion OK");
+            //System.out.println("Connexion OK");
             
             try 
             {        
@@ -113,13 +120,13 @@ public class Client
             {
                 System.out.println(ex.getMessage());
             }
-            System.out.println("Client prêt");
-            System.out.println("Connected = " + getCliSocket().isConnected());
+            //System.out.println("Client prêt");
+            //System.out.println("Connected = " + getCliSocket().isConnected());
             setConnectedToServer(true);
         }
         else 
         {            
-            System.out.println("Client pas prêt !");
+            //System.out.println("Client pas prêt !");
         }
     }
   

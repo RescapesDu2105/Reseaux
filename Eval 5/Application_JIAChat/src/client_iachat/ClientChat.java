@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client_iachat;
 
+
+import client_iachat.ThreadReception;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -28,7 +29,7 @@ public class ClientChat extends javax.swing.JFrame
     private final int port;
     private MulticastSocket socketGroupe;
     private ThreadReception thread;
-    private final ArrayList<String> Questions = new ArrayList<>();
+    private final ArrayList<String> Questions;
     
     /**
      * Creates new form ClientChat
@@ -36,12 +37,14 @@ public class ClientChat extends javax.swing.JFrame
      * @param port
      */
     public ClientChat(String nomPrenomClient, int port)
-    {
-        initComponents();
-        setLocationRelativeTo(null); 
-        
+    {        
+        this.Questions = new ArrayList<>();
         this.nomPrenomClient = nomPrenomClient;
         this.port = port;
+        
+        initComponents();        
+        setLocationRelativeTo(null); 
+        
         Init();                
     }
     
@@ -50,8 +53,10 @@ public class ClientChat extends javax.swing.JFrame
         try
         {
             adresseGroupe = InetAddress.getByName("234.5.5.9");
-            socketGroupe = new MulticastSocket(port);
+            socketGroupe = new MulticastSocket(port);            
+            //socketGroupe.setInterface(InetAddress.getLocalHost());
             socketGroupe.joinGroup(adresseGroupe);
+            System.out.println("socketGroupe.isConnected() = " + socketGroupe.isConnected());
             thread = new ThreadReception (nomPrenomClient, socketGroupe, Questions, jList_Questions, jTA_Chat);
             thread.start();
             
@@ -63,14 +68,18 @@ public class ClientChat extends javax.swing.JFrame
             DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), adresseGroupe, port);
             socketGroupe.send(dtg);
         }
-        catch (UnknownHostException ex)
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        /*catch (UnknownHostException ex)
         {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex)
         {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
     
     public void Stop()
