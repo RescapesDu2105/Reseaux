@@ -1,3 +1,5 @@
+package client_iachat;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,7 +7,6 @@
  */
 
 
-import client_iachat.ThreadReception;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -52,10 +53,12 @@ public class ClientChat extends javax.swing.JFrame
     {
         try
         {
-            adresseGroupe = InetAddress.getByName("234.5.5.9");
+            adresseGroupe = InetAddress.getByName("234.5.5.9");      
+            System.out.println("adresseGroupe = " + adresseGroupe);
             socketGroupe = new MulticastSocket(port);            
-            //socketGroupe.setInterface(InetAddress.getLocalHost());
+            System.out.println("socketGroupe = " + socketGroupe.getPort());
             socketGroupe.joinGroup(adresseGroupe);
+            
             System.out.println("socketGroupe.isConnected() = " + socketGroupe.isConnected());
             thread = new ThreadReception (nomPrenomClient, socketGroupe, Questions, jList_Questions, jTA_Chat);
             thread.start();

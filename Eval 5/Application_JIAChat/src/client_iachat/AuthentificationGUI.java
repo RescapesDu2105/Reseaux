@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import requetereponseIACOP.ReponseIACOP;
+import client_iachat.*;
 
 /**
  *
@@ -173,7 +174,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     //getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
                     
                     final String NomPrenom = Rep.getChargeUtile().get("Prenom").toString() + " " + Rep.getChargeUtile().get("Nom").toString();
-                    final int Port_Fly = Integer.parseInt(Rep.getChargeUtile().get("PORT_FLY").toString()); 
+                    final int Port_Fly = Integer.parseInt(Rep.getChargeUtile().get("PORT_CHAT").toString()); 
 
                     System.out.println("Connexion Reussie");
                     Client.Deconnexion();

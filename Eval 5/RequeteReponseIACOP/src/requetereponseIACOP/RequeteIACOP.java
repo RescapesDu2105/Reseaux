@@ -123,7 +123,7 @@ public class RequeteIACOP implements Requete, Serializable
                         Reponse.getChargeUtile().put("Message", ReponseIACOP.LOGIN_OK_MESSAGE);
                         Reponse.getChargeUtile().put("Nom", Champs[1]);
                         Reponse.getChargeUtile().put("Prenom", Champs[2]);
-                        Reponse.getChargeUtile().put("PORT_FLY", getProp().getProperty("PORT_FLY"));
+                        Reponse.getChargeUtile().put("PORT_CHAT", getProp().getProperty("PORT_CHAT"));
                     }
                     else
                     {
