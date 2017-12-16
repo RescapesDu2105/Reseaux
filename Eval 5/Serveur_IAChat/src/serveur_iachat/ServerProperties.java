@@ -23,7 +23,7 @@ public final class ServerProperties
     //Mets ton chemin de fichier
     //Chemin DimDim :
     //Chemin TussTuss :
-    private String NomFichier ="D:\\GitHub\\Reseaux\\Eval 5\\Serveur_IAChat\\src\\serveur_iachat\\config.properties";
+    private String NomFichier = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
     
     
     public ServerProperties() throws FileNotFoundException, IOException 
@@ -43,8 +43,8 @@ public final class ServerProperties
             {
                 fos = new FileOutputStream(getNomFichier());
               
-                getProp().setProperty("PORT_CON", Integer.toString(30043));
-                getProp().setProperty("PORT_FLY", Integer.toString(30044));
+                getProp().setProperty("PORT_FLY", Integer.toString(30050));
+                getProp().setProperty("PORT_CHAT", Integer.toString(30051));
                 getProp().setProperty("ADRESSEIP", "127.0.0.1"); 
                 getProp().setProperty("HOST_BD", "localhost");
                 getProp().setProperty("PORT_BD", "3306");   

@@ -27,6 +27,7 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     public FenApplicationServeur() {
         initComponents();
         setLocationRelativeTo(null); 
+        setServer(new Serveur(this));
         this.jButtonStartActionPerformed(null);
     }
 
@@ -92,7 +93,6 @@ public class FenApplicationServeur extends javax.swing.JFrame implements Console
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         if (!isStarted()) 
         {
-            setServer(new Serveur(this));
             try 
             {                
                 TraceEvenements("Serveur#Initialisation#Start");

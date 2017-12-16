@@ -5,8 +5,12 @@
  */
 package serveur_iachat;
 
+import java.io.IOException;
+import reponserequetemonothread.ConsoleServeur;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
 {
     private Serveur_IAChat server=null;
+    private boolean Started = false;
 
     /**
      * Creates new form FenSerIAC
@@ -23,6 +28,8 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
     public FenSerIAC()
     {
         initComponents();
+        setLocationRelativeTo(null); 
+        this.jButtonStartActionPerformed(null);
     }
 
     /**
@@ -89,7 +96,33 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
 
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonStartActionPerformed
     {//GEN-HEADEREND:event_jButtonStartActionPerformed
-        setServer(new Serveur_IAChat(this));        
+        if(Started == false)
+        {
+            TraceEvenements("Serveur#Start#FenSerIAC");            
+            //setServer(null);
+            setServer(new Serveur_IAChat(this));
+            getServer().start();
+            Started = true;
+            jButtonStart.setText("Stop");            
+        }
+        else // true
+        {
+            Started = false;            
+            try
+            {
+                getServer().getSSocket_Fly().close();
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(FenSerIAC.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(!getServer().isInterrupted())
+                getServer().interrupt();
+            
+            jButtonStart.setText("Start");            
+            TraceEvenements("Serveur#Stop#FenSerIAC");
+        }
     }//GEN-LAST:event_jButtonStartActionPerformed
 
     /**
@@ -128,12 +161,9 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
+        java.awt.EventQueue.invokeLater(() ->
         {
-            public void run()
-            {
-                new FenSerIAC().setVisible(true);
-            }
+            new FenSerIAC().setVisible(true);
         });
     }
     
@@ -153,6 +183,16 @@ public class FenSerIAC extends javax.swing.JFrame implements ConsoleServeur
         dtm.insertRow(dtm.getRowCount(), Ligne.toArray());
         
         TableauEvenements.setModel(dtm);
+    }
+
+    public boolean isStarted()
+    {
+        return Started;
+    }
+
+    public void setStarted(boolean Started)
+    {
+        this.Started = Started;
     }
     
     public Serveur_IAChat getServer() 

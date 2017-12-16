@@ -1,0 +1,4 @@
+"D:\Programmes\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "E:\Dropbox\B3\Reseaux\2017-2018\Reseaux\Eval 5\Application_CIAChat"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug

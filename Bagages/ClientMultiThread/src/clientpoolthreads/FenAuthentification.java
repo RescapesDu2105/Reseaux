@@ -47,7 +47,8 @@ public class FenAuthentification extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabelLogin = new javax.swing.JLabel();
         jLabelPWD = new javax.swing.JLabel();
@@ -64,15 +65,19 @@ public class FenAuthentification extends javax.swing.JFrame {
         jLabelPWD.setText("Mot de passe");
 
         jButton_Connexion.setText("Connexion");
-        jButton_Connexion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton_Connexion.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton_ConnexionActionPerformed(evt);
             }
         });
 
         jButton_Effacer.setText("Effacer");
-        jButton_Effacer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton_Effacer.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton_EffacerActionPerformed(evt);
             }
         });
@@ -207,15 +212,18 @@ public class FenAuthentification extends javax.swing.JFrame {
         });
     }
     
-    public Client getClient() {
+    public Client getClient() 
+    {
         return Client;
     }
 
-    public void setClient(Client Client) {
+    public void setClient(Client Client) 
+    {
         this.Client = Client;
     }
 
-    public JButton getjButton_Connexion() {
+    public JButton getjButton_Connexion() 
+    {
         return jButton_Connexion;
     }
 
