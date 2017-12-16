@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.awt.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
@@ -23,15 +24,13 @@ import requetereponseIACOP.RequeteIACOP;
 
 public class ThreadReception extends Thread
 {
-    private final String nom;
     private final MulticastSocket socketGroupe;
     private final ArrayList<String> Questions;
     private final JList QList;
     private final JTextArea Chat;
     
-    public ThreadReception (String n, MulticastSocket ms, ArrayList<String> Questions, JList QList, JTextArea Chat)
+    public ThreadReception (MulticastSocket ms, ArrayList<String> Questions, JList QList, JTextArea Chat)
     {
-        this.nom = n; 
         this.socketGroupe = ms; 
         this.Chat = Chat;
         this.Questions = Questions;
@@ -41,30 +40,25 @@ public class ThreadReception extends Thread
     @Override
     public void run()
     {
-        while (isInterrupted())
+        boolean enMarche = true;
+        while (!isInterrupted())
+        //while (enMarche)
         {
             try
             {
-                //RequeteIACOP.RecevoirMessage(Questions, QList, Chat, socketGroupe);
-                
-                byte[] buf = new byte[1000];
-                DatagramPacket dtg = new DatagramPacket(buf, buf.length);
-                socketGroupe.receive(dtg);
-
-                String str = new String(buf);
-                System.err.println(str);
-                String[] parts = str.split(RequeteIACOP.SEPARATOR);
-                System.out.println("parts = " + Arrays.toString(parts));
+                RequeteIACOP.RecevoirMessage(Questions, QList, Chat, socketGroupe);
             }
             catch (IOException e)
             {
                 System.out.println("Erreur dans le thread :-( :" + e.getMessage());
+                e.printStackTrace();
+                enMarche = false; // fin            
                 interrupt();
             }
-            /*catch (NoSuchAlgorithmException | NoSuchProviderException ex)
+            catch (NoSuchAlgorithmException | NoSuchProviderException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ThreadReception.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-        }
+            }
+        }        
     }
 }

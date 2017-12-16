@@ -1,5 +1,7 @@
 package client_iachat;
 
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,17 +9,21 @@ package client_iachat;
  */
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import requetereponseIACOP.RequeteIACOP;
 import javax.swing.DefaultListModel;
+import static requetereponseIACOP.RequeteIACOP.EnvoyerMessage;
 
 /**
  *
@@ -54,13 +60,10 @@ public class ClientChat extends javax.swing.JFrame
         try
         {
             adresseGroupe = InetAddress.getByName("234.5.5.9");      
-            System.out.println("adresseGroupe = " + adresseGroupe);
-            socketGroupe = new MulticastSocket(port);            
-            System.out.println("socketGroupe = " + socketGroupe.getPort());
-            socketGroupe.joinGroup(adresseGroupe);
+            socketGroupe = new MulticastSocket(port);           
+            socketGroupe.joinGroup(adresseGroupe);            
             
-            System.out.println("socketGroupe.isConnected() = " + socketGroupe.isConnected());
-            thread = new ThreadReception (nomPrenomClient, socketGroupe, Questions, jList_Questions, jTA_Chat);
+            thread = new ThreadReception (socketGroupe, Questions, jList_Questions, jTA_Chat);
             thread.start();
             
             this.setTitle("Client : " + nomPrenomClient);
@@ -69,20 +72,22 @@ public class ClientChat extends javax.swing.JFrame
             String msgDeb = nomPrenomClient + " a rejoint le groupe";
             System.out.println("msgDeb = " + msgDeb);
             DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), adresseGroupe, port);
-            socketGroupe.send(dtg);
+            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            baos.flush();
+            ObjectOutputStream os = new ObjectOutputStream(baos);
+            os.writeObject(msgDeb);
+            
+            EnvoyerMessage(baos.toByteArray(), adresseGroupe, port, socketGroupe);              
         }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        /*catch (UnknownHostException ex)
+        catch (UnknownHostException ex)
         {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex)
         {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
     }
     
     public void Stop()
@@ -198,7 +203,6 @@ public class ClientChat extends javax.swing.JFrame
 
     private void jButtonEnvoyerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEnvoyerActionPerformed
     {//GEN-HEADEREND:event_jButtonEnvoyerActionPerformed
-        String msg = null;        
         String Tag = null;
         String MessageToSend = jTA_Envoyer.getText();
         

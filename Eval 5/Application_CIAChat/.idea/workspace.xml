@@ -12,60 +12,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="941a1717-faef-4db3-b197-7c27b7546d10" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Chat.c" afterPath="$PROJECT_DIR$/Chat.c" />
-      <change beforePath="$PROJECT_DIR$/ProtocoleIACOP.c" afterPath="$PROJECT_DIR$/ProtocoleIACOP.c" />
-      <change beforePath="$PROJECT_DIR$/ProtocoleIACOP.h" afterPath="$PROJECT_DIR$/ProtocoleIACOP.h" />
-      <change beforePath="$PROJECT_DIR$/SocketUDP.c" afterPath="$PROJECT_DIR$/SocketUDP.c" />
-      <change beforePath="$PROJECT_DIR$/SocketUDP.h" afterPath="$PROJECT_DIR$/SocketUDP.h" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Application_CIAChat (Copie en conflit de Philippe Dimartino 2017-12-06).cbp" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Application_CIAChat.cbp" afterPath="$PROJECT_DIR$/cmake-build-debug/Application_CIAChat.cbp" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache (Copie en conflit de Philippe Dimartino 2017-12-06).txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeCCompiler (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeCCompiler.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeCCompiler.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CompilerIdC/a (Copie en conflit de Philippe Dimartino 2017-12-06).exe" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/C.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/C.includecache" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo.cmake" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeDetermineCompilerABI_C.bin" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CMakeDetermineCompilerABI_C.bin" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CompilerIdC/a.exe" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.4/CompilerIdC/a.exe" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/C.includecache" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/Chat.c.obj" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.obj" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/SocketUDP.c.obj" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/ThreadReception.c.obj" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/build (Copie en conflit de Philippe Dimartino 2017-12-06).make" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/build.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/build.make" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/cmake_clean (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/cmake_clean.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/cmake_clean.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend (Copie en conflit de Philippe Dimartino 2017-12-06).make" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.internal" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.internal" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.internal" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/depend.make" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/objects1 (Copie en conflit de Philippe Dimartino 2017-12-06).rsp" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/objects1.rsp" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/objects1.rsp" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/progress (Copie en conflit de Philippe Dimartino 2017-12-06).make" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/progress.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/progress.make" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput (Copie en conflit de Philippe Dimartino 2017-12-06).log" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/objects.a" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2 (Copie en conflit de Philippe Dimartino 2017-12-06)" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/1" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/2" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/3" afterPath="" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/4" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories (Copie en conflit de Philippe Dimartino 2017-12-06).txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log (Copie en conflit de Philippe Dimartino 2017-12-06).txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/5" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress (Copie en conflit de Philippe Dimartino 2017-12-06).marks" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile (Copie en conflit de Philippe Dimartino 2017-12-06)" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install (Copie en conflit de Philippe Dimartino 2017-12-06).cmake" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" />
-      <change beforePath="$PROJECT_DIR$/../../JDBC/Application_Test_JDBC/nbproject/private/private.xml" afterPath="$PROJECT_DIR$/../../JDBC/Application_Test_JDBC/nbproject/private/private.xml" />
-      <change beforePath="$PROJECT_DIR$/../../JDBC/Bean_DB_Access/nbproject/private/private.xml" afterPath="$PROJECT_DIR$/../../JDBC/Bean_DB_Access/nbproject/private/private.xml" />
+      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.form" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.form" />
+      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.java" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ClientChat.java" />
+      <change beforePath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ThreadReception.java" afterPath="$PROJECT_DIR$/../Application_JIAChat/src/client_iachat/ThreadReception.java" />
+      <change beforePath="$PROJECT_DIR$/../RequeteReponseIACOP/src/requetereponseIACOP/RequeteIACOP.java" afterPath="$PROJECT_DIR$/../RequeteReponseIACOP/src/requetereponseIACOP/RequeteIACOP.java" />
+      <change beforePath="$PROJECT_DIR$/../../JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar" afterPath="$PROJECT_DIR$/../../JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -83,8 +55,8 @@
           <file leaf-file-name="SocketUDP.h" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/SocketUDP.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="266">
-                  <caret line="14" column="2" lean-forward="false" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+                <state relative-caret-position="608">
+                  <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -93,7 +65,7 @@
           <file leaf-file-name="Chat.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Chat.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="228">
+                <state relative-caret-position="247">
                   <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
                   <folding />
                 </state>
@@ -104,7 +76,7 @@
             <entry file="file://$PROJECT_DIR$/Chat.c">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="380">
-                  <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+                  <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -138,7 +110,7 @@
             <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.c">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="38">
-                  <caret line="2" column="175" lean-forward="true" selection-start-line="2" selection-start-column="175" selection-end-line="2" selection-end-column="195" />
+                  <caret line="2" column="175" lean-forward="false" selection-start-line="2" selection-start-column="175" selection-end-line="2" selection-end-column="195" />
                   <folding />
                 </state>
               </provider>
@@ -192,7 +164,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -275,33 +247,33 @@
       <workItem from="1512518500847" duration="5874000" />
       <workItem from="1512559360905" duration="691000" />
       <workItem from="1512633009857" duration="1879000" />
+      <workItem from="1513434109392" duration="949000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10762000" />
+    <option name="totallyTimeSpent" value="11711000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16197917" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -393,13 +365,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log" />
     <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -412,7 +378,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -458,13 +423,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log" />
     <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -544,19 +503,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeError.log" />
     <entry file="file://$PROJECT_DIR$/main.c" />
     <entry file="file://$PROJECT_DIR$/ThreadReception.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -564,7 +516,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
           <caret line="94" column="48" lean-forward="false" selection-start-line="94" selection-start-column="48" selection-end-line="94" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -572,7 +523,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="422">
           <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -580,7 +530,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -588,7 +537,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -596,23 +544,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1843">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" />
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -620,7 +559,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="316">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -628,14 +566,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="18" column="21" lean-forward="false" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ProtocoleIACOP.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
-          <caret line="2" column="175" lean-forward="true" selection-start-line="2" selection-start-column="175" selection-end-line="2" selection-end-column="195" />
+          <caret line="2" column="175" lean-forward="false" selection-start-line="2" selection-start-column="175" selection-end-line="2" selection-end-column="195" />
           <folding />
         </state>
       </provider>
@@ -659,14 +596,14 @@
     <entry file="file://$PROJECT_DIR$/Chat.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Chat.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
+        <state relative-caret-position="247">
           <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
           <folding />
         </state>
@@ -674,8 +611,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SocketUDP.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="2" lean-forward="false" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+        <state relative-caret-position="608">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
