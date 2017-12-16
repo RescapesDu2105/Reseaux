@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% 
-    if(session.getAttribute("Connected") != null)
+    if(session.getAttribute("isUserLoggedIn") != null)
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
 %>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
+        
         <title>Connexion</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
@@ -26,7 +26,7 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
+                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPInit.jsp"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
             </div>
         </nav>
         <br><br><br><br>
@@ -36,7 +36,7 @@
                     <form class="form-signin" id="loginform" action="ControlDataCenter" method="POST">
                         <h2 id="HeaderConnexion" class="form-signin-heading"><i class="fa fa-sign-in"></i> Connexion</h2>
                         <% if(session.getAttribute("ErrorLogin") != null)
-                        { 
+                        {
                             out.println("<div class=\"alert alert-danger\" role=\"alert\">"+ session.getAttribute("ErrorLogin") +"</div>"); 
                             session.setAttribute("ErrorLogin", null);
                         } %>
@@ -64,11 +64,7 @@
             function InscriptionAddInfos(CheckBox)
             {
                 if(CheckBox.checked)
-                {
-                    /*var div = document.createElement("div");
-                    div.setAttribute('class', "form-group");
-                    div.id = "div_inputNomPrenom";*/
-                                        
+                {                                        
                     var inputNom = document.createElement("input");                   
                     inputNom.type = "text";
                     inputNom.id = "inputNom";
@@ -105,11 +101,7 @@
             
                     div2.appendChild(labelPrenom);
                     div2.appendChild(inputPrenom);
-                    
-                    
-                    /*div.appendChild(inputNom);
-                    div.appendChild(inputPrenom);*/
-                    
+                                        
                     document.getElementById("loginform").insertBefore(div1, document.getElementById("inputHidden"));
                     document.getElementById("loginform").insertBefore(div2, document.getElementById("inputHidden"));
                 }

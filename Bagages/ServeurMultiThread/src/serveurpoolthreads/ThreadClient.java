@@ -24,85 +24,85 @@ public class ThreadClient extends Thread {
     private final ConsoleServeur GUIApplication;
     private final ServerSocket SSocket;
     private Socket CSocket = null;
-    
+
     private ObjectInputStream ois = null;
     private ObjectOutputStream oos = null;
-    
+
     private Runnable TacheEnCours = null; //Pas utile
-    
+
     private final Properties Prop;
 
-    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop) 
+    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop)
     {
         this.Nom = Nom;
         this.SSocket = SSocket;
-        this.GUIApplication = GUIApplication;    
+        this.GUIApplication = GUIApplication;
         this.Prop = Prop;
     }
-    
-    
+
+
     @Override
     public void run()
-    {  
-        while(!isInterrupted()) 
+    {
+        while(!isInterrupted())
         {
-            try 
+            try
             {                
                 GUIApplication.TraceEvenements("Serveur#En attente#" + getNom());
                 CSocket = SSocket.accept();
                 System.out.println("CSocket = " + CSocket.isClosed() + " " + CSocket.isConnected());
                 setOos(new ObjectOutputStream(this.CSocket.getOutputStream()));
                 GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#" + getNom());
-            } 
-            catch (IOException ex) 
+            }
+            catch (IOException ex)
             {
                 if (!ex.getMessage().toUpperCase().equals("SOCKET CLOSED"))
                     System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
                 this.interrupt();
             }
-            
+
             while (getCSocket() != null && !getCSocket().isClosed())
-            {  
-                Requete req = RecevoirRequete(); 
+            {
+                Requete req = RecevoirRequete();
                 if (req != null)
                 {
-                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());                    
-                    
+                    GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getNomTypeRequete() + "#" + getNom());
+
                     this.TacheEnCours = req.createRunnable(getProp());
-                    this.TacheEnCours.run();  
-                    
+                    this.TacheEnCours.run();
+
                     EnvoyerReponse(CSocket, req.getReponse());
                     GUIApplication.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#" + req.getReponse().getChargeUtile().get("Message")+ "#" + getNom());
                     if (req.getReponse().getCode() == Reponse.LOG_OUT_OK)
-                    {                        
-                        try 
+                    {
+                        try
                         {
                             CSocket.close();
-                        } 
-                        catch (IOException ex) 
+                        }
+                        catch (IOException ex)
                         {
                             req.getReponse().setCode(Reponse.INTERNAL_SERVER_ERROR);
                             req.getReponse().getChargeUtile().put("Message", Reponse.INTERNAL_SERVER_ERROR_MESSAGE);
                         }
                     }
-                } 
+                }
             }
-            
-            try 
+
+            try
             {
                 if (getOis() != null)
-                {                    
+                {
                     getOis().close();
                     setOis(null);
                 }
-                
-                if (getOos() != null) 
-                {                    
+
+                if (getOos() != null)
+                {
                     getOos().close();
                     setOos(null);
                 }
-            } 
-            catch (IOException ex) 
+            }
+            catch (IOException ex)
             {
                 System.err.println("Erreur d'accept ! [" + ex.getMessage() + "]");
             }
@@ -110,59 +110,59 @@ public class ThreadClient extends Thread {
         }
         System.out.println(getNom() + " Je m'arrête");
     }
-    
+
     public Requete RecevoirRequete()
-    {        
+    {
         Requete req;
-        
-        try 
+
+        try
         {
             if (getOis() == null)
                 setOis(new ObjectInputStream(CSocket.getInputStream()));
-            
+
             req = (Requete)ois.readObject();
-            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());               
-        } 
-        catch (IOException ex) 
+            System.out.println("Requete lue par le serveur, instance de " + req.getClass().getName());
+        }
+        catch (IOException ex)
         {
-            try 
+            try
             {
                 CSocket.close();
-            } 
-            catch (IOException ex1) 
-            {
-                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
             }
-            return null;
-        } 
-        catch (ClassNotFoundException ex) 
-        {
-            System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
-            try 
-            {
-                CSocket.close();
-            } 
-            catch (IOException ex1) 
+            catch (IOException ex1)
             {
                 System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
             }
             return null;
         }
-        
+        catch (ClassNotFoundException ex)
+        {
+            System.err.println("Erreur de definition de classe ! [" + ex.getMessage() + "]");
+            try
+            {
+                CSocket.close();
+            }
+            catch (IOException ex1)
+            {
+                System.err.println("Erreur socket ! [" + ex1.getMessage() + "]");
+            }
+            return null;
+        }
+
         return req;
-    }   
-    
+    }
+
     public void EnvoyerReponse(Socket s, Reponse Rep)
     {
-        try 
-        {   
+        try
+        {
             if (oos == null)
                 oos = new ObjectOutputStream(s.getOutputStream());
-            
-            oos.writeObject(Rep); 
+
+            oos.writeObject(Rep);
             oos.flush();
-        } 
-        catch (IOException ex) 
+        }
+        catch (IOException ex)
         {
             System.err.println("Erreur d'envoi de la réponse ! [" + ex.getMessage() + "]");
         }
@@ -187,7 +187,7 @@ public class ThreadClient extends Thread {
     public Socket getCSocket() {
         return CSocket;
     }
-        
+
     public String getNom() {
         return Nom;
     }

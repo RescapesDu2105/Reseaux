@@ -6,16 +6,16 @@
 package database.utilities;
 
 import java.io.Serializable;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -97,11 +97,12 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         try
         {
             Statement stmt = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            //System.out.println("Requete = " + Requete);
+            System.out.println("Requete = " + Requete);
             return stmt.executeQuery(Requete);
         }
         catch (SQLException Ex)
         {
+            Ex.printStackTrace();
             if (!Connection.getAutoCommit())
                 Rollback();
         }
@@ -154,10 +155,10 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         try
         {
             String Requete = ""
-                    + "CREATE EVENT " + EventName + " "
-                    + "ON SCHEDULE " + Schedule + " "
-                    + "DO "
-                        + Task;
+                + "CREATE EVENT " + EventName + " "
+                + "ON SCHEDULE " + Schedule + " "
+                + "DO "
+                    + Task;
             //System.out.println("Requete = " + Requete);
             Statement.execute(Requete);
             if(!getAutoCommit())
@@ -165,6 +166,53 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         }
         catch (SQLException Ex)
         {
+            if (!Connection.getAutoCommit())
+                Rollback();
+        }
+    }
+    public synchronized void DropEvent(String EventName) throws SQLException    
+    {
+        String Requete = "DROP EVENT IF EXISTS " + EventName;
+        
+        try
+        {
+            Statement.execute(Requete);
+                if(!getAutoCommit())
+                    Commit();
+        }
+        catch (SQLException Ex)
+        {
+            if (!Connection.getAutoCommit())
+                Rollback();
+        }
+    }
+    
+    public synchronized void doProcedure(String ProcedureName, ArrayList<Object> Parameters) throws SQLException
+    {
+        String Requete = "{call " + ProcedureName + " (";
+        
+        for(int i = 0 ; i < Parameters.size() ; i++)
+        {            
+            Requete = Requete + "?,";
+        }
+        Requete = Requete.substring(0, Requete.length() - 1);
+        Requete = Requete + ")}";
+                
+        CallableStatement CStatement = getConnection().prepareCall(Requete);
+        
+        try
+        {
+            for (int i = 0 ; i < Parameters.size() ; i++)
+            {
+                CStatement.setObject(i+1, Parameters.get(i));
+            }
+            
+            CStatement.execute();
+                if(!getAutoCommit())
+                    Commit();
+        }
+        catch (SQLException Ex)
+        {       
             if (!Connection.getAutoCommit())
                 Rollback();
         }
