@@ -29,18 +29,30 @@ class SocketUdp
     protected :
         int hSocket=-1; /* Handle de la socket */
         struct hostent * infosHost;
-        struct in_addr adresseIPServeur, adresseIPClient;
+        struct in_addr adresseIPUdp;
         struct sockaddr_in adresseSocketUdp;
         unsigned int tailleSockaddr_in;
 
     public :
         /*************CONSTRUCTOR*************/
-        SocketUdp(std::string host, int port, bool isIP);
+        SocketUdp(int hsocket , hostent **infohost);
 
         /*************GETTER/SETTER*************/
     int getHSocket() const;
 
     void setHSocket(int hSocket);
+
+    const sockaddr_in &getAdresseSocketUdp() const;
+
+    void setAdresseSocketUdp(const sockaddr_in &adresseSocketUdp);
+
+    hostent *getInfosHost() const;
+
+    void setInfosHost(hostent *infosHost);
+
+    const in_addr &getAdresseIPUdp() const;
+
+    void setAdresseIPUdp();
 };
 
 #endif //CPP_CHAT_SOCKETUDP_H
