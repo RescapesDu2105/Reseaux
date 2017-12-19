@@ -44,7 +44,7 @@ class SocketUdp
 
     const sockaddr_in &getAdresseSocketUdp() const;
 
-    void setAdresseSocketUdp(const sockaddr_in &adresseSocketUdp);
+    void setAdresseSocketUdp();
 
     hostent *getInfosHost() const;
 
@@ -53,6 +53,11 @@ class SocketUdp
     const in_addr &getAdresseIPUdp() const;
 
     void setAdresseIPUdp();
+
+    unsigned int getTailleSockaddr_in() const;
+
+    void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
+
 };
 
 #endif //CPP_CHAT_SOCKETUDP_H

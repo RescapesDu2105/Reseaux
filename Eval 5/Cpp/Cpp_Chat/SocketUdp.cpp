@@ -24,6 +24,14 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
     //setAdresseIPUdp();
     //memcpy( &adresseIPUdp, getInfosHost()->h_addr,getInfosHost()->h_length);
     memcpy( &adresseIPUdp, (*infohost)->h_addr,(*infohost)->h_length);
+
+    setTailleSockaddr_in(sizeof(struct sockaddr_in));
+
+    setAdresseSocketUdp();
+    memset(&adresseSocketUdp, 0, getTailleSockaddr_in());
+    adresseSocketUdp.sin_family = AF_INET;
+    adresseSocketUdp.sin_port = htons(PORTUPD);
+    memcpy(&adresseSocketUdp.sin_addr, infosHost->h_addr,infosHost->h_length);
 }
 
 int SocketUdp::getHSocket() const {
@@ -38,8 +46,11 @@ const sockaddr_in &SocketUdp::getAdresseSocketUdp() const {
     return adresseSocketUdp;
 }
 
-void SocketUdp::setAdresseSocketUdp(const sockaddr_in &adresseSocketUdp) {
-    SocketUdp::adresseSocketUdp = adresseSocketUdp;
+void SocketUdp::setAdresseSocketUdp() {
+    memset(&adresseSocketUdp, 0, getTailleSockaddr_in());
+    adresseSocketUdp.sin_family = AF_INET;
+    adresseSocketUdp.sin_port = htons(PORTUPD);
+    memcpy(&adresseSocketUdp.sin_addr, getInfosHost()->h_addr,getInfosHost()->h_length);
 }
 
 hostent *SocketUdp::getInfosHost() const {
@@ -57,3 +68,12 @@ const in_addr &SocketUdp::getAdresseIPUdp() const {
 void SocketUdp::setAdresseIPUdp() {
     memcpy( &adresseIPUdp, getInfosHost()->h_addr,getInfosHost()->h_length);
 }
+
+unsigned int SocketUdp::getTailleSockaddr_in() const {
+    return tailleSockaddr_in;
+}
+
+void SocketUdp::setTailleSockaddr_in(unsigned int tailleSockaddr_in) {
+    SocketUdp::tailleSockaddr_in = tailleSockaddr_in;
+}
+
