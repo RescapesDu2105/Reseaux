@@ -2,6 +2,7 @@
 // Created by Doublon on 19/12/2017.
 //
 
+#include <unistd.h>
 #include "SocketUdp.h"
 using namespace std;
 
@@ -33,6 +34,15 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
     adresseSocketUdp.sin_family = AF_INET;
     adresseSocketUdp.sin_port = htons(PORTUPD);
     memcpy(&adresseSocketUdp.sin_addr, infosHost->h_addr,infosHost->h_length);
+
+    /* 4. Le systeme prend connaissance de l'adresse et du port de la socket */
+    if (bind(hSocket, (struct sockaddr *)&adresseSocketUdp,
+             sizeof(struct sockaddr_in)) == -1)
+    {
+        printf("Erreur sur le bind de la socket %d\n", errno);
+        exit(1);
+    }
+    else printf("Bind adresse et port socket OK\n");
 }
 
 int SocketUdp::getHSocket() const {
@@ -76,5 +86,34 @@ unsigned int SocketUdp::getTailleSockaddr_in() const {
 
 void SocketUdp::setTailleSockaddr_in(unsigned int tailleSockaddr_in) {
     SocketUdp::tailleSockaddr_in = tailleSockaddr_in;
+}
+
+void SocketUdp::EnvoyerMessageUDP() {
+    /* 4. Envoi d'un message */
+    char msgEnvoie[MAXSTRING];
+    printf("Message a envoyer au groupe : ");
+    gets(msgEnvoie);
+    if (sendto(hSocket, msgEnvoie, MAXSTRING, 0, (struct sockaddr *)getAdresseSocketUdp(), getTailleSockaddr_in()) == -1)
+    {
+        printf("Erreur sur le send de la socket %d\n", errno);
+        close(hSocket); /* Fermeture de la socket */
+        exit(1);
+    }
+    else printf("Send socket OK\n");
+}
+
+void SocketUdp::RecevoirMessageUPD() {
+    /* 5.Reception d'un message*/
+    char msgRecu[MAXSTRING];
+    int nbreRecv, cpt=0 ,tailleSocksddr_in = sizeof(struct sockaddr_in);
+    if ((nbreRecv = recvfrom(hSocket, msgRecu, MAXSTRING, 0, (struct sockaddr *)getAdresseSocketUdp(),&tailleSocksddr_in)) == -1)
+    {
+        printf("Erreur sur le recvfrom de la socket %d\n", errno);
+        close(hSocket); /* Fermeture de la socket */
+        exit(1);
+    }
+    msgRecu[nbreRecv+1]=0;
+    printf("Message recu = %s\n", msgRecu);
+    printf("Adresse de l'emetteur = %s\n", inet_ntoa(getAdresseSocketUdp().sin_addr));
 }
 

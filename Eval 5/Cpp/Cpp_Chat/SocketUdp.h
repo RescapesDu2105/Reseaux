@@ -37,6 +37,11 @@ class SocketUdp
         /*************CONSTRUCTOR*************/
         SocketUdp(int hsocket , hostent **infohost);
 
+
+        /*************METHODE*************/
+        void EnvoyerMessageUDP();
+        void RecevoirMessageUPD();
+
         /*************GETTER/SETTER*************/
         int getHSocket() const;
 
