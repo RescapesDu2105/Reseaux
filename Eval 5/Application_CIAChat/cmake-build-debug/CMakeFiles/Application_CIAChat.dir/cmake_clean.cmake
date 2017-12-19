@@ -1,11 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Application_CIAChat.dir/Chat.c.obj"
-  "CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.obj"
-  "CMakeFiles/Application_CIAChat.dir/SocketUDP.c.obj"
-  "CMakeFiles/Application_CIAChat.dir/ThreadReception.c.obj"
+  "CMakeFiles/Application_CIAChat.dir/Chat.c.o"
+  "CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.o"
+  "CMakeFiles/Application_CIAChat.dir/SocketUDP.c.o"
+  "CMakeFiles/Application_CIAChat.dir/ThreadReception.c.o"
   "Application_CIAChat.pdb"
   "Application_CIAChat.exe"
-  "Application_CIAChat.exe.manifest"
   "libApplication_CIAChat.dll.a"
 )
 

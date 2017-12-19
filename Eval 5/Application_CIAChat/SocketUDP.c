@@ -60,7 +60,7 @@ void SettingUpSocket(int hSocket, struct ip_mreq mreq, struct sockaddr_in adress
 
 void EnvoyerMessageUDP(char* Message, int hSocket, struct sockaddr_in adresseSocket, unsigned int tailleSockaddr_in)
 {
-    if (sendto(hSocket, Message, MAXSTRING, 0, &adresseSocket, tailleSockaddr_in) == -1)
+    if (sendto(hSocket, Message, MAXSTRING, 0, (const struct sockaddr *) &adresseSocket, tailleSockaddr_in) == -1)
     {
         printf("Erreur sur le sendto de la socket %d\n", errno);
         CloseSocketUDP(hSocket);
@@ -95,6 +95,6 @@ void RecevoirMessageUDP(int hSocket, struct sockaddr_in adresseSocket, unsigned 
 
 void CloseSocketUDP(int hSocket)
 {
-    close(hSocket); /* Fermeture de la socket */
+    //close(hSocket); /* Fermeture de la socket */
     printf("Socket client fermee\n");
 }

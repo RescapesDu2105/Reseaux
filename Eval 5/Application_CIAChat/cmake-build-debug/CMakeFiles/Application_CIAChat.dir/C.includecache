@@ -1,0 +1,60 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.c
+Chat.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
+ProtocoleIACOP.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h
+ThreadReception.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ThreadReception.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.c
+ProtocoleIACOP.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h
+SocketUDP.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUDP.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUDP.c
+SocketUDP.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUDP.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUDP.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+sys/types.h
+-
+sys/socket.h
+-
+sys/time.h
+-
+netdb.h
+-
+errno.h
+-
+netinet/in.h
+-
+netinet/tcp.h
+-
+arpa/inet.h
+-
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ThreadReception.c
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/ThreadReception.h
+pthread.h
+-
+

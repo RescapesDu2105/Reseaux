@@ -12,7 +12,7 @@ int main()
     pthread_t ThreadReception = NULL;
 
     InitSockets(&hSocketRecv, &hSocketSend, infosHost, &adresseIP, &adresseSocket, &tailleSockaddr_in, mreq, Port);
-    ThreadReception = InitThread();
+    printf("cc");
 
 
     return 0;
