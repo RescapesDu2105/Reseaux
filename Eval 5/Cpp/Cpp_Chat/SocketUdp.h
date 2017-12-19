@@ -36,9 +36,11 @@ class SocketUdp
     public :
         /*************CONSTRUCTOR*************/
         SocketUdp(int hsocket , hostent **infohost);
+        SocketUdp(const SocketUdp& s);
+        ~SocketUdp();
 
 
-        /*************METHODE*************/
+    /*************METHODE*************/
         void EnvoyerMessageUDP();
         void RecevoirMessageUPD();
 

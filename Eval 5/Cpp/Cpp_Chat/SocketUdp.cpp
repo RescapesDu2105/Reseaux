@@ -6,6 +6,7 @@
 #include "SocketUdp.h"
 using namespace std;
 
+/*************CONSTRUCTOR*************/
 SocketUdp::SocketUdp(int hsocket , hostent **infohost)
 {
     /* 1. Creation de la socket */
@@ -45,6 +46,18 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
     else printf("Bind adresse et port socket OK\n");
 }
 
+SocketUdp::SocketUdp(const SocketUdp& s)
+{
+    memcpy(&adresseSocketUdp, &s.adresseSocketUdp, sizeof(struct sockaddr_in));
+    setHSocket(s.hSocket);
+}
+
+SocketUdp::~SocketUdp() {
+    if(hSocket != -1)
+        close(hSocket);
+}
+
+/*************GETTER/SETTER*************/
 int SocketUdp::getHSocket() const {
     return hSocket;
 }
@@ -88,6 +101,7 @@ void SocketUdp::setTailleSockaddr_in(unsigned int tailleSockaddr_in) {
     SocketUdp::tailleSockaddr_in = tailleSockaddr_in;
 }
 
+/*************METHODE*************/
 void SocketUdp::EnvoyerMessageUDP() {
     /* 4. Envoi d'un message */
     char msgEnvoie[MAXSTRING];
@@ -116,4 +130,5 @@ void SocketUdp::RecevoirMessageUPD() {
     printf("Message recu = %s\n", msgRecu);
     printf("Adresse de l'emetteur = %s\n", inet_ntoa(getAdresseSocketUdp().sin_addr));
 }
+
 
