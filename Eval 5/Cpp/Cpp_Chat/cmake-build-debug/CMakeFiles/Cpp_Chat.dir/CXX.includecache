@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/./Cpp_Lib/Socket.h
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+string
+-
+iostream
+-
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+netdb.h
+-
+errno.h
+-
+sstream
+-
+
+D:/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp
+iostream
+-
+./Cpp_Lib/Socket.h
+D:/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/./Cpp_Lib/Socket.h
+
