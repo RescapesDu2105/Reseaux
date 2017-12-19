@@ -27,6 +27,7 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
 
     setTailleSockaddr_in(sizeof(struct sockaddr_in));
 
+    /* 3. Preparation de la structure sockaddr_in */
     setAdresseSocketUdp();
     memset(&adresseSocketUdp, 0, getTailleSockaddr_in());
     adresseSocketUdp.sin_family = AF_INET;

@@ -38,25 +38,25 @@ class SocketUdp
         SocketUdp(int hsocket , hostent **infohost);
 
         /*************GETTER/SETTER*************/
-    int getHSocket() const;
+        int getHSocket() const;
 
-    void setHSocket(int hSocket);
+        void setHSocket(int hSocket);
 
-    const sockaddr_in &getAdresseSocketUdp() const;
+        const sockaddr_in &getAdresseSocketUdp() const;
 
-    void setAdresseSocketUdp();
+        void setAdresseSocketUdp();
 
-    hostent *getInfosHost() const;
+        hostent *getInfosHost() const;
 
-    void setInfosHost(hostent *infosHost);
+        void setInfosHost(hostent *infosHost);
 
-    const in_addr &getAdresseIPUdp() const;
+        const in_addr &getAdresseIPUdp() const;
 
-    void setAdresseIPUdp();
+        void setAdresseIPUdp();
 
-    unsigned int getTailleSockaddr_in() const;
+        unsigned int getTailleSockaddr_in() const;
 
-    void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
+        void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
 
 };
 
