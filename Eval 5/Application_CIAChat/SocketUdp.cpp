@@ -6,7 +6,7 @@
 #include "SocketUdp.h"
 
 /*************CONSTRUCTOR*************/
-SocketUdp::SocketUdp(int hsocket ,char *adresseip , int port )
+SocketUdp::SocketUdp(char *adresseip , int port )
 {
     /* 1. Creation de la socket */
     setHSocket(::socket(AF_INET, SOCK_STREAM, 0));

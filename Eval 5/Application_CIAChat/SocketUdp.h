@@ -36,7 +36,7 @@ class SocketUdp
 
     public :
         /*************CONSTRUCTOR*************/
-        SocketUdp(int hsocket ,char *adresseip , int port );
+        SocketUdp(char *adresseip , int port );
         SocketUdp(const SocketUdp& s);
         ~SocketUdp();
 
