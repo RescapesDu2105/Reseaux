@@ -1,1 +1,0 @@
-/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/Application_CIAChat.dir/Chat.c.o CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.o CMakeFiles/Application_CIAChat.dir/SocketUDP.c.o CMakeFiles/Application_CIAChat.dir/ThreadReception.c.o  -o Application_CIAChat.exe -Wl,--out-implib,libApplication_CIAChat.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

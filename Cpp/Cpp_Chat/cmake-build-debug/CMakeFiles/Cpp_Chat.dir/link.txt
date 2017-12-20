@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/Cpp_Chat.dir/main.cpp.o CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o  -o Cpp_Chat.exe -Wl,--out-implib,libCpp_Chat.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
