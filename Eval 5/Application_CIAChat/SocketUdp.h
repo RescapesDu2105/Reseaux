@@ -17,6 +17,8 @@
 #include <netinet/in.h> /* pour la conversion adresse reseau->format dot ainsi que le conversion format local/format reseau */
 #include <netinet/tcp.h> /* pour la conversion adresse reseau->format dot */
 #include <arpa/inet.h> /* pour la conversion adresse reseau->format dot */
+#include <unistd.h>
+#include <iostream>
 
 #define SEPARATOR "#"
 #define ADRESSEIP "234.5.5.9"
@@ -45,26 +47,25 @@ class SocketUdp
         void EnvoyerMessageUDP();
         void RecevoirMessageUDP();
 
-        /*************GETTER/SETTER*************/
-        int getHSocket() const;
+        void CreerSocket();
+        void FindInfosHost(char* adresseip);
+        void PreparerSockAddr_In(int port);
+        void BindSocket();
 
+    /*************GETTER/SETTER*************/
+        int getHSocket() const;
         void setHSocket(int hSocket);
 
         const sockaddr_in &getAdresseSocketUdp() const;
-
         void setAdresseSocketUdp();
 
         hostent *getInfosHost() const;
     
         const in_addr &getAdresseIPUdp() const;
-
         void setAdresseIPUdp();
 
         unsigned int getTailleSockaddr_in() const;
-
         void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
-
-        //void Init();
 };
 
 #endif //CPP_CHAT_SOCKETUDP_H

@@ -6,7 +6,7 @@
 
 Chat::Chat()
 {
-
+    socketUDP = new SocketUdp((char *)ADRESSEIP, PORTUPD);
 }
 
 Chat::~Chat()
@@ -26,29 +26,29 @@ const void Chat::Pause() const
     system("read");
 }
 
-const void Chat::ActiverEcho(termios oldt) const
-{
-    // REACTIVE L'AFFICHAGE DANS LE TERMINAL //
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    // ************************************* //
-}
-
-const termios Chat::DesactiverEcho(termios oldt) const
-{
-    // DESACTIVE L'AFFICHAGE DANS LE TERMINAL //
-    termios oldt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    termios newt = oldt;
-    newt.c_lflag &= ~ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    // ************************************** //
-
-    return oldt;
-}
-
 void Chat::sendMessage()
 {
 
+}
+
+const string &Chat::getUser() const
+{
+    return user;
+}
+
+void Chat::setUser(const string &user)
+{
+    Chat::user = user;
+}
+
+SocketUdp *Chat::getSocketUDP() const
+{
+    return socketUDP;
+}
+
+void Chat::setSocketUDP(SocketUdp *socketUDP)
+{
+    Chat::socketUDP = socketUDP;
 }
 
 

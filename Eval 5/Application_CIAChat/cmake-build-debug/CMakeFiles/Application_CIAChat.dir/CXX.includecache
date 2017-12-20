@@ -6,7 +6,6 @@
 
 #IncludeRegexTransform: 
 
-<<<<<<< HEAD
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp
 Chat.h
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h
@@ -30,44 +29,10 @@ SocketUdp.h
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp
-unistd.h
--
 SocketUdp.h
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
-cstdio
-=======
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.cpp
-Chat.h
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
-
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
-stdio.h
->>>>>>> b64417d407a08848b9ea970c2fb55c61c19332fe
--
-cstdlib
--
-<<<<<<< HEAD
-cstring
-=======
-iostream
--
-fstream
--
-string
--
-string.h
->>>>>>> b64417d407a08848b9ea970c2fb55c61c19332fe
--
-
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp
-unistd.h
--
-SocketUdp.h
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
-
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 cstdio
 -
 cstdlib
@@ -92,14 +57,14 @@ netinet/tcp.h
 -
 arpa/inet.h
 -
+unistd.h
+-
+iostream
+-
 
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp
+/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/main.cpp
 iostream
 -
 Chat.h
-<<<<<<< HEAD
 /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h
-=======
-/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
->>>>>>> b64417d407a08848b9ea970c2fb55c61c19332fe
 

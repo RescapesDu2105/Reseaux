@@ -45,19 +45,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
+CMAKE_COMMAND = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
 
 # The command to remove a file.
-RM = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
+RM = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat"
+CMAKE_SOURCE_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
+CMAKE_BINARY_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
 
 #=============================================================================
 # Target rules for target CMakeFiles/Application_CIAChat.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-
 CMakeFiles/Application_CIAChat.dir/all:
 	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/depend
 	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=1,2,3,4 "Built target Application_CIAChat"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=1,2,3,4 "Built target Application_CIAChat"
 .PHONY : CMakeFiles/Application_CIAChat.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/Application_CIAChat.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Application_CIAChat.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 4
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Application_CIAChat.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 0
 .PHONY : CMakeFiles/Application_CIAChat.dir/rule
 
 # Convenience name for target.

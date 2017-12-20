@@ -5,12 +5,12 @@
 #ifndef APPLICATION_CIACHAT_CHAT_H
 #define APPLICATION_CIACHAT_CHAT_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <termios.h>
 #include "SocketUdp.h"
 
@@ -21,16 +21,20 @@ class Chat
 {
     private:
         string user;
-        SocketUdp socketUDP;
+        SocketUdp *socketUDP;
 
     public:
         Chat();
         ~Chat();
 
+        const string &getUser() const;
+        void setUser(const string &user);
+
+        SocketUdp *getSocketUDP() const;
+        void setSocketUDP(SocketUdp *socketUDP);
+
         const void ClearScreen() const;
         const void Pause() const;
-        const void ActiverEcho(termios oldt) const;
-        const termios DesactiverEcho(termios oldt) const;
 
         void sendMessage();
 };

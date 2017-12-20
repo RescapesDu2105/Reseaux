@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
+CMAKE_COMMAND = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
 
 # The command to remove a file.
-RM = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
+RM = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat"
+CMAKE_SOURCE_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
+CMAKE_BINARY_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Application_CIAChat.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/Application_CIAChat.dir/flags.make
 
 CMakeFiles/Application_CIAChat.dir/main.cpp.o: CMakeFiles/Application_CIAChat.dir/flags.make
 CMakeFiles/Application_CIAChat.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Application_CIAChat.dir/main.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/main.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Application_CIAChat.dir/main.cpp.o"
+	C:/cygwin64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/main.cpp.o -c "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/main.cpp"
 
 CMakeFiles/Application_CIAChat.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Application_CIAChat.dir/main.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp" > CMakeFiles/Application_CIAChat.dir/main.cpp.i
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/main.cpp" > CMakeFiles/Application_CIAChat.dir/main.cpp.i
 
 CMakeFiles/Application_CIAChat.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Application_CIAChat.dir/main.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp" -o CMakeFiles/Application_CIAChat.dir/main.cpp.s
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/main.cpp" -o CMakeFiles/Application_CIAChat.dir/main.cpp.s
 
 CMakeFiles/Application_CIAChat.dir/main.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/Application_CIAChat.dir/main.cpp.o.provides.build: CMakeFiles/Applica
 
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o: CMakeFiles/Application_CIAChat.dir/flags.make
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o: ../SocketUdp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o"
+	C:/cygwin64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o -c "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp"
 
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" > CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.i
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" > CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.i
 
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" -o CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" -o CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s
 
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o.provides.build: CMakeFiles/Ap
 
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o: CMakeFiles/Application_CIAChat.dir/flags.make
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o: ../Chat.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Application_CIAChat.dir/Chat.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/Chat.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Application_CIAChat.dir/Chat.cpp.o"
+	C:/cygwin64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Application_CIAChat.dir/Chat.cpp.o -c "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp"
 
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Application_CIAChat.dir/Chat.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.cpp" > CMakeFiles/Application_CIAChat.dir/Chat.cpp.i
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp" > CMakeFiles/Application_CIAChat.dir/Chat.cpp.i
 
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Application_CIAChat.dir/Chat.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.cpp" -o CMakeFiles/Application_CIAChat.dir/Chat.cpp.s
+	C:/cygwin64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp" -o CMakeFiles/Application_CIAChat.dir/Chat.cpp.s
 
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o.requires:
 
@@ -143,7 +143,7 @@ Application_CIAChat.exe: CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o
 Application_CIAChat.exe: CMakeFiles/Application_CIAChat.dir/Chat.cpp.o
 Application_CIAChat.exe: CMakeFiles/Application_CIAChat.dir/build.make
 Application_CIAChat.exe: CMakeFiles/Application_CIAChat.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Application_CIAChat.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Application_CIAChat.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Application_CIAChat.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -162,6 +162,6 @@ CMakeFiles/Application_CIAChat.dir/clean:
 .PHONY : CMakeFiles/Application_CIAChat.dir/clean
 
 CMakeFiles/Application_CIAChat.dir/depend:
-	cd "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/Application_CIAChat.dir/depend
 
