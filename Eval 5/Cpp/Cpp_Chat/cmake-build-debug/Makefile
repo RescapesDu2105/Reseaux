@@ -48,10 +48,10 @@ RM = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat"
+CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
+CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -111,125 +111,71 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Application_CIAChat
+# Target rules for targets named Cpp_Chat
 
 # Build rule for target.
-Application_CIAChat: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Application_CIAChat
-.PHONY : Application_CIAChat
+Cpp_Chat: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Cpp_Chat
+.PHONY : Cpp_Chat
 
 # fast build rule for target.
-Application_CIAChat/fast:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/build
-.PHONY : Application_CIAChat/fast
+Cpp_Chat/fast:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/build
+.PHONY : Cpp_Chat/fast
 
-Chat.o: Chat.c.o
+SocketUdp.o: SocketUdp.cpp.o
 
-.PHONY : Chat.o
-
-# target to build an object file
-Chat.c.o:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.c.o
-.PHONY : Chat.c.o
-
-Chat.i: Chat.c.i
-
-.PHONY : Chat.i
-
-# target to preprocess a source file
-Chat.c.i:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.c.i
-.PHONY : Chat.c.i
-
-Chat.s: Chat.c.s
-
-.PHONY : Chat.s
-
-# target to generate assembly for a file
-Chat.c.s:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.c.s
-.PHONY : Chat.c.s
-
-ProtocoleIACOP.o: ProtocoleIACOP.c.o
-
-.PHONY : ProtocoleIACOP.o
+.PHONY : SocketUdp.o
 
 # target to build an object file
-ProtocoleIACOP.c.o:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.o
-.PHONY : ProtocoleIACOP.c.o
+SocketUdp.cpp.o:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o
+.PHONY : SocketUdp.cpp.o
 
-ProtocoleIACOP.i: ProtocoleIACOP.c.i
+SocketUdp.i: SocketUdp.cpp.i
 
-.PHONY : ProtocoleIACOP.i
+.PHONY : SocketUdp.i
 
 # target to preprocess a source file
-ProtocoleIACOP.c.i:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.i
-.PHONY : ProtocoleIACOP.c.i
+SocketUdp.cpp.i:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i
+.PHONY : SocketUdp.cpp.i
 
-ProtocoleIACOP.s: ProtocoleIACOP.c.s
+SocketUdp.s: SocketUdp.cpp.s
 
-.PHONY : ProtocoleIACOP.s
+.PHONY : SocketUdp.s
 
 # target to generate assembly for a file
-ProtocoleIACOP.c.s:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.s
-.PHONY : ProtocoleIACOP.c.s
+SocketUdp.cpp.s:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s
+.PHONY : SocketUdp.cpp.s
 
-SocketUDP.o: SocketUDP.c.o
+main.o: main.cpp.o
 
-.PHONY : SocketUDP.o
+.PHONY : main.o
 
 # target to build an object file
-SocketUDP.c.o:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUDP.c.o
-.PHONY : SocketUDP.c.o
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-SocketUDP.i: SocketUDP.c.i
+main.i: main.cpp.i
 
-.PHONY : SocketUDP.i
-
-# target to preprocess a source file
-SocketUDP.c.i:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUDP.c.i
-.PHONY : SocketUDP.c.i
-
-SocketUDP.s: SocketUDP.c.s
-
-.PHONY : SocketUDP.s
-
-# target to generate assembly for a file
-SocketUDP.c.s:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUDP.c.s
-.PHONY : SocketUDP.c.s
-
-ThreadReception.o: ThreadReception.c.o
-
-.PHONY : ThreadReception.o
-
-# target to build an object file
-ThreadReception.c.o:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.c.o
-.PHONY : ThreadReception.c.o
-
-ThreadReception.i: ThreadReception.c.i
-
-.PHONY : ThreadReception.i
+.PHONY : main.i
 
 # target to preprocess a source file
-ThreadReception.c.i:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.c.i
-.PHONY : ThreadReception.c.i
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-ThreadReception.s: ThreadReception.c.s
+main.s: main.cpp.s
 
-.PHONY : ThreadReception.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-ThreadReception.c.s:
-	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.c.s
-.PHONY : ThreadReception.c.s
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -239,19 +185,13 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... Application_CIAChat"
-	@echo "... Chat.o"
-	@echo "... Chat.i"
-	@echo "... Chat.s"
-	@echo "... ProtocoleIACOP.o"
-	@echo "... ProtocoleIACOP.i"
-	@echo "... ProtocoleIACOP.s"
-	@echo "... SocketUDP.o"
-	@echo "... SocketUDP.i"
-	@echo "... SocketUDP.s"
-	@echo "... ThreadReception.o"
-	@echo "... ThreadReception.i"
-	@echo "... ThreadReception.s"
+	@echo "... Cpp_Chat"
+	@echo "... SocketUdp.o"
+	@echo "... SocketUdp.i"
+	@echo "... SocketUdp.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 
