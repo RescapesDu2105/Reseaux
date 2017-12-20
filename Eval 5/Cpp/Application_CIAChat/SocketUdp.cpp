@@ -10,7 +10,7 @@ SocketUdp::SocketUdp(char *adresseip, int port)
     CreerSocket();
     FindInfosHost(adresseip);
     PreparerSockAddr_In(port);
-    //BindSocket();
+    BindSocket();
     cout << "Fin de l'initialisation de la Socket UDP !" << endl;
 }
 
@@ -66,7 +66,7 @@ void SocketUdp::setTailleSockaddr_in(unsigned int tailleSockaddr_in) {
 /*************METHODE*************/
 void SocketUdp::EnvoyerMessageUDP(char * msgEnvoie) {
     /* 4. Envoi d'un message */
-    if (sendto(hSocket, msgEnvoie, MAXSTRING, 0, (struct sockaddr *)&adresseSocketUdp, getTailleSockaddr_in()) == -1)
+    if (sendto(hSocket, msgEnvoie, MAXSTRING, 0, (struct sockaddr *)&adresseSocketUdp,sizeof(sockaddr_in)) == -1)
     {
         printf("Erreur sur le send de la socket %d\n", errno);
         close(hSocket); /* Fermeture de la socket */
@@ -116,30 +116,34 @@ void SocketUdp::FindInfosHost(char* adresseip)
 
 void SocketUdp::PreparerSockAddr_In(int port)
 {
-    setTailleSockaddr_in(sizeof(struct sockaddr_in));
-    /* 3. Preparation de la structure sockaddr_in */
-    setAdresseSocketUdp();
-    memset(&adresseSocketUdp, 0, getTailleSockaddr_in());
-    adresseSocketUdp.sin_family = AF_INET;
-    adresseSocketUdp.sin_port = htons(port);
-    memcpy(&adresseSocketUdp.sin_addr, infosHost->h_addr,infosHost->h_length);
-}
+    //setsockopt(hSocket, SOL_SOCKET, SO_REUSEPORT, (char *)&reuse, sizeof(reuse));
 
-void SocketUdp::BindSocket()
-{
+    /******************Test******************************/
     int reuse = 1;
-    if(setsockopt(SocketUdp::hSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
+    if(setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
         perror("Setting SO_REUSEADDR error");
         close(getHSocket());
         exit(1);
     }
+    memset(&adresseSocketUdp, 0, sizeof(struct sockaddr_in));
+    adresseSocketUdp.sin_family = AF_INET;
+    adresseSocketUdp.sin_port = htons(port);
+    adresseSocketUdp.sin_addr.s_addr = htonl(INADDR_ANY);
+    /*****************FINTEST****************************/
+}
+
+void SocketUdp::BindSocket()
+{
+
+
     /* 4. Le systeme prend connaissance de l'adresse et du port de la socket */
-    if (bind(SocketUdp::hSocket, (struct sockaddr *)&adresseSocketUdp, sizeof(sockaddr_in)) < 0)
+    if (bind(hSocket, (struct sockaddr *)&adresseSocketUdp, sizeof(sockaddr_in)) < 0)
     {
         printf("Erreur sur le bind de la socket %d\n", errno);
         exit(1);
     }
     printf("Bind adresse et port socket OK\n");
+    printf("port : %d\n", adresseSocketUdp.sin_port);
 }
 
 
