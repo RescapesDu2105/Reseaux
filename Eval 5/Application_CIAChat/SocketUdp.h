@@ -65,6 +65,7 @@ class SocketUdp
 
         void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
 
+        //void Init();
 };
 
 #endif //CPP_CHAT_SOCKETUDP_H
