@@ -5,21 +5,21 @@
 #ifndef CPP_CHAT_SOCKETUDP_H
 #define CPP_CHAT_SOCKETUDP_H
 
-#include <stdio.h>
-#include <stdlib.h> /* pour exit */
-#include <string.h> /* pour memcpy */
+#include <cstdio>
+#include <cstdlib> /* pour exit */
+#include <cstring> /* pour memcpy */
 #include <string>
 #include <sys/types.h>
 #include <sys/socket.h> /* pour les types de socket */
 #include <sys/time.h> /* pour les types de socket */
 #include <netdb.h> /* pour la structure hostent */
-#include <errno.h>
+#include <cerrno>
 #include <netinet/in.h> /* pour la conversion adresse reseau->format dot ainsi que le conversion format local/format reseau */
 #include <netinet/tcp.h> /* pour la conversion adresse reseau->format dot */
 #include <arpa/inet.h> /* pour la conversion adresse reseau->format dot */
 
 #define SEPARATOR "#"
-#define ADRESSEIP "192.168.0.3"
+#define ADRESSEIP "234.5.5.9"
 #define PORTUPD 30051
 
 #define MAXSTRING 200

@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp">
+			<Option target="Application_CIAChat"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h">
+			<Option target="Application_CIAChat"/>
+		</Unit>
 		<Unit filename="/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp">
 			<Option target="Application_CIAChat"/>
 		</Unit>

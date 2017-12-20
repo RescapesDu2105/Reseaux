@@ -123,6 +123,33 @@ Application_CIAChat/fast:
 	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/build
 .PHONY : Application_CIAChat/fast
 
+Chat.o: Chat.cpp.o
+
+.PHONY : Chat.o
+
+# target to build an object file
+Chat.cpp.o:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.cpp.o
+.PHONY : Chat.cpp.o
+
+Chat.i: Chat.cpp.i
+
+.PHONY : Chat.i
+
+# target to preprocess a source file
+Chat.cpp.i:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.cpp.i
+.PHONY : Chat.cpp.i
+
+Chat.s: Chat.cpp.s
+
+.PHONY : Chat.s
+
+# target to generate assembly for a file
+Chat.cpp.s:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/Chat.cpp.s
+.PHONY : Chat.cpp.s
+
 SocketUdp.o: SocketUdp.cpp.o
 
 .PHONY : SocketUdp.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Application_CIAChat"
+	@echo "... Chat.o"
+	@echo "... Chat.i"
+	@echo "... Chat.s"
 	@echo "... SocketUdp.o"
 	@echo "... SocketUdp.i"
 	@echo "... SocketUdp.s"

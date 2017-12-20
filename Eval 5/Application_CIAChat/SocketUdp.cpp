@@ -116,7 +116,7 @@ void SocketUdp::EnvoyerMessageUDP() {
     else printf("Send socket OK\n");
 }
 
-void SocketUdp::RecevoirMessageUPD() {
+void SocketUdp::RecevoirMessageUDP() {
     /* 5.Reception d'un message*/
     char msgRecu[MAXSTRING];
     int nbreRecv, cpt=0 ,tailleSocksddr_in = sizeof(struct sockaddr_in);

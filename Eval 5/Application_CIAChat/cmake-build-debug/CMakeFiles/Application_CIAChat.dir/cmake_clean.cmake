@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Application_CIAChat.dir/main.cpp.o"
   "CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o"
+  "CMakeFiles/Application_CIAChat.dir/Chat.cpp.o"
   "Application_CIAChat.pdb"
   "Application_CIAChat.exe"
   "libApplication_CIAChat.dll.a"
