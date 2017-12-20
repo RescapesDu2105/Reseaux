@@ -14,8 +14,13 @@ SocketUdp::SocketUdp(int hsocket ,char *adresseip , int port )
         printf("Erreur lors de la création de la socket !");
 
     /* 2. Acquisition des informations sur l'ordinateur local */
+<<<<<<< HEAD
     //setInfosHost(*infohost);
     if ( (*infosHost = gethostbyname(adresseip))==0)
+=======
+    setInfosHost(*infohost);
+    if ( (*infohost = gethostbyname("234.5.5.9"))==0)
+>>>>>>> a26cc08d89866971e9ea2cee850836ca76361d74
     {
         printf("Erreur d'acquisition d'infos sur le host %d\n", errno);
         exit(1);
@@ -111,7 +116,7 @@ void SocketUdp::EnvoyerMessageUDP() {
     else printf("Send socket OK\n");
 }
 
-void SocketUdp::RecevoirMessageUPD() {
+void SocketUdp::RecevoirMessageUDP() {
     /* 5.Reception d'un message*/
     char msgRecu[MAXSTRING];
     int nbreRecv, cpt=0 ,tailleSocksddr_in = sizeof(struct sockaddr_in);

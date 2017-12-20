@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
+<<<<<<< HEAD
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCCompiler.cmake.in"
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCCompilerABI.c"
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCInformation.cmake"
@@ -96,6 +97,29 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN.cmake"
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/UnixPaths.cmake"
   "/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/ProcessorCount.cmake"
+=======
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCInformation.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCXXInformation.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeCommonLanguageInclude.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeFindCodeBlocks.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeGenericSystem.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeLanguageInformation.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeRCInformation.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeSystemSpecificInformation.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/CMakeSystemSpecificInitialize.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Compiler/GNU-C.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Compiler/GNU-CXX.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Compiler/GNU.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN-GNU-C.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN-GNU-CXX.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN-GNU.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN-windres.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/CYGWIN.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/Platform/UnixPaths.cmake"
+  "/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/share/cmake-3.9.4/Modules/ProcessorCount.cmake"
+>>>>>>> a26cc08d89866971e9ea2cee850836ca76361d74
   "../CMakeLists.txt"
   "CMakeFiles/3.9.4/CMakeCCompiler.cmake"
   "CMakeFiles/3.9.4/CMakeCXXCompiler.cmake"
@@ -124,5 +148,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/Cpp_Chat.dir/DependInfo.cmake"
+  "CMakeFiles/Application_CIAChat.dir/DependInfo.cmake"
   )
