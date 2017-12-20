@@ -23,24 +23,25 @@
 #define PORTUPD 30051
 
 #define MAXSTRING 200
+using namespace std;
 
 class SocketUdp
 {
-    protected :
+    private :
         int hSocket=-1; /* Handle de la socket */
-        struct hostent * infosHost;
+        hostent **infosHost;
         struct in_addr adresseIPUdp;
         struct sockaddr_in adresseSocketUdp;
         unsigned int tailleSockaddr_in;
 
     public :
         /*************CONSTRUCTOR*************/
-        SocketUdp(int hsocket , hostent **infohost);
+        SocketUdp(int hsocket ,char *adresseip , int port );
         SocketUdp(const SocketUdp& s);
         ~SocketUdp();
 
 
-    /*************METHODE*************/
+        /*************METHODE*************/
         void EnvoyerMessageUDP();
         void RecevoirMessageUDP();
 
@@ -54,9 +55,7 @@ class SocketUdp
         void setAdresseSocketUdp();
 
         hostent *getInfosHost() const;
-
-        void setInfosHost(hostent *infosHost);
-
+    
         const in_addr &getAdresseIPUdp() const;
 
         void setAdresseIPUdp();

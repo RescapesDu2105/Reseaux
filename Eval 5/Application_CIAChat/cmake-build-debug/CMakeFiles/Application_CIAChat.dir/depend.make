@@ -3,12 +3,18 @@
 
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o: ../Chat.cpp
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o: ../Chat.h
+<<<<<<< HEAD
 CMakeFiles/Application_CIAChat.dir/Chat.cpp.o: ../SocketUdp.h
+=======
+>>>>>>> b64417d407a08848b9ea970c2fb55c61c19332fe
 
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o: ../SocketUdp.cpp
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o: ../SocketUdp.h
 
 CMakeFiles/Application_CIAChat.dir/main.cpp.o: ../Chat.h
+<<<<<<< HEAD
 CMakeFiles/Application_CIAChat.dir/main.cpp.o: ../SocketUdp.h
+=======
+>>>>>>> b64417d407a08848b9ea970c2fb55c61c19332fe
 CMakeFiles/Application_CIAChat.dir/main.cpp.o: ../main.cpp
 
