@@ -10,7 +10,7 @@ SocketUdp::SocketUdp(char *adresseip, int port)
     CreerSocket();
     FindInfosHost(adresseip);
     PreparerSockAddr_In(port);
-    BindSocket();
+    BindSocket(adresseip);
     cout << "Fin de l'initialisation de la Socket UDP !" << endl;
 }
 
@@ -118,7 +118,7 @@ void SocketUdp::PreparerSockAddr_In(int port)
 {
     //setsockopt(hSocket, SOL_SOCKET, SO_REUSEPORT, (char *)&reuse, sizeof(reuse));
 
-    /******************Test******************************/
+    /******************DEBUT TEST******************************/
     int reuse = 1;
     if(setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
         perror("Setting SO_REUSEADDR error");
@@ -129,10 +129,10 @@ void SocketUdp::PreparerSockAddr_In(int port)
     adresseSocketUdp.sin_family = AF_INET;
     adresseSocketUdp.sin_port = htons(port);
     adresseSocketUdp.sin_addr.s_addr = htonl(INADDR_ANY);
-    /*****************FINTEST****************************/
+    /*****************FIN TEST****************************/
 }
 
-void SocketUdp::BindSocket()
+void SocketUdp::BindSocket(char* adresseip)
 {
 
 
@@ -142,6 +142,12 @@ void SocketUdp::BindSocket()
         printf("Erreur sur le bind de la socket %d\n", errno);
         exit(1);
     }
+
+    struct ip_mreq imr;
+    imr.imr_multiaddr.s_addr = inet_addr(adresseip);
+    imr.imr_interface.s_addr = inet_addr("255.255.255.255");
+
+    setsockopt(hSocket , IPPROTO_IP, IP_ADD_MEMBERSHIP, &imr, sizeof(imr));
     printf("Bind adresse et port socket OK\n");
     printf("port : %d\n", adresseSocketUdp.sin_port);
 }

@@ -50,7 +50,7 @@ class SocketUdp
         void CreerSocket();
         void FindInfosHost(char* adresseip);
         void PreparerSockAddr_In(int port);
-        void BindSocket();
+        void BindSocket(char* adresseip);
 
     /*************GETTER/SETTER*************/
         int getHSocket() const;
