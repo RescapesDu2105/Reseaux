@@ -1,4 +1,4 @@
-C:\Users\Doublon\.CLion2017.3\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat"
+C:\Users\Philippe\.CLion2017.3\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=C:/cygwin64/bin/c++.exe -G "CodeBlocks - Unix Makefiles" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat"
 -- Configuring done
 -- Generating done
--- Build files have been written to: /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug
+-- Build files have been written to: /cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug

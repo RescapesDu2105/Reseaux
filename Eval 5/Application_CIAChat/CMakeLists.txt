@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
-project(Cpp_Chat)
+project(Application_CIAChat)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Cpp_Chat main.cpp SocketUdp.h SocketUdp.cpp)
+add_executable(Application_CIAChat main.cpp SocketUdp.h SocketUdp.cpp)

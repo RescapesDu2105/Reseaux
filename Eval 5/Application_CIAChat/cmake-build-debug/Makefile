@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
+CMAKE_COMMAND = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe
 
 # The command to remove a file.
-RM = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
+RM = /cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat"
+CMAKE_SOURCE_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"
+CMAKE_BINARY_DIR = "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-d
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E echo No\ interactive\ CMake\ dialog\ available.
+	/cygdrive/c/Users/Philippe/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Cpp_Chat
+# Target rules for targets named Application_CIAChat
 
 # Build rule for target.
-Cpp_Chat: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Cpp_Chat
-.PHONY : Cpp_Chat
+Application_CIAChat: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Application_CIAChat
+.PHONY : Application_CIAChat
 
 # fast build rule for target.
-Cpp_Chat/fast:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/build
-.PHONY : Cpp_Chat/fast
+Application_CIAChat/fast:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/build
+.PHONY : Application_CIAChat/fast
 
 SocketUdp.o: SocketUdp.cpp.o
 
@@ -129,7 +129,7 @@ SocketUdp.o: SocketUdp.cpp.o
 
 # target to build an object file
 SocketUdp.cpp.o:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o
 .PHONY : SocketUdp.cpp.o
 
 SocketUdp.i: SocketUdp.cpp.i
@@ -138,7 +138,7 @@ SocketUdp.i: SocketUdp.cpp.i
 
 # target to preprocess a source file
 SocketUdp.cpp.i:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.i
 .PHONY : SocketUdp.cpp.i
 
 SocketUdp.s: SocketUdp.cpp.s
@@ -147,7 +147,7 @@ SocketUdp.s: SocketUdp.cpp.s
 
 # target to generate assembly for a file
 SocketUdp.cpp.s:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s
 .PHONY : SocketUdp.cpp.s
 
 main.o: main.cpp.o
@@ -156,7 +156,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -165,7 +165,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -174,7 +174,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/Cpp_Chat.dir/build.make CMakeFiles/Cpp_Chat.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -185,7 +185,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... Cpp_Chat"
+	@echo "... Application_CIAChat"
 	@echo "... SocketUdp.o"
 	@echo "... SocketUdp.i"
 	@echo "... SocketUdp.s"
