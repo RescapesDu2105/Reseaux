@@ -8,97 +8,94 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="Application_CIAChat">
-				<Option output="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Application_CIAChat.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include"/>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/../../../../include"/>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include-fixed"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Application_CIAChat"/>
-					<CompileFile command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="Application_CIAChat/fast">
-				<Option output="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Application_CIAChat.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include"/>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/../../../../include"/>
-					<Add directory="D:/Programmes/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include-fixed"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Application_CIAChat/fast"/>
-					<CompileFile command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="edit_cache">
-				<Option working_dir="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programmes/CodeBlocks/MinGW/bin/mingw32-make.exe -f &quot;E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Application_CIAChat">
+				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug/Application_CIAChat.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Application_CIAChat"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Application_CIAChat/fast">
+				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug/Application_CIAChat.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Application_CIAChat/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.c">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.cpp">
 			<Option target="Application_CIAChat"/>
 		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h">
 			<Option target="Application_CIAChat"/>
 		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.c">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.cpp">
 			<Option target="Application_CIAChat"/>
 		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.h">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h">
 			<Option target="Application_CIAChat"/>
 		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUDP.c">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp">
 			<Option target="Application_CIAChat"/>
 		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUDP.h">
-			<Option target="Application_CIAChat"/>
-		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.c">
-			<Option target="Application_CIAChat"/>
-		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.h">
-			<Option target="Application_CIAChat"/>
-		</Unit>
-		<Unit filename="E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/CMakeLists.txt">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

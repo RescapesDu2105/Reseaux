@@ -1,32 +1,70 @@
-#ifndef APPLICATION_CIACHAT_SOCKETUDP_H
-#define APPLICATION_CIACHAT_SOCKETUDP_H
+//
+// Created by Doublon on 19/12/2017.
+//
 
-#include <stdio.h>
-#include <stdlib.h> /* pour exit */
-#include <string.h> /* pour memcpy */
+#ifndef CPP_CHAT_SOCKETUDP_H
+#define CPP_CHAT_SOCKETUDP_H
+
+#include <cstdio>
+#include <cstdlib> /* pour exit */
+#include <cstring> /* pour memcpy */
+#include <string>
 #include <sys/types.h>
 #include <sys/socket.h> /* pour les types de socket */
 #include <sys/time.h> /* pour les types de socket */
 #include <netdb.h> /* pour la structure hostent */
-#include <errno.h>
+#include <cerrno>
 #include <netinet/in.h> /* pour la conversion adresse reseau->format dot ainsi que le conversion format local/format reseau */
 #include <netinet/tcp.h> /* pour la conversion adresse reseau->format dot */
 #include <arpa/inet.h> /* pour la conversion adresse reseau->format dot */
-//#include <Winsock2.h>
-//#include <ws2tcpip.h>
+#include <unistd.h>
+#include <iostream>
+
+#define SEPARATOR "#"
+#define ADRESSEIP "234.5.5.9"
+#define PORTUPD 30051
 
 #define MAXSTRING 200
+using namespace std;
 
-int CreateSocketUDP();
-void GetInfosHost(struct hostent ** infosHost, struct in_addr * adresseIP);
-void PrepareSockAddrIn(struct sockaddr_in *adresseSocketServeur, unsigned int *tailleSockaddr_in, int Port);
-void BindSocket(int hSocket, struct sockaddr_in adresseSocketServeur, unsigned int tailleSockaddr_in);
-void SettingUpSocket(int hSocket, struct ip_mreq mreq, struct sockaddr_in adresseSocketServeur, unsigned int tailleSockaddr_in);
-void CloseSocketUDP(int hSocket);
+class SocketUdp
+{
+    private :
+        int hSocket; /* Handle de la socket */
+        hostent *infosHost;
+        struct in_addr adresseIPUdp;
+        struct sockaddr_in adresseSocketUdp;
+        unsigned int tailleSockaddr_in;
 
-void EnvoyerMessageUDP(char* Message, int hSocket, struct sockaddr_in adresseSocketServeur, unsigned int tailleSockaddr_in);
-void RecevoirMessageUDP(int hSocket, struct sockaddr_in adresseSocketClient, unsigned int tailleSockaddr_in);
+    public :
+        /*************CONSTRUCTOR*************/
+        SocketUdp(char *adresseip , int port );
+        SocketUdp(const SocketUdp& s);
+        ~SocketUdp();
 
 
+        /*************METHODE*************/
+        void EnvoyerMessageUDP(char *msgEnvoie);
+        void RecevoirMessageUDP();
 
-#endif //APPLICATION_CIACHAT_SOCKETUDP_H
+        void CreerSocket();
+        void FindInfosHost(char* adresseip);
+        void PreparerSockAddr_In(int port);
+        void BindSocket(char* adresseip);
+
+    /*************GETTER/SETTER*************/
+        int getHSocket() const;
+        void setHSocket(int hSocket);
+
+        const sockaddr_in &getAdresseSocketUdp() const;
+        void setAdresseSocketUdp();
+
+    
+        const in_addr &getAdresseIPUdp() const;
+        void setAdresseIPUdp();
+
+        unsigned int getTailleSockaddr_in() const;
+        void setTailleSockaddr_in(unsigned int tailleSockaddr_in);
+};
+
+#endif //CPP_CHAT_SOCKETUDP_H

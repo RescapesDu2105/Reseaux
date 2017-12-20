@@ -1,18 +1,17 @@
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "C"
+  "CXX"
   )
 # The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_C
-  "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.c" "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/Chat.c.obj"
-  "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ProtocoleIACOP.c" "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/ProtocoleIACOP.c.obj"
-  "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUDP.c" "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/SocketUDP.c.obj"
-  "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/ThreadReception.c" "E:/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/ThreadReception.c.obj"
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/Chat.cpp.o"
+  "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o"
+  "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/cmake-build-debug/CMakeFiles/Application_CIAChat.dir/main.cpp.o"
   )
-set(CMAKE_C_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
-set(CMAKE_C_TARGET_INCLUDE_PATH
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
   )
 
 # Targets to which this target links.
