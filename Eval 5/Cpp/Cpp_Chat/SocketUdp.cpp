@@ -107,7 +107,7 @@ void SocketUdp::EnvoyerMessageUDP() {
     char msgEnvoie[MAXSTRING];
     printf("Message a envoyer au groupe : ");
     gets(msgEnvoie);
-    if (sendto(hSocket, msgEnvoie, MAXSTRING, 0, (struct sockaddr *)getAdresseSocketUdp(), getTailleSockaddr_in()) == -1)
+    if (sendto(hSocket, msgEnvoie, MAXSTRING, 0, (struct sockaddr *)&adresseSocketUdp, getTailleSockaddr_in()) == -1)
     {
         printf("Erreur sur le send de la socket %d\n", errno);
         close(hSocket); /* Fermeture de la socket */
@@ -120,7 +120,7 @@ void SocketUdp::RecevoirMessageUPD() {
     /* 5.Reception d'un message*/
     char msgRecu[MAXSTRING];
     int nbreRecv, cpt=0 ,tailleSocksddr_in = sizeof(struct sockaddr_in);
-    if ((nbreRecv = recvfrom(hSocket, msgRecu, MAXSTRING, 0, (struct sockaddr *)getAdresseSocketUdp(),&tailleSocksddr_in)) == -1)
+    if ((nbreRecv = recvfrom(hSocket, msgRecu, MAXSTRING, 0, (struct sockaddr *&)adresseSocketUdp,&tailleSocksddr_in)) == -1)
     {
         printf("Erreur sur le recvfrom de la socket %d\n", errno);
         close(hSocket); /* Fermeture de la socket */

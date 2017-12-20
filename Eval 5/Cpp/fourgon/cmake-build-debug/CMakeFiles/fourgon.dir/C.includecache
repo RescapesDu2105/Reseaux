@@ -6,20 +6,12 @@
 
 #IncludeRegexTransform: 
 
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp
-unistd.h
--
-SocketUdp.h
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.h
-
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/fourgon/main.c
 stdio.h
 -
 stdlib.h
 -
 string.h
--
-string
 -
 sys/types.h
 -
@@ -37,8 +29,6 @@ netinet/tcp.h
 -
 arpa/inet.h
 -
-
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp
-iostream
+unistd.h
 -
 
