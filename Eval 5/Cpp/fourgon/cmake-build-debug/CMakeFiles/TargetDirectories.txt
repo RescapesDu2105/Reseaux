@@ -1,3 +1,0 @@
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/fourgon/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/fourgon/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/fourgon/cmake-build-debug/CMakeFiles/fourgon.dir
