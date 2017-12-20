@@ -4,7 +4,7 @@
 int main()
 {
     string user;
-    Chat chat = Chat();
+    Chat *chat = new Chat();
 
     // Saisit du nom d'user
     cout << "Entrez le nom d'user : ";

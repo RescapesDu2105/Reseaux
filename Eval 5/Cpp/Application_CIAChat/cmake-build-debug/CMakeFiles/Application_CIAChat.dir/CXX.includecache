@@ -1,0 +1,70 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.cpp
+Chat.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h
+cstdio
+-
+cstdlib
+-
+iostream
+-
+fstream
+-
+string
+-
+cstring
+-
+termios.h
+-
+SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.cpp
+SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h
+cstdio
+-
+cstdlib
+-
+cstring
+-
+string
+-
+sys/types.h
+-
+sys/socket.h
+-
+sys/time.h
+-
+netdb.h
+-
+cerrno
+-
+netinet/in.h
+-
+netinet/tcp.h
+-
+arpa/inet.h
+-
+unistd.h
+-
+iostream
+-
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp
+iostream
+-
+Chat.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h
+
