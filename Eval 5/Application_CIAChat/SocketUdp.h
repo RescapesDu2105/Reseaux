@@ -42,7 +42,7 @@ class SocketUdp
 
     /*************METHODE*************/
         void EnvoyerMessageUDP();
-        void RecevoirMessageUPD();
+        void RecevoirMessageUDP();
 
         /*************GETTER/SETTER*************/
         int getHSocket() const;

@@ -16,7 +16,7 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
 
     /* 2. Acquisition des informations sur l'ordinateur local */
     setInfosHost(*infohost);
-    if ( (*infohost = gethostbyname("localhost"))==0)
+    if ( (*infohost = gethostbyname("234.5.5.9"))==0)
     {
         printf("Erreur d'acquisition d'infos sur le host %d\n", errno);
         exit(1);
