@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Cpp_Chat">
-				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/Cpp_Chat.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"/>
+				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Cpp_Chat.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -52,15 +52,15 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Cpp_Chat"/>
-					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Cpp_Chat"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Cpp_Chat/fast">
-				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/Cpp_Chat.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"/>
+				<Option output="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/Cpp_Chat.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -73,23 +73,23 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Cpp_Chat/fast"/>
-					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Cpp/Cpp_Chat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 Cpp_Chat/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/GitHub/Reseaux/Eval\ 5/Application_CIAChat/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp">
 			<Option target="Cpp_Chat"/>
 		</Unit>
-		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.h">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h">
 			<Option target="Cpp_Chat"/>
 		</Unit>
-		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp">
 			<Option target="Cpp_Chat"/>
 		</Unit>
-		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/CMakeLists.txt">
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

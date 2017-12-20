@@ -4,10 +4,9 @@
 
 #include <unistd.h>
 #include "SocketUdp.h"
-using namespace std;
 
 /*************CONSTRUCTOR*************/
-SocketUdp::SocketUdp(int hsocket , hostent **infohost)
+SocketUdp::SocketUdp(int hsocket ,char *adresseip , int port )
 {
     /* 1. Creation de la socket */
     setHSocket(::socket(AF_INET, SOCK_STREAM, 0));
@@ -15,8 +14,8 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
         printf("Erreur lors de la création de la socket !");
 
     /* 2. Acquisition des informations sur l'ordinateur local */
-    setInfosHost(*infohost);
-    if ( (*infohost = gethostbyname("localhost"))==0)
+    //setInfosHost(*infohost);
+    if ( (*infosHost = gethostbyname(adresseip))==0)
     {
         printf("Erreur d'acquisition d'infos sur le host %d\n", errno);
         exit(1);
@@ -25,7 +24,7 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
         printf("Acquisition infos host OK\n");
     //setAdresseIPUdp();
     //memcpy( &adresseIPUdp, getInfosHost()->h_addr,getInfosHost()->h_length);
-    memcpy( &adresseIPUdp, (*infohost)->h_addr,(*infohost)->h_length);
+    memcpy( &adresseIPUdp, (*infosHost)->h_addr,(*infosHost)->h_length);
 
     setTailleSockaddr_in(sizeof(struct sockaddr_in));
 
@@ -33,8 +32,8 @@ SocketUdp::SocketUdp(int hsocket , hostent **infohost)
     setAdresseSocketUdp();
     memset(&adresseSocketUdp, 0, getTailleSockaddr_in());
     adresseSocketUdp.sin_family = AF_INET;
-    adresseSocketUdp.sin_port = htons(PORTUPD);
-    memcpy(&adresseSocketUdp.sin_addr, infosHost->h_addr,infosHost->h_length);
+    adresseSocketUdp.sin_port = htons(port);
+    memcpy(&adresseSocketUdp.sin_addr, (*infosHost)->h_addr,(*infosHost)->h_length);
 
     /* 4. Le systeme prend connaissance de l'adresse et du port de la socket */
     if (bind(hSocket, (struct sockaddr *)&adresseSocketUdp,
@@ -78,11 +77,7 @@ void SocketUdp::setAdresseSocketUdp() {
 }
 
 hostent *SocketUdp::getInfosHost() const {
-    return infosHost;
-}
-
-void SocketUdp::setInfosHost(hostent *infosHost) {
-    SocketUdp::infosHost = infosHost;
+    return *infosHost;
 }
 
 const in_addr &SocketUdp::getAdresseIPUdp() const {

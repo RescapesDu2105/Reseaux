@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o"
-  "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/main.cpp.o"
+  "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o"
+  "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -43,10 +43,10 @@ RM = /cygdrive/c/Users/Doublon/.CLion2017.3/system/cygwin_cmake/bin/cmake.exe -E
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat"
+CMAKE_SOURCE_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug"
+CMAKE_BINARY_DIR = "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Cpp_Chat.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/Cpp_Chat.dir/flags.make
 
 CMakeFiles/Cpp_Chat.dir/main.cpp.o: CMakeFiles/Cpp_Chat.dir/flags.make
 CMakeFiles/Cpp_Chat.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Cpp_Chat.dir/main.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Cpp_Chat.dir/main.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Cpp_Chat.dir/main.cpp.o"
+	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Cpp_Chat.dir/main.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp"
 
 CMakeFiles/Cpp_Chat.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Cpp_Chat.dir/main.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp" > CMakeFiles/Cpp_Chat.dir/main.cpp.i
+	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp" > CMakeFiles/Cpp_Chat.dir/main.cpp.i
 
 CMakeFiles/Cpp_Chat.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Cpp_Chat.dir/main.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/main.cpp" -o CMakeFiles/Cpp_Chat.dir/main.cpp.s
+	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp" -o CMakeFiles/Cpp_Chat.dir/main.cpp.s
 
 CMakeFiles/Cpp_Chat.dir/main.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/Cpp_Chat.dir/main.cpp.o.provides.build: CMakeFiles/Cpp_Chat.dir/main.
 
 CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o: CMakeFiles/Cpp_Chat.dir/flags.make
 CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o: ../SocketUdp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o"
+	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o -c "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp"
 
 CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp" > CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i
+	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" > CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.i
 
 CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/SocketUdp.cpp" -o CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s
+	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp" -o CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.s
 
 CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o.requires:
 
@@ -117,7 +117,7 @@ Cpp_Chat.exe: CMakeFiles/Cpp_Chat.dir/main.cpp.o
 Cpp_Chat.exe: CMakeFiles/Cpp_Chat.dir/SocketUdp.cpp.o
 Cpp_Chat.exe: CMakeFiles/Cpp_Chat.dir/build.make
 Cpp_Chat.exe: CMakeFiles/Cpp_Chat.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable Cpp_Chat.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable Cpp_Chat.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Cpp_Chat.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -135,6 +135,6 @@ CMakeFiles/Cpp_Chat.dir/clean:
 .PHONY : CMakeFiles/Cpp_Chat.dir/clean
 
 CMakeFiles/Cpp_Chat.dir/depend:
-	cd "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Cpp_Chat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug" "/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/cmake-build-debug/CMakeFiles/Cpp_Chat.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/Cpp_Chat.dir/depend
 
