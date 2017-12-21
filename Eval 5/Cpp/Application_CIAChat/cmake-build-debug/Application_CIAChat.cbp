@@ -92,6 +92,12 @@
 		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h">
 			<Option target="Application_CIAChat"/>
 		</Unit>
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.cpp">
+			<Option target="Application_CIAChat"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h">
+			<Option target="Application_CIAChat"/>
+		</Unit>
 		<Unit filename="/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp">
 			<Option target="Application_CIAChat"/>
 		</Unit>

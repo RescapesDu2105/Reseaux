@@ -62,9 +62,43 @@ unistd.h
 iostream
 -
 
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.cpp
+ThreadReception.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h
+
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h
+stdio.h
+-
+iostream
+-
+thread
+-
+string
+-
+sys/socket.h
+-
+errno.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+netdb.h
+-
+cstdlib
+-
+cstring
+-
+unistd.h
+-
+sstream
+-
+
 /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp
 iostream
 -
 Chat.h
 /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h
+ThreadReception.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h
 

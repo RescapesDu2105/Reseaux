@@ -9,7 +9,7 @@ SocketUdp::SocketUdp(char *adresseip, int port)
 {
     CreerSocket(port);
     //FindInfosHost(adresseip);
-    PreparerSockAddr_In(port);
+    //PreparerSockAddr_In(port);
     //BindSocket(adresseip);
     cout << "Fin de l'initialisation de la Socket UDP !" << endl;
 }
@@ -73,7 +73,7 @@ void SocketUdp::EnvoyerMessageUDP(char * msgEnvoie) {
         exit(1);
     }
     cout<<"Message envoyé : "<<msgEnvoie<<endl;
-    sleep(5);
+    //sleep(5);
 }
 
 void SocketUdp::RecevoirMessageUDP() {
@@ -179,9 +179,9 @@ void SocketUdp::PreparerSockAddr_In(int port)
     setsockopt(sd , IPPROTO_IP, IP_ADD_MEMBERSHIP, &imr, sizeof(imr));
     printf("Bind adresse et port socket OK\n");
 
-    /*****************FIN TEST****************************/
     cout<<"port recu pour sd: "<<port<<endl;
     cout<<"port enregistrer dans la sockaddr_in de sd: "<<localSock.sin_port<<endl;
+    /*****************FIN TEST****************************/
 }
 
 void SocketUdp::BindSocket(char* adresseip)

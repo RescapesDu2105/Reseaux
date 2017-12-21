@@ -3,4 +3,4 @@ project(Application_CIAChat)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Application_CIAChat main.cpp SocketUdp.h SocketUdp.cpp Chat.cpp Chat.h)
+add_executable(Application_CIAChat main.cpp SocketUdp.h SocketUdp.cpp Chat.cpp Chat.h ThreadReception.h ThreadReception.cpp)

@@ -177,6 +177,33 @@ SocketUdp.cpp.s:
 	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.s
 .PHONY : SocketUdp.cpp.s
 
+ThreadReception.o: ThreadReception.cpp.o
+
+.PHONY : ThreadReception.o
+
+# target to build an object file
+ThreadReception.cpp.o:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.cpp.o
+.PHONY : ThreadReception.cpp.o
+
+ThreadReception.i: ThreadReception.cpp.i
+
+.PHONY : ThreadReception.i
+
+# target to preprocess a source file
+ThreadReception.cpp.i:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.cpp.i
+.PHONY : ThreadReception.cpp.i
+
+ThreadReception.s: ThreadReception.cpp.s
+
+.PHONY : ThreadReception.s
+
+# target to generate assembly for a file
+ThreadReception.cpp.s:
+	$(MAKE) -f CMakeFiles/Application_CIAChat.dir/build.make CMakeFiles/Application_CIAChat.dir/ThreadReception.cpp.s
+.PHONY : ThreadReception.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -219,6 +246,9 @@ help:
 	@echo "... SocketUdp.o"
 	@echo "... SocketUdp.i"
 	@echo "... SocketUdp.s"
+	@echo "... ThreadReception.o"
+	@echo "... ThreadReception.i"
+	@echo "... ThreadReception.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

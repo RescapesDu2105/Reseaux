@@ -8,7 +8,11 @@ CMakeFiles/Application_CIAChat.dir/Chat.cpp.o
 CMakeFiles/Application_CIAChat.dir/SocketUdp.cpp.o
  /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.cpp
  /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h
+CMakeFiles/Application_CIAChat.dir/ThreadReception.cpp.o
+ /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.cpp
+ /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h
 CMakeFiles/Application_CIAChat.dir/main.cpp.o
  /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/Chat.h
  /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/SocketUdp.h
+ /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/ThreadReception.h
  /cygdrive/d/GitHub/Reseaux/Eval 5/Cpp/Application_CIAChat/main.cpp
