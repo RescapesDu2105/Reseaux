@@ -6,14 +6,14 @@
 
 #IncludeRegexTransform: 
 
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.cpp
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.cpp
 Chat.h
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
 
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h
-stdio.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
+cstdio
 -
-stdlib.h
+cstdlib
 -
 iostream
 -
@@ -21,18 +21,18 @@ fstream
 -
 string
 -
-string.h
+cstring
 -
 termios.h
 -
 SocketUdp.h
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.cpp
 SocketUdp.h
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/SocketUdp.h
 cstdio
 -
 cstdlib
@@ -62,9 +62,9 @@ unistd.h
 iostream
 -
 
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/main.cpp
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/main.cpp
 iostream
 -
 Chat.h
-/cygdrive/e/Dropbox/B3/Reseaux/2017-2018/Reseaux/Eval 5/Application_CIAChat/Chat.h
+/cygdrive/d/GitHub/Reseaux/Eval 5/Application_CIAChat/Chat.h
 

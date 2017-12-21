@@ -36,6 +36,10 @@ class SocketUdp
         struct sockaddr_in adresseSocketUdp;
         unsigned int tailleSockaddr_in;
 
+        struct sockaddr_in localSock;
+        struct ip_mreq group;
+        int sd;
+
     public :
         /*************CONSTRUCTOR*************/
         SocketUdp(char *adresseip , int port );
@@ -47,7 +51,7 @@ class SocketUdp
         void EnvoyerMessageUDP(char *msgEnvoie);
         void RecevoirMessageUDP();
 
-        void CreerSocket();
+        void CreerSocket(int port);
         void FindInfosHost(char* adresseip);
         void PreparerSockAddr_In(int port);
         void BindSocket(char* adresseip);
