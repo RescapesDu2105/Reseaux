@@ -17,7 +17,6 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -68,10 +67,8 @@ public class ClientChat extends javax.swing.JFrame
             
             this.setTitle("Client : " + nomPrenomClient);
             
-            //RequeteIACOP.Connexion(nomPrenomClient, adresseGroupe, port, socketGroupe);
             String msgDeb = nomPrenomClient + " a rejoint le groupe";
             System.out.println("msgDeb = " + msgDeb);
-            DatagramPacket dtg = new DatagramPacket(msgDeb.getBytes(), msgDeb.length(), adresseGroupe, port);
             
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             baos.flush();

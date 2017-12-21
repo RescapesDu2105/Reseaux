@@ -14,8 +14,6 @@ import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.awt.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;

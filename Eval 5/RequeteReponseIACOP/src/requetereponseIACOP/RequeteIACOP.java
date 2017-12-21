@@ -57,7 +57,6 @@ public class RequeteIACOP implements Requete, Serializable
     
     private int Type;
     private HashMap<String, Object> chargeUtile;
-    private Socket SocketClient;
     
     private ReponseIACOP Reponse = null;
     private Properties Prop = null;

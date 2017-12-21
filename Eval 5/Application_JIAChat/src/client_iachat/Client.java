@@ -18,8 +18,6 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import requetereponseIACOP.RequeteIACOP;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetereponseIACOP.ReponseIACOP;
@@ -100,15 +98,13 @@ public class Client
         {
             setCliSocket(new Socket(getIP(), getPort()));
         }
-        catch(Exception ex)
+        catch(IOException ex)
         {
             ex.printStackTrace();
         }
         
         if (getCliSocket().isConnected()) 
-        {
-            //System.out.println("Connexion OK");
-            
+        {            
             try 
             {        
                 System.out.println("Création des flux");
@@ -120,13 +116,11 @@ public class Client
             {
                 System.out.println(ex.getMessage());
             }
-            //System.out.println("Client prêt");
-            //System.out.println("Connected = " + getCliSocket().isConnected());
             setConnectedToServer(true);
         }
         else 
         {            
-            //System.out.println("Client pas prêt !");
+            
         }
     }
   
