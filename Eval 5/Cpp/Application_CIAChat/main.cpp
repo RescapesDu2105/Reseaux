@@ -15,12 +15,11 @@ int main()
     chat.getSocketUDP().RecevoirMessageUDP();*/
 
     SocketUdp socketUDP=SocketUdp((char *)"234.5.5.9", 30051);
-    /*cout << "message a envoyé : "<<endl;
+    cout << "message a envoyé : "<<endl;
     char msgEnvoie[MAXSTRING];
     cin>>msgEnvoie;
-    socketUDP.EnvoyerMessageUDP(msgEnvoie);*/
+    socketUDP.EnvoyerMessageUDP(msgEnvoie);
     socketUDP.RecevoirMessageUDP();
-    std::cout << "Hello, World!" << std::endl;
     socketUDP.~SocketUdp();
     return 0;
 }
