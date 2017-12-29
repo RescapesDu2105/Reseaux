@@ -156,9 +156,9 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     this.dispose();
                     AuthentificationGUI Test = this;
                     
-                   /* java.awt.EventQueue.invokeLater(() -> {
-                        new FlightsFrame(Test, getClient()).setVisible(true);
-                    });*/
+                   java.awt.EventQueue.invokeLater(() -> {
+                        new test().setVisible(true);
+                    });
                     this.jButtonEffacerActionPerformed(null);
                 }
                 else
