@@ -5,16 +5,6 @@
 using namespace std;
 int main()
 {
-    /*cout << "cc";
-    string user;
-    Chat chat = Chat();
-
-    // Saisit du nom d'user
-    cout << "Entrez le nom d'user : ";
-    cin >> user;
-
-    chat.setUser(user);
-    chat.getSocketUDP().RecevoirMessageUDP();*/
 
     bool envoie_msg =true;
     string adressedip=string("234.5.5.9");
