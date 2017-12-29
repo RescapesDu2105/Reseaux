@@ -29,6 +29,7 @@ import requetepoolthreads.Requete;
 public class RequeteTICKMAP implements Requete, Serializable
 {
     
+    public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     
     private int Type;
@@ -168,14 +169,23 @@ public class RequeteTICKMAP implements Requete, Serializable
         
         switch(getType())
         {
+            case REQUEST_LOG_OUT_PORTER:
+                return new Runnable() 
+                {
+                    public void run() 
+                    {
+                        traiteRequeteLogOutPorter();
+                    }            
+                };
+             
             case REQUEST_LOGIN_PORTER:
                 return new Runnable() 
-            {
-                public void run() 
                 {
-                    traiteRequeteLoginPorter();
-                }            
-            };
+                    public void run() 
+                    {
+                        traiteRequeteLoginPorter();
+                    }            
+                };
             default : return null;
         }
     }
@@ -185,12 +195,13 @@ public class RequeteTICKMAP implements Requete, Serializable
     {
         switch(getType()) 
         {
+            case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
             case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
             default : return null;
         }
     }
     
-        private void traiteRequeteLoginPorter() 
+    private void traiteRequeteLoginPorter() 
     {        
         String user = getChargeUtile().get("Login").toString();
         long Temps = (long) getChargeUtile().get("Temps");
@@ -243,6 +254,12 @@ public class RequeteTICKMAP implements Requete, Serializable
             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.WRONG_USER_PASSWORD_MESSAGE);                        
             System.out.println(ReponseTICKMAP.WRONG_USER_PASSWORD_MESSAGE);
         }               
+    }
+    
+    private void traiteRequeteLogOutPorter() 
+    {
+        Reponse = new ReponseTICKMAP(ReponseTICKMAP.LOG_OUT_OK);
+        Reponse.getChargeUtile().put("Message", ReponseTICKMAP.LOG_OUT_OK_MESSAGE);
     }
     
 }
