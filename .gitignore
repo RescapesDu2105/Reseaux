@@ -40,3 +40,14 @@
 /Eval 5/Application_JIAChat/build/
 /Eval 5/Application_JIAChat/dist/
 JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar
+/Serveur_Billet/ClientMultiThread/nbproject/private/
+/Serveur_Billet/RequeteReponseLUGAP/nbproject/private/
+/Serveur_Billet/RequeteReponseMultiThread/nbproject/private/
+/Serveur_Billet/ServeurMultiThread/nbproject/private/
+/Serveur_Billet/RequeteReponseLUGAP/build/
+/Serveur_Billet/ClientMultiThread/build/
+/Serveur_Billet/RequeteReponseMultiThread/build/
+/Serveur_Billet/RequeteReponseLUGAP/dist/
+/Serveur_Billet/RequeteReponseMultiThread/dist/
+/Serveur_Billet/ServeurMultiThreadTICKMAP/nbproject/private/
+/Serveur_Billet/RequeteReponseTICKMAP/nbproject/private/
