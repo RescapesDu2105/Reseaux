@@ -56,3 +56,6 @@ JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar
 /Serveur_Billet/RequeteReponseTICKMAP/build/
 /Serveur_Billet/ClientMutliThreadTICKMAP/build/
 /Nouveau dossier/ServeurMultiThread/build/
+/Serveur_Billet/ClientMutliThreadTICKMAP/dist/
+/Serveur_Billet/RequeteReponseTICKMAP/dist/
+/Serveur_Billet/ServeurMultiThreadTICKMAP/dist/
