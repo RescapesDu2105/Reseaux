@@ -59,3 +59,6 @@ JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar
 /Serveur_Billet/ClientMutliThreadTICKMAP/dist/
 /Serveur_Billet/RequeteReponseTICKMAP/dist/
 /Serveur_Billet/ServeurMultiThreadTICKMAP/dist/
+/Serveur_Billet/Cryptographie/nbproject/private/
+/Serveur_Billet/Cryptographie/build/
+/Serveur_Billet/Cryptographie/dist/

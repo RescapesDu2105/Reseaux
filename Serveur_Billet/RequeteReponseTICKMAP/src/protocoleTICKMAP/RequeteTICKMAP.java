@@ -47,7 +47,6 @@ public class RequeteTICKMAP implements Requete, Serializable
     
     public RequeteTICKMAP(int Type) 
     {
-        System.out.println("cc");
         this.Type = Type;
         this.chargeUtile = new HashMap<>();
     }

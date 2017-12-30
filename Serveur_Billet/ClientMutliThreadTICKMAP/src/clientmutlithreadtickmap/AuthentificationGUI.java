@@ -5,6 +5,7 @@
  */
 package clientmutlithreadtickmap;
 
+import cryptographie.ClesPourCryptageAsymetrique;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -18,6 +19,7 @@ import protocoleTICKMAP.ReponseTICKMAP;
 public class AuthentificationGUI extends javax.swing.JFrame
 {
     private Client Client;
+    private ClesPourCryptageAsymetrique cles;
 
     /**
      * Creates new form AuthentificationGUI
@@ -153,13 +155,17 @@ public class AuthentificationGUI extends javax.swing.JFrame
                 {
                     getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
 
+                    
                     this.dispose();
                     AuthentificationGUI Test = this;
                     
-                   java.awt.EventQueue.invokeLater(() -> {
+                    cles=new ClesPourCryptageAsymetrique();
+                    cles.SerialiserCle();
+                    
+                   /*java.awt.EventQueue.invokeLater(() -> {
                         new test().setVisible(true);
                     });
-                    this.jButtonEffacerActionPerformed(null);
+                    this.jButtonEffacerActionPerformed(null);*/
                 }
                 else
                 {
