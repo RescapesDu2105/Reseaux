@@ -27,6 +27,33 @@ public class Certificats
     private X509Certificate cert;
     private PublicKey clepublique;
 
+    public Certificats(X509Certificate certif)
+    {
+        //cert=certif;
+
+        /*System.out.println("");
+        System.out.println("Je suis dans la classe Certificat");
+        System.out.println("Classe instanciée : " + getCerf().getClass().getName());
+        System.out.println("Type de certificat : " + getCerf().getType());
+        System.out.println("Nom du propriétaire du certificat : " +getCerf().getSubjectDN().getName());
+
+        setClepublique(cert.getPublicKey());
+        System.out.println("... sa clé publique : " + getClepublique().toString());
+        System.out.println("... la classe instanciée par celle-ci : " +getClepublique().getClass().getName());
+        System.out.println("Dates limites de validité : [" + getCerf().getNotBefore() + " - " +getCerf().getNotAfter() + "]");*/
+        
+        System.out.println("");
+        System.out.println("Je suis dans la classe Certificat");
+        System.out.println("Classe instanciée : " + certif.getClass().getName());
+        System.out.println("Type de certificat : " + certif.getType());
+        System.out.println("Nom du propriétaire du certificat : " +certif.getSubjectDN().getName());
+
+        setClepublique(certif.getPublicKey());
+        System.out.println("... sa clé publique : " + getClepublique().toString());
+        System.out.println("... la classe instanciée par celle-ci : " +getClepublique().getClass().getName());
+        System.out.println("Dates limites de validité : [" + getCerf().getNotBefore() + " - " +getCerf().getNotAfter() + "]");     
+    }
+    
     public Certificats(String path)
     {
         try
@@ -34,11 +61,11 @@ public class Certificats
             inStream = new FileInputStream(path);
             cf=CertificateFactory.getInstance("X.509");
             cert=(X509Certificate)cf.generateCertificate(inStream);
-            System.out.println("Classe instanciée : " + cert.getClass().getName());
-            System.out.println("Type de certificat : " + cert.getType());
-            System.out.println("Nom du propriétaire du certificat : " +cert.getSubjectDN().getName());
+            System.out.println("Classe instanciée : " + getCerf().getClass().getName());
+            System.out.println("Type de certificat : " + getCerf().getType());
+            System.out.println("Nom du propriétaire du certificat : " +getCerf().getSubjectDN().getName());
             
-            setClepublique(cert.getPublicKey());
+            setClepublique(getCerf().getPublicKey());
             System.out.println("... sa clé publique : " + getClepublique().toString());
             System.out.println("... la classe instanciée par celle-ci : " +getClepublique().getClass().getName());
             System.out.println("Dates limites de validité : [" + cert.getNotBefore() + " - " +cert.getNotAfter() + "]"); 

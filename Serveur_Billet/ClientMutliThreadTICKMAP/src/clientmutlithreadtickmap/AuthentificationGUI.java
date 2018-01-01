@@ -5,12 +5,21 @@
  */
 package clientmutlithreadtickmap;
 
+import cryptographie.Certificats;
 import cryptographie.ClesPourCryptageAsymetrique;
+import cryptographie.KeyStoreUtils;
 import java.io.IOException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import protocoleTICKMAP.ReponseTICKMAP;
+import protocoleTICKMAP.RequeteTICKMAP;
+import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_CERTIFICATE;
 
 /**
  *
@@ -18,8 +27,13 @@ import protocoleTICKMAP.ReponseTICKMAP;
  */
 public class AuthentificationGUI extends javax.swing.JFrame
 {
+    private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ClientKeystore.jks";
+    private static String keyStorePsw = "123Soleil";
+    private static String aliasKeyStrore="clientprivatekey";
+    
     private Client Client;
     private ClesPourCryptageAsymetrique cles;
+    private KeyStoreUtils ks;
 
     /**
      * Creates new form AuthentificationGUI
@@ -126,7 +140,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
 
     private void jButtonConnexionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonConnexionActionPerformed
     {//GEN-HEADEREND:event_jButtonConnexionActionPerformed
-        if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().length == 0)
+if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().length == 0)
         {
             JOptionPane.showMessageDialog(this, ReponseTICKMAP.WRONG_USER_PASSWORD_MESSAGE, "Erreur", JOptionPane.ERROR_MESSAGE);
             jPasswordFieldPsw.setText("");
@@ -156,11 +170,12 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     getClient().setNomUtilisateur(Rep.getChargeUtile().get("Prenom").toString() + " " + (Rep.getChargeUtile().get("Nom").toString()));
 
                     
+                    RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
+                    
                     this.dispose();
                     AuthentificationGUI Test = this;
-                    
-                    cles=new ClesPourCryptageAsymetrique();
-                    cles.SerialiserCle();
+                    /*cles=new ClesPourCryptageAsymetrique();
+                    cles.SerialiserCle();*/
                     
                    /*java.awt.EventQueue.invokeLater(() -> {
                         new test().setVisible(true);
@@ -174,7 +189,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
                     getClient().Deconnexion();
                 }
             }
-        }        // TODO add your handling code here:
+        }
     }//GEN-LAST:event_jButtonConnexionActionPerformed
 
     private void jButtonEffacerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEffacerActionPerformed
@@ -183,6 +198,45 @@ public class AuthentificationGUI extends javax.swing.JFrame
         jPasswordFieldPsw.setText("");        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonEffacerActionPerformed
 
+    
+    public void RequestSendCertificate(String keystorelocation, String psw , String alias )
+    {
+        RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_CERTIFICATE);
+        ReponseTICKMAP Rep = null;
+        
+        
+        try
+        {
+            ks=new KeyStoreUtils(keystorelocation,psw,alias);            
+        } catch (KeyStoreException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnrecoverableKeyException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Req.getChargeUtile().put("Certificate" , ks.getCertif());
+        Client.EnvoyerRequete(Req);
+        Rep = Client.RecevoirReponse();
+        if(Rep.getCode() == ReponseTICKMAP.SEND_CERTIFICATE_OK)
+        {
+            System.out.println(Rep.getChargeUtile().get("Message"));
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

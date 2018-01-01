@@ -20,6 +20,9 @@ import requetepoolthreads.ConsoleServeur;
  */
 public class ServerGUI extends javax.swing.JFrame implements ConsoleServeur
 {
+    private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
+    private static String aliasKeyStrore="serveurprivatekey";
+    
     private boolean Started = false;
     private int Port_Billet;
     private int Max_Clients;

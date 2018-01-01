@@ -5,6 +5,7 @@
  */
 package protocoleTICKMAP;
 
+import cryptographie.Certificats;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -15,6 +16,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.security.cert.X509Certificate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
+    public final static int REQUEST_SEND_CERTIFICATE=2;
     
     private int Type;
     private HashMap<String, Object> chargeUtile;
@@ -186,6 +189,15 @@ public class RequeteTICKMAP implements Requete, Serializable
                         traiteRequeteLoginPorter();
                     }            
                 };
+                
+            case REQUEST_SEND_CERTIFICATE :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traiterSendCertificate();
+                    }
+                };
             default : return null;
         }
     }
@@ -196,7 +208,8 @@ public class RequeteTICKMAP implements Requete, Serializable
         switch(getType()) 
         {
             case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
-            case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
+            case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER"; 
+            case REQUEST_SEND_CERTIFICATE : return "REQUEST_SEND_CERTIFICATE";
             default : return null;
         }
     }
@@ -260,6 +273,22 @@ public class RequeteTICKMAP implements Requete, Serializable
     {
         Reponse = new ReponseTICKMAP(ReponseTICKMAP.LOG_OUT_OK);
         Reponse.getChargeUtile().put("Message", ReponseTICKMAP.LOG_OUT_OK_MESSAGE);
+    }
+    
+    private void traiterSendCertificate()
+    {
+        //Certificats certif;  
+        System.out.println("");
+        X509Certificate certif=(X509Certificate) getChargeUtile().get("Certificate");
+        //certif = new Certificats((X509Certificate) getChargeUtile().get("Certificate"));
+        System.out.println("");
+        System.out.println("Je suis dans la classe Certificat");
+        System.out.println("Classe instanciée : " + certif.getClass().getName());
+        System.out.println("Type de certificat : " + certif.getType());
+        System.out.println("Nom du propriétaire du certificat : " +certif.getSubjectDN().getName());
+        
+        Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_CERTIFICATE_OK);
+        Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_CERTIFICATE_OK_MESSAGE);
     }
     
 }
