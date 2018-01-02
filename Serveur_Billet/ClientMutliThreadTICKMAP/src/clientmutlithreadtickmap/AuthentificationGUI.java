@@ -310,9 +310,11 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             System.out.println("");
             PublicKey clePubliqueServer = certifServeur.getPublicKey();
             System.out.println("Cle : " +clePubliqueServer.toString());
-            byte[] cleCrypte=cryptage.Crypte(certifServeur.getPublicKey(), cleHMAC);
+            byte[] cleByte = cleHMAC.getCle().getEncoded();
+            byte[] cleCrypte=cryptage.Crypte(certifServeur.getPublicKey(), cleByte);
             System.out.println("");
-            System.out.println("Cle en byte : "+cleHMAC.toString().getBytes());
+            System.out.println("Cle HMAC : "+cleHMAC.toString());
+            System.out.println("Cle en byte : "+cleByte.toString().getBytes());
             System.out.println("Cle Cryptee(string) : "+cleCrypte.toString());
             System.out.println("Cle Cryptee(bytes) : "+cleCrypte.toString().getBytes());
             System.out.println("Cle Cryptee(bytes) : "+cleCrypte);

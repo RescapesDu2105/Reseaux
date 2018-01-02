@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +26,8 @@ import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -34,6 +37,8 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.Requete;
 
@@ -373,6 +378,10 @@ public class RequeteTICKMAP implements Requete, Serializable
             System.out.println("");
             System.out.println("Cle Decrypte : "+cleDecrypte);
             
+            SecretKey cleClientHMACTemp = new SecretKeySpec(cleDecrypte, 0, cleDecrypte.length, "DES");
+            CleSecrete cleClientHMAC=new CleSecrete(cleClientHMACTemp);
+            System.out.println("");
+            System.out.println("Cle decripté : " +cleClientHMAC.toString());
             Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_SYMETRICKEY_MESSAGE);
         } catch (NoSuchAlgorithmException ex)

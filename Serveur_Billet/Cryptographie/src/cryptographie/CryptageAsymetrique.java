@@ -36,10 +36,10 @@ public class CryptageAsymetrique
         setChiffrement(Cipher.getInstance(algoCrypt,codeProvider));
     }
 
-    public byte[] Crypte(PublicKey cle,Object objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    public byte[] Crypte(PublicKey cle,byte[] objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
         getChiffrement().init(Cipher.ENCRYPT_MODE, cle);
-        byte[] objetCrypte = getChiffrement().doFinal(objetACrypte.toString().getBytes());
+        byte[] objetCrypte = getChiffrement().doFinal(objetACrypte);
         System.out.println("Cryptage de : ");
         System.out.println(new String(objetACrypte.toString().getBytes()) + " ---> " + objetCrypte);
         return objetCrypte;
