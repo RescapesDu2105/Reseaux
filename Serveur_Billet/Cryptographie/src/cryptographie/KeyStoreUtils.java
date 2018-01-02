@@ -28,6 +28,7 @@ public class KeyStoreUtils
     public KeyStoreUtils(String pathKeyStore , String pswd , String alias) 
             throws KeyStoreException, FileNotFoundException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, NoSuchProviderException
     {
+        System.out.println("Coucou"); 
         Security.addProvider(new BouncyCastleProvider());
         ks=KeyStore.getInstance("JKS");
         ks.load(new FileInputStream(pathKeyStore),pswd.toCharArray());

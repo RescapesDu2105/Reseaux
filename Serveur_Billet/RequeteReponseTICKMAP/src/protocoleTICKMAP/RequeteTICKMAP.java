@@ -5,22 +5,27 @@
  */
 package protocoleTICKMAP;
 
-import cryptographie.Certificats;
+import cryptographie.KeyStoreUtils;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.Requete;
 
@@ -35,12 +40,20 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_SEND_CERTIFICATE=2;
     
+    private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
+    private static String keyStorePsw = "123Soleil";    
+    private static String aliasKeyStrore="serveurprivatekey";
+
+    
     private int Type;
     private HashMap<String, Object> chargeUtile;
     private Socket SocketClient;
     
     private ReponseTICKMAP Reponse = null;
     private Properties Prop = null;
+    
+    private X509Certificate certifClient;
+    private KeyStoreUtils ks;
 
     public RequeteTICKMAP(int Type, HashMap chargeUtile) 
     {
@@ -277,18 +290,45 @@ public class RequeteTICKMAP implements Requete, Serializable
     
     private void traiterSendCertificate()
     {
-        //Certificats certif;  
+        System.out.println(keyStorePath);
+        certifClient=(X509Certificate) getChargeUtile().get("Certificate");
         System.out.println("");
-        X509Certificate certif=(X509Certificate) getChargeUtile().get("Certificate");
-        //certif = new Certificats((X509Certificate) getChargeUtile().get("Certificate"));
-        System.out.println("");
-        System.out.println("Je suis dans la classe Certificat");
-        System.out.println("Classe instanciée : " + certif.getClass().getName());
-        System.out.println("Type de certificat : " + certif.getType());
-        System.out.println("Nom du propriétaire du certificat : " +certif.getSubjectDN().getName());
+        System.out.println("Reception du certificat du client");
+        System.out.println("Classe instanciée : " + certifClient.getClass().getName());
+        System.out.println("Type de certificat : " + certifClient.getType());
+        System.out.println("Nom du propriétaire du certificat : " +certifClient.getSubjectDN().getName());
+        System.out.println("Dates limites de validité : [" + certifClient.getNotBefore() + " - " +certifClient.getNotAfter() + "]");   
+        
+        
+        System.out.println("... sa clé publique : " + certifClient.getPublicKey().toString());
+        System.out.println("... la classe instanciée par celle-ci : " +certifClient.getPublicKey().getClass().getName());
+       
+        try
+        {
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+        } catch (KeyStoreException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnrecoverableKeyException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_CERTIFICATE_OK);
         Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_CERTIFICATE_OK_MESSAGE);
+        Reponse.getChargeUtile().put("Certificate",ks.getCertif());
     }
     
 }

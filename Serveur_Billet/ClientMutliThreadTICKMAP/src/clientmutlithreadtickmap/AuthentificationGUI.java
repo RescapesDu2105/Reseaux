@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -32,8 +33,8 @@ public class AuthentificationGUI extends javax.swing.JFrame
     private static String aliasKeyStrore="clientprivatekey";
     
     private Client Client;
-    private ClesPourCryptageAsymetrique cles;
     private KeyStoreUtils ks;
+    private X509Certificate certifServeur;
 
     /**
      * Creates new form AuthentificationGUI
@@ -204,7 +205,6 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_CERTIFICATE);
         ReponseTICKMAP Rep = null;
         
-        
         try
         {
             ks=new KeyStoreUtils(keystorelocation,psw,alias);            
@@ -233,7 +233,18 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         Rep = Client.RecevoirReponse();
         if(Rep.getCode() == ReponseTICKMAP.SEND_CERTIFICATE_OK)
         {
-            System.out.println(Rep.getChargeUtile().get("Message"));
+            certifServeur=(X509Certificate) Rep.getChargeUtile().get("Certificate");
+            
+            System.out.println("");
+            System.out.println("Reception du certificat du serveur");
+            System.out.println("Classe instanciée : " + certifServeur.getClass().getName());
+            System.out.println("Type de certificat : " + certifServeur.getType());
+            System.out.println("Nom du propriétaire du certificat : " +certifServeur.getSubjectDN().getName());
+            System.out.println("Dates limites de validité : [" + certifServeur.getNotBefore() + " - " +certifServeur.getNotAfter() + "]");   
+
+
+            System.out.println("... sa clé publique : " + certifServeur.getPublicKey().toString());
+            System.out.println("... la classe instanciée par celle-ci : " +certifServeur.getPublicKey().getClass().getName());
         }
     }
     
