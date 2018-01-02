@@ -39,20 +39,20 @@ public class CryptageAsymetrique
     public byte[] Crypte(PublicKey cle,Object objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
         getChiffrement().init(Cipher.ENCRYPT_MODE, cle);
-        byte[] objetCrypte = getChiffrement().doFinal (objetACrypte.toString().getBytes());
+        byte[] objetCrypte = getChiffrement().doFinal(objetACrypte.toString().getBytes());
         System.out.println("Cryptage de : ");
         System.out.println(new String(objetACrypte.toString().getBytes()) + " ---> " + objetCrypte);
         return objetCrypte;
     }
     
-    public byte[] Decrypte(PrivateKey cle , Object objetADecrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    public byte[] Decrypte(PrivateKey cle , byte[] objetADecrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
         System.out.println("ici");
         System.out.println("objetADecrypte : "+objetADecrypte);
         getChiffrement().init(Cipher.DECRYPT_MODE, cle);
-        byte[] objetDecrypte = getChiffrement().doFinal(objetADecrypte.toString().getBytes());
+        byte[] objetDecrypte = getChiffrement().doFinal(objetADecrypte);
         System.out.println("Decryptage de : ");
-        System.out.println(objetADecrypte.toString().getBytes() + " ---> " +new String(objetDecrypte).substring(0,objetDecrypte.length));
+        System.out.println(new String(objetADecrypte.toString().getBytes()) + " ---> " + objetDecrypte);
         return objetDecrypte;
     }
     

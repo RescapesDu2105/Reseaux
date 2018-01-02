@@ -19,6 +19,7 @@ import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
@@ -63,6 +64,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     private X509Certificate certifClient;
     private KeyStoreUtils ks;
     private CleSecrete cleHMACClient ;
+    private PrivateKey clePriveeServeur;
 
     public RequeteTICKMAP(int Type, HashMap chargeUtile) 
     {
@@ -326,8 +328,10 @@ public class RequeteTICKMAP implements Requete, Serializable
         try
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            clePriveeServeur= ks.getClePrivee();
             System.out.println("");
             System.out.println("Cle privee du Keystore : "+ks.getClePrivee().toString());
+            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());
         } catch (KeyStoreException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
@@ -357,9 +361,15 @@ public class RequeteTICKMAP implements Requete, Serializable
     {
         try
         {
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            clePriveeServeur= ks.getClePrivee();
+            System.out.println("");
+            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
-            System.out.println("ChargeUtile : "+ (byte [])getChargeUtile().get("Cle"));
-            byte[] cleDecrypte = cryptage.Decrypte(ks.getClePrivee(), getChargeUtile().get("Cle"));
+            byte[] cleCryptee = (byte[]) getChargeUtile().get("Cle");
+            System.out.println("ChargeUtile : "+ cleCryptee);
+            
+            byte[] cleDecrypte = cryptage.Decrypte(clePriveeServeur, cleCryptee);
             System.out.println("");
             System.out.println("Cle Decrypte : "+cleDecrypte);
             
@@ -381,6 +391,18 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadPaddingException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (KeyStoreException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnrecoverableKeyException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
