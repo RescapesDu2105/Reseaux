@@ -6,21 +6,33 @@
 package clientmutlithreadtickmap;
 
 import cryptographie.Certificats;
+import cryptographie.CleSecrete;
 import cryptographie.ClesPourCryptageAsymetrique;
+import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import protocoleTICKMAP.ReponseTICKMAP;
 import protocoleTICKMAP.RequeteTICKMAP;
 import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_CERTIFICATE;
+import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_SYMETRIC_KEY;
 
 /**
  *
@@ -29,12 +41,15 @@ import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_CERTIFICATE;
 public class AuthentificationGUI extends javax.swing.JFrame
 {
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ClientKeystore.jks";
+    private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
+    private static String keySecretHmac = "CleSecreteHMACClient.ser";
     private static String keyStorePsw = "123Soleil";
     private static String aliasKeyStrore="clientprivatekey";
     
     private Client Client;
     private KeyStoreUtils ks;
     private X509Certificate certifServeur;
+    private CleSecrete cleHMAC=null;
 
     /**
      * Creates new form AuthentificationGUI
@@ -172,6 +187,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
 
                     
                     RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
+                    RequestSendSecretKey(keyStoreDirPath,keySecretHmac);
                     
                     this.dispose();
                     AuthentificationGUI Test = this;
@@ -246,6 +262,89 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             System.out.println("... sa clé publique : " + certifServeur.getPublicKey().toString());
             System.out.println("... la classe instanciée par celle-ci : " +certifServeur.getPublicKey().getClass().getName());
         }
+    }
+    
+    public void RequestSendSecretKey(String path, String nameFile)
+    {
+        RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_SYMETRIC_KEY);
+        ReponseTICKMAP Rep = null;
+        try
+        {
+            File f = new File(path+nameFile);
+            if(f.exists())
+            {
+                try
+                {
+                    ObjectInputStream cleFichier =new ObjectInputStream(new FileInputStream(path+nameFile));
+                    SecretKey keyLoad=(SecretKey) cleFichier.readObject();
+                    cleFichier.close();
+                    cleHMAC=new CleSecrete(keyLoad);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    cleHMAC=new CleSecrete();
+                    cleHMAC.SaveCle(path, nameFile);
+                } catch (NoSuchAlgorithmException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            CryptageAsymetrique cryptage = new CryptageAsymetrique();
+            //byte[] cleACrypte = cleHMAC.toString().getBytes();
+            System.out.println("");
+            PublicKey clePubliqueServer = certifServeur.getPublicKey();
+            System.out.println("Cle : " +clePubliqueServer.toString());
+            byte[] cleCrypte=cryptage.Crypte(certifServeur.getPublicKey(), cleHMAC);
+            System.out.println("");
+            System.out.println("Cle en byte : "+cleHMAC.toString().getBytes());
+            System.out.println("Cle Cryptee(string) : "+cleCrypte.toString());
+            System.out.println("Cle Cryptee(bytes) : "+cleCrypte.toString().getBytes());
+            System.out.println("Cle Cryptee(bytes) : "+cleCrypte);
+            
+            Req.getChargeUtile().put("Cle" , cleCrypte);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex)
+        {
+            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        Client.EnvoyerRequete(Req);
+        Rep = Client.RecevoirReponse();
+        if(Rep.getCode() == ReponseTICKMAP.SEND_SYMETRICKEY_OK)
+        {
+            System.out.println("ok!");
+        }
+    
     }
     
     /**

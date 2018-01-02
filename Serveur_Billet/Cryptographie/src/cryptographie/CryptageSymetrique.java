@@ -9,12 +9,14 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -23,54 +25,21 @@ import javax.crypto.SecretKey;
 public class CryptageSymetrique
 {
     private static String codeProvider ="BC";
-    private KeyGenerator cleGen ;
-    private SecretKey cle;
+    private static String algoCrypt="DES/ECB/PKCS5Padding";
     private Cipher chiffrement;
 
-    public CryptageSymetrique()
+    public CryptageSymetrique() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException
     {
-        try
-        {
-            cleGen= KeyGenerator.getInstance("DES", codeProvider);
-            cle=cleGen.generateKey();
-            chiffrement=Cipher.getInstance("DES/ECB/PKCS5Padding",codeProvider);
-            chiffrement.init(Cipher.ENCRYPT_MODE,cle); 
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(CryptageSymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(CryptageSymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(CryptageSymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(CryptageSymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        cleGen.init(new SecureRandom()); 
+        Security.addProvider(new BouncyCastleProvider());
+        setChiffrement(Cipher.getInstance(algoCrypt,codeProvider));
+    }
+
+    public void Crypte(SecretKey cle,byte[] objetaCrypte) throws InvalidKeyException
+    {
+        getChiffrement().init(Cipher.ENCRYPT_MODE, cle);
+        
     }
     
-    public KeyGenerator getCleGen()
-    {
-        return cleGen;
-    }
-
-    public void setCleGen(KeyGenerator cleGen)
-    {
-        this.cleGen = cleGen;
-    }
-
-    public SecretKey getCle()
-    {
-        return cle;
-    }
-
-    public void setCle(SecretKey cle)
-    {
-        this.cle = cle;
-    }
-
     public Cipher getChiffrement()
     {
         return chiffrement;

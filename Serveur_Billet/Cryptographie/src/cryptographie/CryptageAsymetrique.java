@@ -10,10 +10,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Security;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -21,97 +26,36 @@ import javax.crypto.NoSuchPaddingException;
  */
 public class CryptageAsymetrique
 {
-    private static String codeProvider = "BC"; 
-    private ClesPourCryptageAsymetrique cles;
-    private PublicKey clePublique;
-    private PrivateKey clePrivee;
+    private static String codeProvider ="BC";
+    private static String algoCrypt="RSA/ECB/PKCS1Padding";
     private Cipher chiffrement;
 
-    public CryptageAsymetrique()
+    public CryptageAsymetrique() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException
     {
-        try
-        {
-            cles=new ClesPourCryptageAsymetrique();
-            clePublique=cles.getClepublique();
-            clePrivee=cles.getCleprivee();
-            chiffrement=Cipher.getInstance("RSA/ECB/PKCS#1",codeProvider);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Security.addProvider(new BouncyCastleProvider());
+        setChiffrement(Cipher.getInstance(algoCrypt,codeProvider));
+    }
+
+    public byte[] Crypte(PublicKey cle,Object objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    {
+        getChiffrement().init(Cipher.ENCRYPT_MODE, cle);
+        byte[] objetCrypte = getChiffrement().doFinal (objetACrypte.toString().getBytes());
+        System.out.println("Cryptage de : ");
+        System.out.println(new String(objetACrypte.toString().getBytes()) + " ---> " + objetCrypte);
+        return objetCrypte;
     }
     
-    public CryptageAsymetrique(PublicKey clePubliqueRecue , PrivateKey clePriveeRecue)
+    public byte[] Decrypte(PrivateKey cle , Object objetADecrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
-        try
-        {
-            setClePublique(clePubliqueRecue);
-            setClePrivee(clePriveeRecue);
-            chiffrement=Cipher.getInstance("RSA/ECB/PKCS#1",codeProvider);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println("ici");
+        System.out.println("objetADecrypte : "+objetADecrypte);
+        getChiffrement().init(Cipher.DECRYPT_MODE, cle);
+        byte[] objetDecrypte = getChiffrement().doFinal(objetADecrypte.toString().getBytes());
+        System.out.println("Decryptage de : ");
+        System.out.println(objetADecrypte.toString().getBytes() + " ---> " +new String(objetDecrypte).substring(0,objetDecrypte.length));
+        return objetDecrypte;
     }
     
-    public void Crypte()
-    {
-        try
-        {
-            getChiffrement().init(Cipher.ENCRYPT_MODE, getClePublique());
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(CryptageAsymetrique.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void Decrypte() throws InvalidKeyException
-    {
-        getChiffrement().init(Cipher.DECRYPT_MODE, getClePublique());
-    }
-    
-    public ClesPourCryptageAsymetrique getCles()
-    {
-        return cles;
-    }
-
-    public void setCles(ClesPourCryptageAsymetrique cles)
-    {
-        this.cles = cles;
-    }
-
-    public PublicKey getClePublique()
-    {
-        return clePublique;
-    }
-
-    public void setClePublique(PublicKey clePublique)
-    {
-        this.clePublique = clePublique;
-    }
-
-    public PrivateKey getClePrivee()
-    {
-        return clePrivee;
-    }
-
-    public void setClePrivee(PrivateKey clePrivee)
-    {
-        this.clePrivee = clePrivee;
-    }
-
     public Cipher getChiffrement()
     {
         return chiffrement;
@@ -121,7 +65,6 @@ public class CryptageAsymetrique
     {
         this.chiffrement = chiffrement;
     }
-    
     
     
 }

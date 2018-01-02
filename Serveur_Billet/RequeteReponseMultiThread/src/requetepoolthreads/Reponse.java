@@ -21,6 +21,8 @@ public interface Reponse {
     public final static String LOGIN_OK_MESSAGE = "Client connecté au serveur";
     public final static int SEND_CERTIFICATE_OK = 203;
     public final static String SEND_CERTIFICATE_OK_MESSAGE="Certificat du client recu";
+    public final static int SEND_SYMETRICKEY_OK = 204;
+    public final static String SEND_SYMETRICKEY_MESSAGE = "Clé secrete recue";
     
     public final static int LOGIN_KO = 402;    
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";

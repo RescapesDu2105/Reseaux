@@ -49,6 +49,11 @@ public class KeyStoreUtils
         else System.out.println("Signature testee sans succes"); */
     }
     
+    public void saveCertificate(String alias , X509Certificate certifRecu) throws KeyStoreException
+    {
+        ks.setCertificateEntry(alias, certifRecu);
+    }
+    
     public KeyStore getKs()
     {
         return ks;

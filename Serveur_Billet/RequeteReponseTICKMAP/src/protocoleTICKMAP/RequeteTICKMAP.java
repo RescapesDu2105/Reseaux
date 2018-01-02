@@ -5,6 +5,8 @@
  */
 package protocoleTICKMAP;
 
+import cryptographie.CleSecrete;
+import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
@@ -12,10 +14,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
@@ -26,6 +30,9 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import requetepoolthreads.Requete;
 
@@ -39,6 +46,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
     public final static int REQUEST_SEND_CERTIFICATE=2;
+    public final static int REQUEST_SEND_SYMETRIC_KEY=3;
     
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private static String keyStorePsw = "123Soleil";    
@@ -54,6 +62,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     
     private X509Certificate certifClient;
     private KeyStoreUtils ks;
+    private CleSecrete cleHMACClient ;
 
     public RequeteTICKMAP(int Type, HashMap chargeUtile) 
     {
@@ -211,6 +220,15 @@ public class RequeteTICKMAP implements Requete, Serializable
                         traiterSendCertificate();
                     }
                 };
+                
+            case REQUEST_SEND_SYMETRIC_KEY :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traiterSendSymetricKey();
+                    }
+                };
             default : return null;
         }
     }
@@ -223,6 +241,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
             case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER"; 
             case REQUEST_SEND_CERTIFICATE : return "REQUEST_SEND_CERTIFICATE";
+            case REQUEST_SEND_SYMETRIC_KEY : return "REQUEST_SEND_SYMETRIC_KEY";
             default : return null;
         }
     }
@@ -302,10 +321,13 @@ public class RequeteTICKMAP implements Requete, Serializable
         
         System.out.println("... sa clé publique : " + certifClient.getPublicKey().toString());
         System.out.println("... la classe instanciée par celle-ci : " +certifClient.getPublicKey().getClass().getName());
+        
        
         try
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            System.out.println("");
+            System.out.println("Cle privee du Keystore : "+ks.getClePrivee().toString());
         } catch (KeyStoreException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
@@ -329,6 +351,39 @@ public class RequeteTICKMAP implements Requete, Serializable
         Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_CERTIFICATE_OK);
         Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_CERTIFICATE_OK_MESSAGE);
         Reponse.getChargeUtile().put("Certificate",ks.getCertif());
+    }
+    
+    public void traiterSendSymetricKey()
+    {
+        try
+        {
+            CryptageAsymetrique cryptage = new CryptageAsymetrique();
+            System.out.println("ChargeUtile : "+ (byte [])getChargeUtile().get("Cle"));
+            byte[] cleDecrypte = cryptage.Decrypte(ks.getClePrivee(), getChargeUtile().get("Cle"));
+            System.out.println("");
+            System.out.println("Cle Decrypte : "+cleDecrypte);
+            
+            Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
+            Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_SYMETRICKEY_MESSAGE);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
