@@ -30,6 +30,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -51,8 +52,9 @@ public class RequeteTICKMAP implements Requete, Serializable
     
     public final static int REQUEST_LOG_OUT_PORTER = 0;
     public final static int REQUEST_LOGIN_PORTER = 1;
-    public final static int REQUEST_SEND_CERTIFICATE=2;
-    public final static int REQUEST_SEND_SYMETRIC_KEY=3;
+    public final static int REQUEST_SEND_CERTIFICATE = 2;
+    public final static int REQUEST_SEND_SYMETRIC_KEY = 3;
+    public final static int REQUEST_SEND_LIST_OF_FLY = 4;
     
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private static String keyStorePsw = "123Soleil";    
@@ -236,6 +238,15 @@ public class RequeteTICKMAP implements Requete, Serializable
                         traiterSendSymetricKey();
                     }
                 };
+                
+            case REQUEST_SEND_LIST_OF_FLY :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traiterSendListOfFly();
+                    }
+                };                
             default : return null;
         }
     }
@@ -249,6 +260,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER"; 
             case REQUEST_SEND_CERTIFICATE : return "REQUEST_SEND_CERTIFICATE";
             case REQUEST_SEND_SYMETRIC_KEY : return "REQUEST_SEND_SYMETRIC_KEY";
+            case REQUEST_SEND_LIST_OF_FLY : return "REQUEST_SEND_LIST_OF_FLY";
             default : return null;
         }
     }
@@ -417,4 +429,53 @@ public class RequeteTICKMAP implements Requete, Serializable
         }
     }
     
+    public void traiterSendListOfFly()
+    {
+        Bean_DB_Access BD_airport;
+        ResultSet RS;
+        String[] Champs = null;
+        
+        BD_airport = Connexion_DB();
+        
+        if (BD_airport != null)
+        {
+            int i=1;
+            try 
+            {                        
+                RS = BD_airport.Select("SELECT * FROM VOLS");
+                //RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Login = \"" + user + "\"");
+                if (RS != null) 
+                {         
+                    Reponse = new ReponseTICKMAP(ReponseTICKMAP.LIST_OF_FLY_OK);
+                    while(RS.next())
+                    {
+                        int NumeroVol = RS.getInt("NumeroVol");
+                        String Destination = RS.getString("Destination");
+                        Timestamp DateHeureDepart = RS.getTimestamp("HeureDepart");
+                        int PlacesRestantes = RS.getInt("PlacesRestantes");
+
+                        HashMap<String, Object> hm = new HashMap<>();
+                        
+                        hm.put("NumeroVol", NumeroVol);
+                        hm.put("Destination", Destination);
+                        hm.put("DateHeureDepart", DateHeureDepart);
+                        hm.put("PlacesRestantes",PlacesRestantes);
+
+                        Reponse.getChargeUtile().put(Integer.toString(i), hm);
+                        i++;
+                    }
+                    Reponse.getChargeUtile().put("Message", ReponseTICKMAP.LIST_OF_FLY_MESSAGE);
+                }
+            }       
+            catch (SQLException ex) 
+            {            
+                Reponse = new ReponseTICKMAP(ReponseTICKMAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseTICKMAP.INTERNAL_SERVER_ERROR_MESSAGE);
+                System.out.println(ReponseTICKMAP.INTERNAL_SERVER_ERROR_MESSAGE + " : " + ex.getMessage());
+            }
+        }
+        
+        BD_airport.Deconnexion();
+        //return Champs;        
+    }
 }

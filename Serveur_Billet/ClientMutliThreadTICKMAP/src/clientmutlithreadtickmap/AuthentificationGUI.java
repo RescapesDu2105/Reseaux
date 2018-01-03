@@ -194,10 +194,10 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                     /*cles=new ClesPourCryptageAsymetrique();
                     cles.SerialiserCle();*/
                     
-                   /*java.awt.EventQueue.invokeLater(() -> {
-                        new test().setVisible(true);
+                   java.awt.EventQueue.invokeLater(() -> {
+                        new ListeVolsGUI(getClient()).setVisible(true);
                     });
-                    this.jButtonEffacerActionPerformed(null);*/
+                    this.jButtonEffacerActionPerformed(null);
                 }
                 else
                 {
@@ -311,6 +311,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             PublicKey clePubliqueServer = certifServeur.getPublicKey();
             System.out.println("Cle : " +clePubliqueServer.toString());
             byte[] cleByte = cleHMAC.getCle().getEncoded();
+            //byte[] cleByte = "bonjour".getBytes();
             byte[] cleCrypte=cryptage.Crypte(certifServeur.getPublicKey(), cleByte);
             System.out.println("");
             System.out.println("Cle HMAC : "+cleHMAC.toString());
