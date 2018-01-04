@@ -54,6 +54,13 @@ public class KeyStoreUtils
         ks.setCertificateEntry(alias, certifRecu);
     }
     
+    public void SaveKeyStore(String pathKeyStore , String pswd) throws FileNotFoundException, KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException
+    {
+        FileOutputStream out = new FileOutputStream(pathKeyStore);
+        ks.store(out, pswd.toCharArray());
+        out.close();        
+    }
+    
     public KeyStore getKs()
     {
         return ks;

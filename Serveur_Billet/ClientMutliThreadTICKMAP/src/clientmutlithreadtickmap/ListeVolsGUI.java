@@ -21,6 +21,7 @@ import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_LIST_OF_FLY;
 public class ListeVolsGUI extends javax.swing.JFrame
 {
     private final Client client;
+    private final ArrayList<HashMap<String, Object>> Vols = new ArrayList<>();
 
     /**
      * Creates new form ListeVolsGUI
@@ -45,6 +46,7 @@ public class ListeVolsGUI extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVols = new javax.swing.JTable();
         jLabelTitre = new javax.swing.JLabel();
+        jButtonSlectionner = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,14 +65,28 @@ public class ListeVolsGUI extends javax.swing.JFrame
         jLabelTitre.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabelTitre.setText("LISTE DES VOLS");
 
+        jButtonSlectionner.setText("SELECTIONNER");
+        jButtonSlectionner.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonSlectionnerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jLabelTitre)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addComponent(jLabelTitre))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(228, 228, 228)
+                        .addComponent(jButtonSlectionner)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -79,12 +95,33 @@ public class ListeVolsGUI extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelTitre)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonSlectionner)
+                .addGap(14, 14, 14))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonSlectionnerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSlectionnerActionPerformed
+    {//GEN-HEADEREND:event_jButtonSlectionnerActionPerformed
+        System.out.println(jTableVols.getSelectedRow());
+        if((jTableVols.getSelectedRow())==-1)
+            JOptionPane.showMessageDialog(this, "Vous devez selectionner un vol", "Erreur", JOptionPane.ERROR_MESSAGE);
+        else
+        {
+            this.dispose();
+            java.awt.EventQueue.invokeLater(new Runnable() 
+            {
+                public void run() 
+                {
+                    new ClientInformationGUI(getClient(), getVols().get(jTableVols.getSelectedRow())).setVisible(true);
+                }
+            });
+        }
+        
+    }//GEN-LAST:event_jButtonSlectionnerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,7 +171,6 @@ public class ListeVolsGUI extends javax.swing.JFrame
     public void RequeteListeVols()
     {
         RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_LIST_OF_FLY);
-        ArrayList<HashMap<String, Object>> Vols = new ArrayList<>();
         
         DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
         
@@ -150,7 +186,7 @@ public class ListeVolsGUI extends javax.swing.JFrame
 
                 for (int Cpt = 1 ; Cpt <= RepVols.size() - 1 ; Cpt++) 
                 {
-                    Vols.add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
+                    getVols().add((HashMap<String, Object>) RepVols.get(Integer.toString(Cpt)));
                     HashMap<String, Object> Vol = Vols.get(Cpt - 1);
                     
                     ligne[0] = Vol.get("NumeroVol");
@@ -179,7 +215,13 @@ public class ListeVolsGUI extends javax.swing.JFrame
         return client;
     }
     
+    public ArrayList<HashMap<String, Object>> getVols() 
+    {
+        return Vols;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonSlectionner;
     private javax.swing.JLabel jLabelTitre;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVols;

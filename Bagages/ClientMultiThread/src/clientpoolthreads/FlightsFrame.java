@@ -191,7 +191,8 @@ public class FlightsFrame extends javax.swing.JFrame {
         return Client;
     }
 
-    public ArrayList<HashMap<String, Object>> getVols() {
+    public ArrayList<HashMap<String, Object>> getVols() 
+    {
         return Vols;
     }    
     

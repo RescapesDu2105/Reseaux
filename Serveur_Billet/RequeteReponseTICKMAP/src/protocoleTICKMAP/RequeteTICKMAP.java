@@ -57,8 +57,12 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_SEND_LIST_OF_FLY = 4;
     
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
+    private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
     private static String keyStorePsw = "123Soleil";    
-    private static String aliasKeyStrore="serveurprivatekey";
+    private static String aliasKeyStrore = "serveurprivatekey";
+    private static String aliasCertifPublicClientKey = "PublicClientKey";
+    private static String NameFileClientSecretKey = "SecretClientKey.ser";
+    private static String NameFileClientHMAC = "ClientHMAC.ser";
 
     
     private int Type;
@@ -349,6 +353,9 @@ public class RequeteTICKMAP implements Requete, Serializable
             System.out.println("");
             System.out.println("Cle privee du Keystore : "+ks.getClePrivee().toString());
             System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());
+            
+            ks.saveCertificate(aliasCertifPublicClientKey, certifClient);
+            ks.SaveKeyStore(keyStorePath, keyStorePsw);
         } catch (KeyStoreException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
@@ -380,20 +387,29 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
             clePriveeServeur= ks.getClePrivee();
-            System.out.println("");
-            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());
+            /*System.out.println("");
+            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());*/
+            /**********************************CLE HMAC***********************************/
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
-            byte[] cleCryptee = (byte[]) getChargeUtile().get("Cle");
-            System.out.println("ChargeUtile : "+ cleCryptee);
+            byte[] cleCrypteeHMAC = (byte[]) getChargeUtile().get("CleHMAC");
+            //System.out.println("ChargeUtile : "+ cleCryptee);
             
-            byte[] cleDecrypte = cryptage.Decrypte(clePriveeServeur, cleCryptee);
-            System.out.println("");
-            System.out.println("Cle Decrypte : "+cleDecrypte);
+            byte[] cleDecrypteHMAC = cryptage.Decrypte(clePriveeServeur, cleCrypteeHMAC);
+            /*System.out.println("");
+            System.out.println("Cle Decrypte : "+cleDecrypte);*/
             
-            SecretKey cleClientHMACTemp = new SecretKeySpec(cleDecrypte, 0, cleDecrypte.length, "DES");
+            SecretKey cleClientHMACTemp = new SecretKeySpec(cleDecrypteHMAC, 0, cleDecrypteHMAC.length, "DES");
             CleSecrete cleClientHMAC=new CleSecrete(cleClientHMACTemp);
-            System.out.println("");
-            System.out.println("Cle decripté : " +cleClientHMAC.toString());
+            cleClientHMAC.SaveCle(keyStoreDirPath,NameFileClientHMAC);
+            
+            /**********************************CLE SECRETE***********************************/
+            byte[] cleCrypteeSecrete = (byte[]) getChargeUtile().get("CleSECRETE");
+            byte[] cleDecrypteSecrete = cryptage.Decrypte(clePriveeServeur, cleCrypteeSecrete);
+            SecretKey cleClientSecreteTemp = new SecretKeySpec(cleDecrypteSecrete, 0, cleDecrypteSecrete.length, "DES");
+            CleSecrete cleClientSecete=new CleSecrete(cleClientSecreteTemp);
+            cleClientHMAC.SaveCle(keyStoreDirPath,NameFileClientSecretKey);
+            /*System.out.println("");
+            System.out.println("Cle decripté : " +cleClientHMAC.toString());*/
             Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_SYMETRICKEY_MESSAGE);
         } catch (NoSuchAlgorithmException ex)
@@ -449,6 +465,7 @@ public class RequeteTICKMAP implements Requete, Serializable
                     Reponse = new ReponseTICKMAP(ReponseTICKMAP.LIST_OF_FLY_OK);
                     while(RS.next())
                     {
+                        int IdVol = RS.getInt("IdVol");
                         int NumeroVol = RS.getInt("NumeroVol");
                         String Destination = RS.getString("Destination");
                         Timestamp DateHeureDepart = RS.getTimestamp("HeureDepart");
@@ -456,6 +473,7 @@ public class RequeteTICKMAP implements Requete, Serializable
 
                         HashMap<String, Object> hm = new HashMap<>();
                         
+                        hm.put("IdVol", IdVol);
                         hm.put("NumeroVol", NumeroVol);
                         hm.put("Destination", Destination);
                         hm.put("DateHeureDepart", DateHeureDepart);

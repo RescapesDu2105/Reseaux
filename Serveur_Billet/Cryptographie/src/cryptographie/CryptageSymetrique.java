@@ -12,7 +12,9 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -34,10 +36,22 @@ public class CryptageSymetrique
         setChiffrement(Cipher.getInstance(algoCrypt,codeProvider));
     }
 
-    public void Crypte(SecretKey cle,byte[] objetaCrypte) throws InvalidKeyException
+    public byte[] Crypte(SecretKey cle,byte[] objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
         getChiffrement().init(Cipher.ENCRYPT_MODE, cle);
-        
+        byte[] objetCrypte = getChiffrement().doFinal(objetACrypte);
+        System.out.println("Cryptage de : ");
+        System.out.println(new String(objetACrypte.toString().getBytes()) + " ---> " + objetCrypte);
+        return objetCrypte;  
+    }
+    
+    public byte[] Decrypte(SecretKey cle,byte[] objetADecrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    {
+        getChiffrement().init(Cipher.DECRYPT_MODE, cle);
+        byte[] objetDecrypte = getChiffrement().doFinal(objetADecrypte);
+        System.out.println("Cryptage de : ");
+        System.out.println(new String(objetADecrypte.toString().getBytes()) + " ---> " + objetDecrypte);
+        return objetDecrypte;  
     }
     
     public Cipher getChiffrement()

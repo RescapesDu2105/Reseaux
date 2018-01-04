@@ -42,6 +42,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
 {
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ClientKeystore.jks";
     private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
+    private static String keySecretClient = "CleSecreteClient.ser";
     private static String keySecretHmac = "CleSecreteHMACClient.ser";
     private static String keyStorePsw = "123Soleil";
     private static String aliasKeyStrore="clientprivatekey";
@@ -49,6 +50,7 @@ public class AuthentificationGUI extends javax.swing.JFrame
     private Client Client;
     private KeyStoreUtils ks;
     private X509Certificate certifServeur;
+    private CleSecrete cleClient;
     private CleSecrete cleHMAC=null;
 
     /**
@@ -187,7 +189,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
 
                     
                     RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
-                    RequestSendSecretKey(keyStoreDirPath,keySecretHmac);
+                    RequestSendSecretKey(keyStoreDirPath,keySecretClient,keySecretHmac);
                     
                     this.dispose();
                     AuthentificationGUI Test = this;
@@ -264,18 +266,19 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         }
     }
     
-    public void RequestSendSecretKey(String path, String nameFile)
+    public void RequestSendSecretKey(String path, String nameClientKey, String nameHMACClient)
     {
         RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_SYMETRIC_KEY);
         ReponseTICKMAP Rep = null;
         try
         {
-            File f = new File(path+nameFile);
-            if(f.exists())
+            /************************************Chargement de la cle du HMAC*********************************/
+            File fHMAC = new File(path+nameHMACClient);
+            if(fHMAC.exists())
             {
                 try
                 {
-                    ObjectInputStream cleFichier =new ObjectInputStream(new FileInputStream(path+nameFile));
+                    ObjectInputStream cleFichier =new ObjectInputStream(new FileInputStream(path+nameHMACClient));
                     SecretKey keyLoad=(SecretKey) cleFichier.readObject();
                     cleFichier.close();
                     cleHMAC=new CleSecrete(keyLoad);
@@ -292,7 +295,43 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                 try
                 {
                     cleHMAC=new CleSecrete();
-                    cleHMAC.SaveCle(path, nameFile);
+                    cleHMAC.SaveCle(path, nameHMACClient);
+                } catch (NoSuchAlgorithmException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            /*********************************CHARGMENT DE LA CLE SECRETE DU CLIENT***********************/
+            File fClient = new File(path+nameClientKey);
+            if(fClient.exists())
+            {
+                try
+                {
+                    ObjectInputStream cleFichierCli =new ObjectInputStream(new FileInputStream(path+nameClientKey));
+                    SecretKey keyLoadCli=(SecretKey) cleFichierCli.readObject();
+                    cleFichierCli.close();
+                    cleClient=new CleSecrete(keyLoadCli);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    cleClient=new CleSecrete();
+                    cleClient.SaveCle(path, nameHMACClient);
                 } catch (NoSuchAlgorithmException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -305,22 +344,26 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                 }
             }
 
+            /*********************CRYPTAGE DE LA CLE POUR LE HMAC*******************/
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
-            //byte[] cleACrypte = cleHMAC.toString().getBytes();
-            System.out.println("");
+            //System.out.println("");
             PublicKey clePubliqueServer = certifServeur.getPublicKey();
-            System.out.println("Cle : " +clePubliqueServer.toString());
-            byte[] cleByte = cleHMAC.getCle().getEncoded();
-            //byte[] cleByte = "bonjour".getBytes();
-            byte[] cleCrypte=cryptage.Crypte(certifServeur.getPublicKey(), cleByte);
-            System.out.println("");
+            //System.out.println("Cle : " +clePubliqueServer.toString());
+            byte[] cleByteHMAC = cleHMAC.getCle().getEncoded();
+            byte[] cleCrypteHMAC = cryptage.Crypte(certifServeur.getPublicKey(), cleByteHMAC);
+            /*System.out.println("");
             System.out.println("Cle HMAC : "+cleHMAC.toString());
             System.out.println("Cle en byte : "+cleByte.toString().getBytes());
             System.out.println("Cle Cryptee(string) : "+cleCrypte.toString());
             System.out.println("Cle Cryptee(bytes) : "+cleCrypte.toString().getBytes());
-            System.out.println("Cle Cryptee(bytes) : "+cleCrypte);
+            System.out.println("Cle Cryptee(bytes) : "+cleCrypte);*/
             
-            Req.getChargeUtile().put("Cle" , cleCrypte);
+            /*********************CRYPTAGE DE LA CLE SECRETE DU CLIENT*******************/
+            byte[] cleByteSecrete = cleHMAC.getCle().getEncoded();
+            byte[] cleCrypteSecrete = cryptage.Crypte(certifServeur.getPublicKey(), cleByteSecrete);
+            
+            Req.getChargeUtile().put("CleHMAC" , cleCrypteHMAC);
+            Req.getChargeUtile().put("CleSECRETE" , cleCrypteSecrete);
         } catch (NoSuchAlgorithmException ex)
         {
             Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
