@@ -5,18 +5,32 @@
  */
 package clientmutlithreadtickmap;
 
+import cryptographie.ClientBD;
 import cryptographie.CleSecrete;
+import cryptographie.CryptageSymetrique;
 import cryptographie.KeyStoreUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
+import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.ENCRYPT_MODE;
+import protocoleTICKMAP.ReponseTICKMAP;
+import protocoleTICKMAP.RequeteTICKMAP;
+import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_REGISTRATION_FLY;
 
 /**
  *
@@ -26,6 +40,7 @@ public class ClientInformationGUI extends javax.swing.JFrame
 {
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ClientKeystore.jks";
     private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
+    private static String keySecretClient = "SecretKeyClient.ser";
     private static String keySecretHmac = "CleSecreteHMACClient.ser";
     private static String keyStorePsw = "123Soleil";
     private static String aliasKeyStrore="clientprivatekey";
@@ -34,7 +49,6 @@ public class ClientInformationGUI extends javax.swing.JFrame
     private HashMap<String, Object> Vols;
     private KeyStoreUtils ks;
     private X509Certificate certifServeur;
-    private SecretKey cleSecrete;
 
     /**
      * Creates new form ClientInformationGUI
@@ -83,6 +97,13 @@ public class ClientInformationGUI extends javax.swing.JFrame
         });
 
         jButtonEffacer.setText("Effacer");
+        jButtonEffacer.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonEffacerActionPerformed(evt);
+            }
+        });
 
         jTextFieldAccompagnant.setText("0");
 
@@ -145,17 +166,24 @@ public class ClientInformationGUI extends javax.swing.JFrame
             JOptionPane.showMessageDialog(this, "Vous devez remplir les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
         else
         {
-            ClientBD clientbd = new ClientBD(jTextFieldNom.getText(),jTextFieldPrenom.getText(),Integer.parseInt(jTextFieldAccompagnant.getText()));
-            CrypteVol(keyStoreDirPath,keySecretHmac);
+            CrypteVol(keyStoreDirPath,keySecretClient);
         }
     
     }//GEN-LAST:event_jButtonEnregistrerActionPerformed
 
+    private void jButtonEffacerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEffacerActionPerformed
+    {//GEN-HEADEREND:event_jButtonEffacerActionPerformed
+       jTextFieldNom.setText("");
+       jTextFieldPrenom.setText("");
+    }//GEN-LAST:event_jButtonEffacerActionPerformed
+
     public void CrypteVol(String path, String nameFile)
     {
         int idVol = (int) getVols().get("IdVol");
-        
         File f = new File(path+nameFile);
+        RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_REGISTRATION_FLY);
+        ReponseTICKMAP Rep = null;
+        
         if(f.exists())
         {
             try
@@ -163,7 +191,39 @@ public class ClientInformationGUI extends javax.swing.JFrame
                 ObjectInputStream cleFichier =new ObjectInputStream(new FileInputStream(path+nameFile));
                 SecretKey keyLoad=(SecretKey) cleFichier.readObject();
                 cleFichier.close();
-                cleSecrete=(SecretKey) new CleSecrete(keyLoad);
+                CleSecrete cleClient=new CleSecrete(keyLoad);
+                
+                ClientBD clientbd = new ClientBD(jTextFieldNom.getText(),jTextFieldPrenom.getText(),Integer.parseInt(jTextFieldAccompagnant.getText()));
+                try
+                {
+                    System.out.println("cryptage du vol...");
+                    CryptageSymetrique cryptage = new CryptageSymetrique();
+                    //byte[] b = (Integer.toString(idVol)).getBytes();
+                    byte[] idVolCrypte = cryptage.Crypte(keyLoad,(Integer.toString(idVol)).getBytes());
+                    
+                    System.out.println("cryptage du client...");
+                    Cipher chiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
+                    chiffrement.init(ENCRYPT_MODE, keyLoad);
+                    SealedObject sealed = new SealedObject(clientbd, chiffrement);
+                } catch (IllegalBlockSizeException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchAlgorithmException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchPaddingException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidKeyException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (BadPaddingException ex)
+                {
+                    Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (IOException ex)
             {
                 Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);

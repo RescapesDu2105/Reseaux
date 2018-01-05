@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clientmutlithreadtickmap;
+package cryptographie;
+
+import java.io.Serializable;
 
 /**
  *
  * @author Doublon
  */
-public class ClientBD
+public class ClientBD implements Serializable
 {
     private String Nom;
     private String Prenom;

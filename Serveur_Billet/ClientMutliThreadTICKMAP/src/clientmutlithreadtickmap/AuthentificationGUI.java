@@ -42,16 +42,17 @@ public class AuthentificationGUI extends javax.swing.JFrame
 {
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ClientKeystore.jks";
     private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
-    private static String keySecretClient = "CleSecreteClient.ser";
+    private static String keySecretClient = "SecretKeyClient.ser";
     private static String keySecretHmac = "CleSecreteHMACClient.ser";
     private static String keyStorePsw = "123Soleil";
-    private static String aliasKeyStrore="clientprivatekey";
+    private static String aliasKeyStrore = "clientprivatekey";
+    private static String aliasCertifServeurPublicKey = "ServeurPublicKey" ;
     
     private Client Client;
     private KeyStoreUtils ks;
     private X509Certificate certifServeur;
     private CleSecrete cleClient;
-    private CleSecrete cleHMAC=null;
+    private CleSecrete cleHMAC;
 
     /**
      * Creates new form AuthentificationGUI
@@ -251,18 +252,34 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         Rep = Client.RecevoirReponse();
         if(Rep.getCode() == ReponseTICKMAP.SEND_CERTIFICATE_OK)
         {
-            certifServeur=(X509Certificate) Rep.getChargeUtile().get("Certificate");
-            
-            System.out.println("");
-            System.out.println("Reception du certificat du serveur");
-            System.out.println("Classe instanciée : " + certifServeur.getClass().getName());
-            System.out.println("Type de certificat : " + certifServeur.getType());
-            System.out.println("Nom du propriétaire du certificat : " +certifServeur.getSubjectDN().getName());
-            System.out.println("Dates limites de validité : [" + certifServeur.getNotBefore() + " - " +certifServeur.getNotAfter() + "]");   
-
-
-            System.out.println("... sa clé publique : " + certifServeur.getPublicKey().toString());
-            System.out.println("... la classe instanciée par celle-ci : " +certifServeur.getPublicKey().getClass().getName());
+            try {
+                certifServeur=(X509Certificate) Rep.getChargeUtile().get("Certificate");
+                
+                /*System.out.println("");
+                System.out.println("Reception du certificat du serveur");
+                System.out.println("Classe instanciée : " + certifServeur.getClass().getName());
+                System.out.println("Type de certificat : " + certifServeur.getType());
+                System.out.println("Nom du propriétaire du certificat : " +certifServeur.getSubjectDN().getName());
+                System.out.println("Dates limites de validité : [" + certifServeur.getNotBefore() + " - " +certifServeur.getNotAfter() + "]");
+                
+                
+                System.out.println("... sa clé publique : " + certifServeur.getPublicKey().toString());
+                System.out.println("... la classe instanciée par celle-ci : " +certifServeur.getPublicKey().getClass().getName());*/
+                
+                ks.saveCertificate(aliasCertifServeurPublicKey, certifServeur);
+                ks.SaveKeyStore(keyStorePath, keyStorePsw);
+            } catch (KeyStoreException ex) {
+                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex)
+            {
+                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (CertificateException ex)
+            {
+                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -314,6 +331,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             {
                 try
                 {
+                    System.out.println("test");
                     ObjectInputStream cleFichierCli =new ObjectInputStream(new FileInputStream(path+nameClientKey));
                     SecretKey keyLoadCli=(SecretKey) cleFichierCli.readObject();
                     cleFichierCli.close();
@@ -331,7 +349,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                 try
                 {
                     cleClient=new CleSecrete();
-                    cleClient.SaveCle(path, nameHMACClient);
+                    cleClient.SaveCle(path, nameClientKey);
                 } catch (NoSuchAlgorithmException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);

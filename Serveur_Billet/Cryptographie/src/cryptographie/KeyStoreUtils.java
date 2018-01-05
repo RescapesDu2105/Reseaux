@@ -43,10 +43,6 @@ public class KeyStoreUtils
         System.out.println("Recuperation de la cle publique");
         setClePublique(certif.getPublicKey());
         System.out.println("*** Cle publique recuperee = "+getClePublique().toString());
-        
-        /*boolean ok = signature.verify(signature);
-        if (ok) System.out.println("Signature testee avec succes");
-        else System.out.println("Signature testee sans succes"); */
     }
     
     public void saveCertificate(String alias , X509Certificate certifRecu) throws KeyStoreException

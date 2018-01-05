@@ -8,10 +8,15 @@ package protocoleTICKMAP;
 import cryptographie.CleSecrete;
 import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
+import cryptographie.ClientBD;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.security.InvalidKeyException;
@@ -36,11 +41,13 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.DECRYPT_MODE;
 import requetepoolthreads.Requete;
 
 /**
@@ -55,14 +62,15 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_SEND_CERTIFICATE = 2;
     public final static int REQUEST_SEND_SYMETRIC_KEY = 3;
     public final static int REQUEST_SEND_LIST_OF_FLY = 4;
+    public final static int REQUEST_REGISTRATION_FLY = 5;
     
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
     private static String keyStorePsw = "123Soleil";    
     private static String aliasKeyStrore = "serveurprivatekey";
     private static String aliasCertifPublicClientKey = "PublicClientKey";
-    private static String NameFileClientSecretKey = "SecretClientKey.ser";
-    private static String NameFileClientHMAC = "ClientHMAC.ser";
+    private static String NameFileClientSecretKey = "SecretKeyClient.ser";
+    private static String NameFileClientHMAC = "CleSecreteHMACClient.ser";
 
     
     private int Type;
@@ -250,7 +258,16 @@ public class RequeteTICKMAP implements Requete, Serializable
                     {
                         traiterSendListOfFly();
                     }
-                };                
+                };
+
+            case REQUEST_REGISTRATION_FLY :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traitRegistrationFly();
+                    }
+                };                   
             default : return null;
         }
     }
@@ -265,6 +282,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             case REQUEST_SEND_CERTIFICATE : return "REQUEST_SEND_CERTIFICATE";
             case REQUEST_SEND_SYMETRIC_KEY : return "REQUEST_SEND_SYMETRIC_KEY";
             case REQUEST_SEND_LIST_OF_FLY : return "REQUEST_SEND_LIST_OF_FLY";
+            case REQUEST_REGISTRATION_FLY : return "REQUEST_REGISTRATION_FLY";
             default : return null;
         }
     }
@@ -495,5 +513,51 @@ public class RequeteTICKMAP implements Requete, Serializable
         
         BD_airport.Deconnexion();
         //return Champs;        
+    }
+    
+    public void traitRegistrationFly()
+    {
+        Bean_DB_Access BD_airport;
+        BD_airport = Connexion_DB();
+        ClientBD clientdb;
+        CleSecrete cleClient;
+        File f = new File(keyStoreDirPath+NameFileClientSecretKey);
+        
+        if(f.exists())
+        {
+            try 
+            {
+                ObjectInputStream cleFichier = new ObjectInputStream(new FileInputStream(keyStoreDirPath+NameFileClientSecretKey));
+                SecretKey keyLoad=(SecretKey) cleFichier.readObject();
+                cleFichier.close();
+                cleClient=new CleSecrete(keyLoad);
+                
+                Cipher dechiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
+                dechiffrement.init(DECRYPT_MODE,cleClient.getCle());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchProviderException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+        clientdb=
+        //getChargeUtile().get("Certificate");
     }
 }

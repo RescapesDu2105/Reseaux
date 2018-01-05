@@ -44,7 +44,7 @@ public class CleSecrete
     public void SaveCle(String path,String nomFichier) throws IOException
     {
         ObjectOutputStream cleFichier = new ObjectOutputStream(new FileOutputStream(path+nomFichier));
-        cleFichier.writeObject(cle);
+        cleFichier.writeObject(getCle());
         cleFichier.close();
     }
     
