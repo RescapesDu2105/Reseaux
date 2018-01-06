@@ -9,10 +9,13 @@ import cryptographie.ClientBD;
 import cryptographie.CleSecrete;
 import cryptographie.CryptageSymetrique;
 import cryptographie.KeyStoreUtils;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -201,10 +204,32 @@ public class ClientInformationGUI extends javax.swing.JFrame
                     //byte[] b = (Integer.toString(idVol)).getBytes();
                     byte[] idVolCrypte = cryptage.Crypte(keyLoad,(Integer.toString(idVol)).getBytes());
                     
-                    System.out.println("cryptage du client...");
-                    Cipher chiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
+                    /*System.out.println("cryptage du client...");
+                    /*Cipher chiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
                     chiffrement.init(ENCRYPT_MODE, keyLoad);
                     SealedObject sealed = new SealedObject(clientbd, chiffrement);
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    ObjectOutput out = new ObjectOutputStream(bos);
+                    out.writeObject(clientbd);
+                    out.flush();
+                    bos.close();
+                    byte[] clientByte = bos.toByteArray();
+                    byte[] clientCrypte = cryptage.Crypte(keyLoad,clientByte);*/
+                    
+                    Req.getChargeUtile().put("IdVol",idVolCrypte);
+                    //Req.getChargeUtile().put("clientBD", clientCrypte);
+                    getClient().EnvoyerRequete(Req);
+                    Rep = getClient().RecevoirReponse();
+                    if(Rep.getCode() == ReponseTICKMAP.REQUEST_REGISTRATION_FLY_OK)
+                    {
+                        int montant = (int) Rep.getChargeUtile().get("Facture");
+                        System.out.println("Montant a payé : "+montant);
+                    }
+                    else if (Rep.getCode() == ReponseTICKMAP.REQUEST_REGISTRATION_FLY_KO)
+                    {
+                        JOptionPane.showMessageDialog(this, Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);                        
+                    }
+                    
                 } catch (IllegalBlockSizeException ex)
                 {
                     Logger.getLogger(ClientInformationGUI.class.getName()).log(Level.SEVERE, null, ex);

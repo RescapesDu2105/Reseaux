@@ -30,6 +30,8 @@ public interface Reponse {
     
     public final static int LOGIN_KO = 402;    
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
+    public final static int REQUEST_REGISTRATION_FLY_KO = 403;
+    public final static String REQUEST_REGISTRATION_FLY_KO_MESSAGE = "Il n'y a plus de place disponible pour ce vol";
     
     public int getCode();
     public void setCode(int Code);

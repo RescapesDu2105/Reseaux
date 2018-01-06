@@ -377,7 +377,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             System.out.println("Cle Cryptee(bytes) : "+cleCrypte);*/
             
             /*********************CRYPTAGE DE LA CLE SECRETE DU CLIENT*******************/
-            byte[] cleByteSecrete = cleHMAC.getCle().getEncoded();
+            byte[] cleByteSecrete = cleClient.getCle().getEncoded();
             byte[] cleCrypteSecrete = cryptage.Crypte(certifServeur.getPublicKey(), cleByteSecrete);
             
             Req.getChargeUtile().put("CleHMAC" , cleCrypteHMAC);

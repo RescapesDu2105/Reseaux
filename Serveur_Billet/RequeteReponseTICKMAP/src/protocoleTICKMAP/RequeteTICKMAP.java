@@ -9,6 +9,7 @@ import cryptographie.CleSecrete;
 import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
 import cryptographie.ClientBD;
+import cryptographie.CryptageSymetrique;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -425,7 +426,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             byte[] cleDecrypteSecrete = cryptage.Decrypte(clePriveeServeur, cleCrypteeSecrete);
             SecretKey cleClientSecreteTemp = new SecretKeySpec(cleDecrypteSecrete, 0, cleDecrypteSecrete.length, "DES");
             CleSecrete cleClientSecete=new CleSecrete(cleClientSecreteTemp);
-            cleClientHMAC.SaveCle(keyStoreDirPath,NameFileClientSecretKey);
+            cleClientSecete.SaveCle(keyStoreDirPath,NameFileClientSecretKey);
             /*System.out.println("");
             System.out.println("Cle decripté : " +cleClientHMAC.toString());*/
             Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
@@ -518,9 +519,9 @@ public class RequeteTICKMAP implements Requete, Serializable
     public void traitRegistrationFly()
     {
         Bean_DB_Access BD_airport;
-        BD_airport = Connexion_DB();
-        ClientBD clientdb;
+        ResultSet RS;
         CleSecrete cleClient;
+        int idVol;
         File f = new File(keyStoreDirPath+NameFileClientSecretKey);
         
         if(f.exists())
@@ -534,6 +535,44 @@ public class RequeteTICKMAP implements Requete, Serializable
                 
                 Cipher dechiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
                 dechiffrement.init(DECRYPT_MODE,cleClient.getCle());
+                
+                /****************************DECRYPTAGE DE L'IDVOL*********************************/
+                System.out.println("Decriptage de l'idVol...");
+                byte[] idVolCrypte = (byte[]) getChargeUtile().get("IdVol");
+                CryptageSymetrique cryptage = new CryptageSymetrique();
+                byte[] IdVolDecrypte = cryptage.Decrypte(keyLoad, idVolCrypte);
+                String IdVolStr = new String(IdVolDecrypte);
+                idVol= Integer.parseInt(IdVolStr);
+                System.out.println("idVol Decrypte(string) : "+IdVolStr);
+                System.out.println("idVol Decrypte(int) : "+idVol);
+                
+                /****************************VERIF DANS LA BD*************************************/
+                BD_airport = Connexion_DB();
+                if (BD_airport != null)
+                {
+                    RS = BD_airport.Select("SELECT * FROM VOLS WHERE IdVol="+IdVolStr);
+                    if (RS != null)
+                    {
+                       
+                       int PlacesRestantes=0; 
+                       while(RS.next())
+                       {
+                           PlacesRestantes=RS.getInt("PlacesRestantes");
+                       }
+                       if (PlacesRestantes>0)
+                       {
+                            Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_REGISTRATION_FLY_OK);
+                            Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_REGISTRATION_FLY_MESSAGE);
+                            Reponse.getChargeUtile().put("Facture", 75);
+                       }
+                       else
+                       {
+                            Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_REGISTRATION_FLY_KO);
+                            Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_REGISTRATION_FLY_KO_MESSAGE);                           
+                       }
+                    }
+                }
+                
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex)
@@ -554,10 +593,20 @@ public class RequeteTICKMAP implements Requete, Serializable
             } catch (InvalidKeyException ex)
             {
                 Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
        
-        clientdb=
+        //clientdb=
         //getChargeUtile().get("Certificate");
     }
 }
