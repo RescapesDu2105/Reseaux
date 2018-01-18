@@ -5,7 +5,6 @@
  */
 package clientmutlithreadtickmap;
 
-import cryptographie.Certificats;
 import cryptographie.CleSecrete;
 import cryptographie.ClesPourCryptageAsymetrique;
 import cryptographie.CryptageAsymetrique;
@@ -254,18 +253,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         {
             try {
                 certifServeur=(X509Certificate) Rep.getChargeUtile().get("Certificate");
-                
-                /*System.out.println("");
-                System.out.println("Reception du certificat du serveur");
-                System.out.println("Classe instanciée : " + certifServeur.getClass().getName());
-                System.out.println("Type de certificat : " + certifServeur.getType());
-                System.out.println("Nom du propriétaire du certificat : " +certifServeur.getSubjectDN().getName());
-                System.out.println("Dates limites de validité : [" + certifServeur.getNotBefore() + " - " +certifServeur.getNotAfter() + "]");
-                
-                
-                System.out.println("... sa clé publique : " + certifServeur.getPublicKey().toString());
-                System.out.println("... la classe instanciée par celle-ci : " +certifServeur.getPublicKey().getClass().getName());*/
-                
+                             
                 ks.saveCertificate(aliasCertifServeurPublicKey, certifServeur);
                 ks.SaveKeyStore(keyStorePath, keyStorePsw);
             } catch (KeyStoreException ex) {
@@ -364,17 +352,9 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
 
             /*********************CRYPTAGE DE LA CLE POUR LE HMAC*******************/
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
-            //System.out.println("");
             PublicKey clePubliqueServer = certifServeur.getPublicKey();
-            //System.out.println("Cle : " +clePubliqueServer.toString());
             byte[] cleByteHMAC = cleHMAC.getCle().getEncoded();
             byte[] cleCrypteHMAC = cryptage.Crypte(certifServeur.getPublicKey(), cleByteHMAC);
-            /*System.out.println("");
-            System.out.println("Cle HMAC : "+cleHMAC.toString());
-            System.out.println("Cle en byte : "+cleByte.toString().getBytes());
-            System.out.println("Cle Cryptee(string) : "+cleCrypte.toString());
-            System.out.println("Cle Cryptee(bytes) : "+cleCrypte.toString().getBytes());
-            System.out.println("Cle Cryptee(bytes) : "+cleCrypte);*/
             
             /*********************CRYPTAGE DE LA CLE SECRETE DU CLIENT*******************/
             byte[] cleByteSecrete = cleClient.getCle().getEncoded();

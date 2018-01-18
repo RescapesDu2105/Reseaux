@@ -10,6 +10,7 @@ import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
 import cryptographie.ClientBD;
 import cryptographie.CryptageSymetrique;
+import cryptographie.HMACUtils;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -65,6 +66,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_SEND_SYMETRIC_KEY = 3;
     public final static int REQUEST_SEND_LIST_OF_FLY = 4;
     public final static int REQUEST_REGISTRATION_FLY = 5;
+    public final static int REQUEST_PAYMENT_REGISTRATION = 6;
     
     private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
@@ -269,7 +271,17 @@ public class RequeteTICKMAP implements Requete, Serializable
                     {
                         traitRegistrationFly();
                     }
-                };                   
+                };
+                
+            case REQUEST_PAYMENT_REGISTRATION :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traiterPaymentReg();
+                    }
+                };  
+                
             default : return null;
         }
     }
@@ -285,6 +297,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             case REQUEST_SEND_SYMETRIC_KEY : return "REQUEST_SEND_SYMETRIC_KEY";
             case REQUEST_SEND_LIST_OF_FLY : return "REQUEST_SEND_LIST_OF_FLY";
             case REQUEST_REGISTRATION_FLY : return "REQUEST_REGISTRATION_FLY";
+            case REQUEST_PAYMENT_REGISTRATION : return "REQUEST_PAYMENT_REGISTRATION";
             default : return null;
         }
     }
@@ -570,8 +583,6 @@ public class RequeteTICKMAP implements Requete, Serializable
                        }
                        if (PlacesRestantes>=cli.getNbAccompagnant()+1)
                        {
-                            /*********************Cryptage du montant********************************/
-
                             Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_REGISTRATION_FLY_OK);
                             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_REGISTRATION_FLY_MESSAGE);
                             
@@ -620,8 +631,43 @@ public class RequeteTICKMAP implements Requete, Serializable
             }
             
         }
-       
-        //clientdb=
-        //getChargeUtile().get("Certificate");
+    }
+    
+    public void traiterPaymentReg()
+    {
+        SecretKey cleHMAC;
+        
+        byte[] message = (byte[]) getChargeUtile().get("message");
+        byte[] messageHMACRecu = (byte[]) getChargeUtile().get("messageHmac");
+        try
+        {
+            cleHMACClient = new CleSecrete();
+            cleHMAC = cleHMACClient.LoadCle(keyStoreDirPath, NameFileClientHMAC);
+            
+            HMACUtils hmac = new HMACUtils(cleHMAC);
+            byte[] messageHMAC = hmac.DoHmac(message);
+            
+            if(MessageDigest.isEqual(messageHMACRecu, messageHMAC))
+            {
+                System.out.println("Message du client Authentifié !!!");
+                Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK);
+                Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_MESSAGE);
+            }
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

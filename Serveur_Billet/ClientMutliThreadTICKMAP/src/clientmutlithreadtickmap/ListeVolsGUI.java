@@ -28,6 +28,7 @@ public class ListeVolsGUI extends javax.swing.JFrame
      */
     public ListeVolsGUI(Client c)
     {
+        setLocationRelativeTo(null); 
         client=c;
         initComponents();
         RequeteListeVols();

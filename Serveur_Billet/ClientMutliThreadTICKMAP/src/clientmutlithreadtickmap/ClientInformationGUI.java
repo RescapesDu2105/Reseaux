@@ -58,6 +58,7 @@ public class ClientInformationGUI extends javax.swing.JFrame
      */
     public ClientInformationGUI(Client c , HashMap<String, Object> Vols)
     {
+        setLocationRelativeTo(null); 
         setClient(c);
         setVols(Vols);
         initComponents();
@@ -220,6 +221,15 @@ public class ClientInformationGUI extends javax.swing.JFrame
                         String factureStr = new String(factureDecrypte);
                         int facture= Integer.parseInt(factureStr);
                         System.out.println("Facture a payé : "+facture);
+                        
+                        this.dispose();
+                        java.awt.EventQueue.invokeLater(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                new PaymentGUI(getClient(),facture).setVisible(true);
+                            }
+                        });
                     }
                     else if (Rep.getCode() == ReponseTICKMAP.REQUEST_REGISTRATION_FLY_KO)
                     {

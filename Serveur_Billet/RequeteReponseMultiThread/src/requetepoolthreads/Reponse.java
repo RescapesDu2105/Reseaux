@@ -28,6 +28,8 @@ public interface Reponse
     public final static String LIST_OF_FLY_MESSAGE = "Liste des vols chargee";
     public final static int REQUEST_REGISTRATION_FLY_OK = 206;
     public final static String REQUEST_REGISTRATION_FLY_MESSAGE = "Client bien enregistre";
+    public final static int REQUEST_PAYMENT_REGISTRATION_OK = 207;
+    public final static String REQUEST_PAYMENT_REGISTRATION_MESSAGE = "Demande de payment";
     
     public final static int LOGIN_KO = 402;    
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
