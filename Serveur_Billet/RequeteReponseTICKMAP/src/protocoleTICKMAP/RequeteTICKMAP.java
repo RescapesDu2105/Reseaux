@@ -45,6 +45,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -546,6 +547,14 @@ public class RequeteTICKMAP implements Requete, Serializable
                 System.out.println("idVol Decrypte(string) : "+IdVolStr);
                 System.out.println("idVol Decrypte(int) : "+idVol);
                 
+                /****************************DECRYPTAGE DU CLIENT*********************************/
+                System.out.println("Decriptage du client...");
+                SealedObject sealed = (SealedObject) getChargeUtile().get("clientBD");
+                ClientBD cli = (ClientBD) sealed.getObject(dechiffrement);
+                System.out.println("Nom : "+cli.getNom());
+                System.out.println("Prenom : "+cli.getPrenom());
+                //clientBD
+                
                 /****************************VERIF DANS LA BD*************************************/
                 BD_airport = Connexion_DB();
                 if (BD_airport != null)
@@ -559,11 +568,17 @@ public class RequeteTICKMAP implements Requete, Serializable
                        {
                            PlacesRestantes=RS.getInt("PlacesRestantes");
                        }
-                       if (PlacesRestantes>0)
+                       if (PlacesRestantes>=cli.getNbAccompagnant()+1)
                        {
+                            /*********************Cryptage du montant********************************/
+
                             Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_REGISTRATION_FLY_OK);
                             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_REGISTRATION_FLY_MESSAGE);
-                            Reponse.getChargeUtile().put("Facture", 75);
+                            
+                            /*************************CRYPTAGE DU MONTANT******************************************/
+                            int montant = (cli.getNbAccompagnant()+1)*75;
+                            byte[] factureCrypte = cryptage.Crypte(keyLoad, (Integer.toString(montant)).getBytes());
+                            Reponse.getChargeUtile().put("Facture", (factureCrypte));
                        }
                        else
                        {
