@@ -62,3 +62,6 @@ JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar
 /Serveur_Billet/Cryptographie/nbproject/private/
 /Serveur_Billet/Cryptographie/build/
 /Serveur_Billet/Cryptographie/dist/
+/Serveur_Billet/ServeurMultiThreadPayment/nbproject/private/
+/Serveur_Billet/ServeurMultiThreadPayment/build/
+/Serveur_Billet/ServeurMultiThreadPayment/dist/

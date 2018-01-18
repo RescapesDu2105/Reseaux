@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package requetepoolthreads;
+package requetepoolsthreadspayment;
 
 import java.util.HashMap;
 import java.util.Properties;
 
 /**
  *
- * @author Philippe
+ * @author Doublon
  */
 public interface Requete
 {
     public Runnable createRunnable(Properties Prop);
     public Reponse getReponse();
     public HashMap getChargeUtile();
-    public String getNomTypeRequete();
+    public String getNomTypeRequete();    
 }

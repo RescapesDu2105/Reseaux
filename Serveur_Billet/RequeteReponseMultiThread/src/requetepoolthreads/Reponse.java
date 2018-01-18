@@ -11,7 +11,8 @@ import java.util.HashMap;
  *
  * @author Philippe
  */
-public interface Reponse {
+public interface Reponse 
+{
     public final static int INTERNAL_SERVER_ERROR = 500;
     public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";  
     
