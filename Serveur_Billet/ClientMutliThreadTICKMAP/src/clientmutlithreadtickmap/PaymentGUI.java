@@ -6,6 +6,7 @@
 package clientmutlithreadtickmap;
 
 import cryptographie.CleSecrete;
+import cryptographie.ClientBD;
 import cryptographie.HMACUtils;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -30,17 +31,19 @@ public class PaymentGUI extends javax.swing.JFrame
     
     private int montant ;
     private Client client;
+    private ClientBD clientBD;
     private CleSecrete cleSecr;
     private SecretKey cleHMAC;
     
     /**
      * Creates new form PaymentGUI
      */
-    public PaymentGUI(Client cli ,int mont)
+    public PaymentGUI(Client cli ,int mont , ClientBD clibd)
     {
         initComponents();
         setLocationRelativeTo(null); 
         setClient(cli);
+        setClientBD(clibd);
         jLabelMontant.setText(Integer.toString(mont)+"€");
     }
 
@@ -149,6 +152,7 @@ public class PaymentGUI extends javax.swing.JFrame
             
             Req.getChargeUtile().put("message" , message);
             Req.getChargeUtile().put("messageHmac" , messageHmac);
+            Req.getChargeUtile().put("ClientBD", getClientBD());
             getClient().EnvoyerRequete(Req);
             
             Rep = getClient().RecevoirReponse();
@@ -209,7 +213,7 @@ public class PaymentGUI extends javax.swing.JFrame
         {
             public void run()
             {
-                new PaymentGUI(null,0).setVisible(true);
+                new PaymentGUI(null,0,null).setVisible(true);
             }
         });
     }
@@ -252,6 +256,16 @@ public class PaymentGUI extends javax.swing.JFrame
     public void setCleHMAC(SecretKey cleHMAC)
     {
         this.cleHMAC = cleHMAC;
+    }
+
+    public ClientBD getClientBD()
+    {
+        return clientBD;
+    }
+
+    public void setClientBD(ClientBD clientBD)
+    {
+        this.clientBD = clientBD;
     }
     
     

@@ -38,6 +38,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -636,22 +637,45 @@ public class RequeteTICKMAP implements Requete, Serializable
     public void traiterPaymentReg()
     {
         SecretKey cleHMAC;
+        Bean_DB_Access BD_airport;
+        ResultSet RS;
         
         byte[] message = (byte[]) getChargeUtile().get("message");
         byte[] messageHMACRecu = (byte[]) getChargeUtile().get("messageHmac");
+        
         try
         {
             cleHMACClient = new CleSecrete();
             cleHMAC = cleHMACClient.LoadCle(keyStoreDirPath, NameFileClientHMAC);
-            
             HMACUtils hmac = new HMACUtils(cleHMAC);
             byte[] messageHMAC = hmac.DoHmac(message);
             
             if(MessageDigest.isEqual(messageHMACRecu, messageHMAC))
             {
+                ClientBD clientBD = (ClientBD) getChargeUtile().get("ClientBD");
                 System.out.println("Message du client Authentifié !!!");
+                
+                /***************************ENREGISTREMENT DU CLIENT DANS LA BD***************/
+                System.out.println("Enregistrement du client dans la BD !!!");
+   
+                HashMap<String, Object> client = new HashMap<>();
+                client.put("Nom", clientBD.getNom());
+                client.put("Prenom", clientBD.getPrenom());
+                client.put("Login" , clientBD.getPrenom().substring(0, 3)+clientBD.getNom().substring(0,3));
+                client.put("Password", "1234");
+                client.put("nbAccompagnant", clientBD.getNbAccompagnant());
+                
+                BD_airport = Connexion_DB();
+                if (BD_airport != null)
+                    BD_airport.Insert("Clients", client);
+                
                 Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK);
                 Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_MESSAGE);
+            }
+            else
+            {
+                Reponse = new ReponseTICKMAP(ReponseTICKMAP.INTERNAL_SERVER_ERROR);
+                Reponse.getChargeUtile().put("Message", ReponseTICKMAP.INTERNAL_SERVER_ERROR_MESSAGE);                
             }
         } catch (NoSuchAlgorithmException ex)
         {
@@ -666,6 +690,9 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }

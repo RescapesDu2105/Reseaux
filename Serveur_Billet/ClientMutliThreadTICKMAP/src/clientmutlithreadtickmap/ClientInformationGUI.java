@@ -227,7 +227,7 @@ public class ClientInformationGUI extends javax.swing.JFrame
                         {
                             public void run() 
                             {
-                                new PaymentGUI(getClient(),facture).setVisible(true);
+                                new PaymentGUI(getClient(),facture,clientbd).setVisible(true);
                             }
                         });
                     }
