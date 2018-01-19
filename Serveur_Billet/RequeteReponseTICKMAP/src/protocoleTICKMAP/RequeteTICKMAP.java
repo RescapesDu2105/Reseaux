@@ -614,9 +614,7 @@ public class RequeteTICKMAP implements Requete, Serializable
                 BD_airport = Connexion_DB();
                 if (BD_airport != null)
                     BD_airport.Insert("Clients", client);
-                
-                //COMMUNICATION AVEC SERVEUR_MASTERCARD
-                
+                                
                 Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK);
                 Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_MESSAGE);
             }
