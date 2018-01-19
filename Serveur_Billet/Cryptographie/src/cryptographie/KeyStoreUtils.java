@@ -16,7 +16,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class KeyStoreUtils
 {
-    private static String codeProvider = "BC"; 
+    private static final String codeProvider = "BC"; 
     private static final String algoSIGN = "SHA1withRSA";
 
     private KeyStore ks;
