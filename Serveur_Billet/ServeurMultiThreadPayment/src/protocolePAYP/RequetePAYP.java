@@ -5,10 +5,15 @@
  */
 package protocolePAYP;
 
+import cryptographie.ClientBD;
 import cryptographie.KeyStoreUtils;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -19,6 +24,10 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
+import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.DECRYPT_MODE;
 import requetepoolthreads.Requete;
 
 /**
@@ -28,6 +37,7 @@ import requetepoolthreads.Requete;
 public class RequetePAYP implements Requete, Serializable
 {
     public final static int REQUEST_SEND_CERTIFICATE = 0;
+    public final static int REQUEST_SEND_PAYMENT = 1;
     
     private final static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurPaymentKeyStore.jks";
     private final static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
@@ -122,6 +132,15 @@ public class RequetePAYP implements Requete, Serializable
                 }            
             };
             
+            case REQUEST_SEND_PAYMENT:
+            return new Runnable() 
+            {
+                public void run() 
+                {
+                    traiterSendPayment();
+                }            
+            };
+            
             default : return null;
         }
     }
@@ -132,6 +151,7 @@ public class RequetePAYP implements Requete, Serializable
         switch(getType()) 
         {
             case REQUEST_SEND_CERTIFICATE: return "REQUEST_SEND_CERTIFICATE";
+            case REQUEST_SEND_PAYMENT: return "REQUEST_SEND_PAYMENT";
             default : return null;
         }
     }
@@ -171,5 +191,70 @@ public class RequetePAYP implements Requete, Serializable
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_CERTIFICATE_OK);
         Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_CERTIFICATE_MESSAGE);
         Reponse.getChargeUtile().put("Certificate",ks.getCertif());        
+    }
+    
+    public void traiterSendPayment()
+    {
+        KeyStoreUtils ks = null;
+        byte[] signature = (byte[]) getChargeUtile().get("Signature");
+        
+        try
+        {
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            
+            /********************************DECRYPTAGE DU PAYEMENT*******************************/
+            Cipher dechiffrement = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
+            dechiffrement.init(DECRYPT_MODE,ks.getClePrivee());
+            SealedObject sealed = (SealedObject) getChargeUtile().get("PayementCrypte");
+            //ClientBD cli = (ClientBD) sealed.getObject(dechiffrement);
+
+        } catch (KeyStoreException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnrecoverableKeyException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ClientBD ByteToObject(byte[] byteArray)
+    {
+        ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+        ObjectInput in = null;
+        ClientBD cli = null;
+        
+        try
+        {
+            in = new ObjectInputStream(bis);
+            cli = (ClientBD) in.readObject(); 
+            in.close();
+            
+            return cli;
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cli;
     }
 }

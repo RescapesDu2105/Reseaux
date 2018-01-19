@@ -40,6 +40,8 @@ public interface Reponse
     /**********************************SERVEUR PAYMENT******************************************/
     public final int REQUEST_SEND_CERTIFICATE_OK = 208;
     public final String REQUEST_SEND_CERTIFICATE_MESSAGE = "Handshake done";
+    public final int REQUEST_SEND_PAYMENT_OK = 209;
+    public final String REQUEST_SEND_PAYMENT_MESSAGE = "Payement effectue";
     
     public int getCode();
     public void setCode(int Code);

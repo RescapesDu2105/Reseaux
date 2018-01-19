@@ -404,16 +404,12 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
             clePriveeServeur= ks.getClePrivee();
-            /*System.out.println("");
-            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());*/
+
             /**********************************CLE HMAC***********************************/
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
             byte[] cleCrypteeHMAC = (byte[]) getChargeUtile().get("CleHMAC");
-            //System.out.println("ChargeUtile : "+ cleCryptee);
             
             byte[] cleDecrypteHMAC = cryptage.Decrypte(clePriveeServeur, cleCrypteeHMAC);
-            /*System.out.println("");
-            System.out.println("Cle Decrypte : "+cleDecrypte);*/
             
             SecretKey cleClientHMACTemp = new SecretKeySpec(cleDecrypteHMAC, 0, cleDecrypteHMAC.length, "DES");
             CleSecrete cleClientHMAC=new CleSecrete(cleClientHMACTemp);
@@ -425,8 +421,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             SecretKey cleClientSecreteTemp = new SecretKeySpec(cleDecrypteSecrete, 0, cleDecrypteSecrete.length, "DES");
             CleSecrete cleClientSecete=new CleSecrete(cleClientSecreteTemp);
             cleClientSecete.SaveCle(keyStoreDirPath,NameFileClientSecretKey);
-            /*System.out.println("");
-            System.out.println("Cle decripté : " +cleClientHMAC.toString());*/
+
             Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_SYMETRICKEY_MESSAGE);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException ex)
@@ -523,7 +518,6 @@ public class RequeteTICKMAP implements Requete, Serializable
                 ClientBD cli = (ClientBD) sealed.getObject(dechiffrement);
                 System.out.println("Nom : "+cli.getNom());
                 System.out.println("Prenom : "+cli.getPrenom());
-                //clientBD
                 
                 /****************************VERIF DANS LA BD*************************************/
                 BD_airport = Connexion_DB();
@@ -572,7 +566,6 @@ public class RequeteTICKMAP implements Requete, Serializable
         Bean_DB_Access BD_airport;
         ResultSet RS;
         
-        //byte[] message = (byte[]) getChargeUtile().get("message");
         byte[] messageHMACRecu = (byte[]) getChargeUtile().get("messageHmac");
         byte[] cliByte = (byte[]) getChargeUtile().get("ClientBD");
         
@@ -585,7 +578,6 @@ public class RequeteTICKMAP implements Requete, Serializable
             
             if(MessageDigest.isEqual(messageHMACRecu, messageHMAC))
             {
-                System.out.println("HMAC OK!!!");
                 ClientBD clientBD = ByteToObject(cliByte);
                 System.out.println("Message du client Authentifié !!!");
                 
