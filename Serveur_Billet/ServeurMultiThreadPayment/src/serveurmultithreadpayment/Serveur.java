@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Properties;
-import requetepoolsthreadspayment.ConsoleServeur;
+import requetepoolthreads.ConsoleServeur;
 
 
 /**
@@ -24,7 +24,7 @@ public class Serveur extends Thread
     private int Port_Billet;
     private int MaxClients;
 
-    private ArrayList<ThreadClient> threads = new ArrayList<>();
+    private ArrayList<ThreadServeur> threads = new ArrayList<>();
 
     public Serveur(ConsoleServeur GUIApplication) 
     {
@@ -48,7 +48,7 @@ public class Serveur extends Thread
 
         for (int i = 0 ; i < getMaxClients() ; i++) 
         {
-            getThreads().add(new ThreadClient("Thread du pool n°" + String.valueOf(i + 1), getSSocket_Billet(), getGUIApplication(), getProp()));
+            getThreads().add(new ThreadServeur("Thread du pool n°" + String.valueOf(i + 1), getSSocket_Billet(), getGUIApplication(), getProp()));
             getThreads().get(i).start();
         }
     }
@@ -113,12 +113,12 @@ public class Serveur extends Thread
         this.MaxClients = MaxClients;
     }
 
-    public ArrayList<ThreadClient> getThreads()
+    public ArrayList<ThreadServeur> getThreads()
     {
         return threads;
     }
 
-    public void setThreads(ArrayList<ThreadClient> threads)
+    public void setThreads(ArrayList<ThreadServeur> threads)
     {
         this.threads = threads;
     }
