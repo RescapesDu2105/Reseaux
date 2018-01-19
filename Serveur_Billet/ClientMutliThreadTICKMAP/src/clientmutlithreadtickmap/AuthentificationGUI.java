@@ -193,8 +193,6 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                     
                     this.dispose();
                     AuthentificationGUI Test = this;
-                    /*cles=new ClesPourCryptageAsymetrique();
-                    cles.SerialiserCle();*/
                     
                    java.awt.EventQueue.invokeLater(() -> {
                         new ListeVolsGUI(getClient()).setVisible(true);

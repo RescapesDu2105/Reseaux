@@ -7,20 +7,33 @@ package clientmutlithreadtickmap;
 
 import cryptographie.CleSecrete;
 import cryptographie.ClientBD;
+import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
+import cryptographie.PayementInfo;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
+import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.ENCRYPT_MODE;
 import protocolePAYP.ReponsePAYP;
 import protocolePAYP.RequetePAYP;
+import static protocolePAYP.RequetePAYP.REQUEST_SEND_PAYMENT;
 
 /**
  *
@@ -146,6 +159,7 @@ public class CreditCardGUI extends javax.swing.JFrame
             getClient().ConnexionPAYP();
             
             RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
+            RequestSendPayment();
             
         } catch (IOException ex)
         {
@@ -291,6 +305,78 @@ public class CreditCardGUI extends javax.swing.JFrame
             }            
         }    
     }
+    
+    public void RequestSendPayment()
+    {
+        RequetePAYP ReqPAYP = new RequetePAYP(RequetePAYP.REQUEST_SEND_PAYMENT);
+        ReponsePAYP RepPAYP = null;
+        PayementInfo payement = new PayementInfo(getCreditCard(),getClientBD().getNom(),getMontant());
+        try
+        {  
+            /****************************CRYPTAGE DU PAYEMENT**********************/
+            System.out.println("cryptage du client...");
+            Cipher chiffrement = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
+            chiffrement.init(ENCRYPT_MODE, certifServeur.getPublicKey());
+            SealedObject sealed = new SealedObject(payement, chiffrement);
+            
+            /****************************SIGNATURE DU PAYEMENT*********************/
+            byte[] sealedByte = ObcjetToByte(sealed);
+            CryptageAsymetrique cryptage = new CryptageAsymetrique();
+            byte[] signature = cryptage.Signe(ks.getClePrivee(), sealedByte);
+                    
+            ReqPAYP.getChargeUtile().put("PayementCrypte", sealed);
+            ReqPAYP.getChargeUtile().put("Signature", signature);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SignatureException ex)
+        {
+            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        getClient().EnvoyerRequete(ReqPAYP);
+
+        RepPAYP = getClient().RecevoirReponsePAYP();
+        if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_PAYMENT_OK)
+            System.out.println("ok !");
+    }
+    
+    public byte[] ObcjetToByte(Object o)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
+        byte[] byteArray = null;
+        
+        try
+        {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(o);
+            out.flush();
+            byteArray = bos.toByteArray();
+            
+            bos.close();
+            return byteArray;
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return byteArray;
+    }    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAnnuler;
