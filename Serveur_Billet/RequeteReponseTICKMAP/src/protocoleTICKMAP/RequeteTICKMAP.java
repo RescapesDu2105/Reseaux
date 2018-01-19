@@ -22,23 +22,18 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.security.InvalidKeyException;
-import java.security.KeyFactory;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -391,22 +386,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             
             ks.saveCertificate(aliasCertifPublicClientKey, certifClient);
             ks.SaveKeyStore(keyStorePath, keyStorePsw);
-        } catch (KeyStoreException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -447,34 +427,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             System.out.println("Cle decripté : " +cleClientHMAC.toString());*/
             Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_SYMETRICKEY_OK);
             Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_SYMETRICKEY_MESSAGE);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (KeyStoreException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex)
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -603,31 +556,7 @@ public class RequeteTICKMAP implements Requete, Serializable
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchProviderException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex)
-            {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex)
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | SQLException ex)
             {
                 Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -682,6 +611,8 @@ public class RequeteTICKMAP implements Requete, Serializable
                 if (BD_airport != null)
                     BD_airport.Insert("Clients", client);
                 
+                //COMMUNICATION AVEC SERVEUR_MASTERCARD
+                
                 Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK);
                 Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_MESSAGE);
             }
@@ -690,22 +621,7 @@ public class RequeteTICKMAP implements Requete, Serializable
                 Reponse = new ReponseTICKMAP(ReponseTICKMAP.INTERNAL_SERVER_ERROR);
                 Reponse.getChargeUtile().put("Message", ReponseTICKMAP.INTERNAL_SERVER_ERROR_MESSAGE);                
             }
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException | ClassNotFoundException | InvalidKeyException | SQLException ex)
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
