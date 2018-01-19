@@ -65,3 +65,4 @@ JDBC/Bean_DB_Access/dist/Bean_DB_Access.jar
 /Serveur_Billet/ServeurMultiThreadPayment/nbproject/private/
 /Serveur_Billet/ServeurMultiThreadPayment/build/
 /Serveur_Billet/ServeurMultiThreadPayment/dist/
+Serveur_Billet/ServeurMultiThreadPayment/src/protocolePAYP/RequetePAYP.java
