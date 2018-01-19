@@ -20,7 +20,7 @@ import requetepoolsthreadspayment.Requete;
  *
  * @author Doublon
  */
-public class ThreadClient extends Thread
+public class ThreadServeur extends Thread
 {
     private final String Nom;
     private final ConsoleServeur GUIApplication;
@@ -34,7 +34,7 @@ public class ThreadClient extends Thread
 
     private final Properties Prop;
 
-    public ThreadClient(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop)
+    public ThreadServeur(String Nom, ServerSocket SSocket, ConsoleServeur GUIApplication, Properties Prop)
     {
         this.Nom = Nom;
         this.SSocket = SSocket;
