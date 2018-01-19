@@ -9,8 +9,11 @@ import cryptographie.ClientBD;
 import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
 import cryptographie.PayementInfo;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
@@ -19,6 +22,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.security.InvalidKeyException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -35,6 +40,11 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.DECRYPT_MODE;
 import requetepoolthreads.Requete;
 
@@ -203,50 +213,46 @@ public class RequetePAYP implements Requete, Serializable
             SealedObject sealed = (SealedObject) getChargeUtile().get("PayementCrypte");
             PayementInfo pay = (PayementInfo) sealed.getObject(dechiffrement);
             System.out.println("Nom : "+pay.getNom());
-            System.out.println("Carde : "+pay.getCreditCard());
+            System.out.println("Card : "+pay.getCreditCard());
             System.out.println("Montant : "+pay.getMontant());
             
             /********************************VERIFICATION DE LA SIGNATURE*************************/
-            byte[] sealedByte = ObcjetToByte(sealed);
-            boolean ok = cryptage.VerifSignature(certifClient.getPublicKey(), sealedByte, signature);
-            
-        } catch (KeyStoreException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SignatureException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex)
+            byte[] sealedByte = ObjectToByte(sealed);
+            boolean ok = cryptage.VerifSignature(certifClient.getPublicKey(), sealedByte, signature);            
+        } 
+        catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | SignatureException | ClassNotFoundException | IllegalBlockSizeException | BadPaddingException ex)
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
+    // Communication        
+        try
+        {
+            KeyManagerFactory kmf;
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(new FileInputStream(""), "123Soleil".toCharArray());
+            
+            kmf = KeyManagerFactory.getInstance("SunX509");
+            kmf.init(keyStore, "123Soleil".toCharArray());
+        
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+            tmf.init(keyStore);
+
+            SSLContext sslContext = SSLContext.getInstance("SSLv3");
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+            SSLSocketFactory SSLSFactory = sslContext.getSocketFactory();
+
+            SSLSocket CSocket = (SSLSocket) SSLSFactory.createSocket(Ip_Mastercard, Port_Mastercard);
+            ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(CSocket.getOutputStream()));
+            oos.flush();
+            ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(CSocket.getInputStream()));
+        }
+        catch (NoSuchAlgorithmException | IOException | KeyStoreException | UnrecoverableKeyException | KeyManagementException | CertificateException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    //
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_PAYMENT_OK);
         Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_PAYMENT_MESSAGE);
     }
@@ -264,17 +270,14 @@ public class RequetePAYP implements Requete, Serializable
             in.close();
             
             return cli;
-        } catch (IOException ex)
-        {
-            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
+        } catch (IOException | ClassNotFoundException ex)
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cli;
     }
     
-    public byte[] ObcjetToByte(Object o)
+    public byte[] ObjectToByte(Object o)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = null;
