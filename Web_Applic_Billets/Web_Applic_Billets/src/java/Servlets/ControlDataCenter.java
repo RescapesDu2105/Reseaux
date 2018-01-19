@@ -16,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,8 +31,10 @@ import javax.servlet.http.HttpSession;
  *
  * @author Philippe
  */
-public class ControlDataCenter extends HttpServlet {
+public class ControlDataCenter extends HttpServlet 
+{
     private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+    private final Bean_DB_Access BD_compta = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_compta");
     private Client Client = null;
     
     /**
@@ -48,9 +49,32 @@ public class ControlDataCenter extends HttpServlet {
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
-        ServletContext sc = getServletContext();
+        ServletContext sc = getServletContext();           
         sc.log("-- démarrage de la servlet ControlDataCenter");
         System.out.println("Démarrage de la Servlet ControlDataCenter");
+        
+        BD_compta.Connexion();   
+        try
+        {
+            ArrayList<String> Langues = new ArrayList<>();
+            ResultSet RS = BD_compta.Select("SELECT Nom FROM Langues");
+            while(RS.next())
+            {
+                Langues.add(RS.getString(1));
+            }
+            RS.close();
+            sc.setAttribute("Langues", Langues);
+            
+            System.out.println("Langues = " + Langues.size());
+        } 
+        catch (SQLException ex) 
+        {
+            ex.printStackTrace();
+        }  
+        finally 
+        {
+            BD_compta.Deconnexion();
+        }   
     }
     
     @Override
@@ -60,6 +84,7 @@ public class ControlDataCenter extends HttpServlet {
     {
         HttpSession session = request.getSession(true); 
         String Action = request.getParameter("action");
+        
         
         switch (Action) 
         {

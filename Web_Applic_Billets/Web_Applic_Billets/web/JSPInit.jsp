@@ -4,10 +4,40 @@
     Author     : Philippe
 --%>
 
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="database.utilities.Bean_DB_Access"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% 
     if(session.getAttribute("isUserLoggedIn") != null)
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
+    
+    Bean_DB_Access BD_compta = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_compta");
+    BD_compta.Connexion();   
+    try
+    {
+        ArrayList<String> Langues = new ArrayList<>();
+        ResultSet RS = BD_compta.Select("SELECT Nom FROM Langues");
+        while(RS.next())
+        {
+            Langues.add(RS.getString(1));
+        }
+        RS.close();
+        getServletContext().setAttribute("Langues", Langues);
+
+        System.out.println("Langues = " + Langues.size());
+    } 
+    catch (SQLException ex) 
+    {
+        ex.printStackTrace();
+    }  
+    finally 
+    {
+        BD_compta.Deconnexion();
+    }   
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,13 +50,16 @@
         <meta name="author" content="">
         
         <title>Connexion</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
     </head>
     <body>
+        <fmt:setLocale value="fr_FR" scope="session"/> 
+        <fmt:bundle basename = "Resources.">
+            
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPInit.jsp"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
+                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPInit.jsp"><i class="fa fa-plane"></i><strong> <fmt:message key = "brand"/></strong></a>
             </div>
         </nav>
         <br><br><br><br>
@@ -34,32 +67,46 @@
             <div class="row justify-content-center">
                 <div class="col-4">
                     <form class="form-signin" id="loginform" action="ControlDataCenter" method="POST">
-                        <h2 id="HeaderConnexion" class="form-signin-heading"><i class="fa fa-sign-in"></i> Connexion</h2>
+                        <h2 id="HeaderConnexion" class="form-signin-heading text-center"><i class="fas fa-sign-in-alt"></i> <fmt:message key = "connexion"/></h2>
                         <% if(session.getAttribute("ErrorLogin") != null)
                         {
                             out.println("<div class=\"alert alert-danger\" role=\"alert\">"+ session.getAttribute("ErrorLogin") +"</div>"); 
                             session.setAttribute("ErrorLogin", null);
                         } %>
                         <div class="form-group">
-                            <label for="username"><i class="fa fa-user"></i> Nom d'utilisateur</label>
-                            <input type="text" name="inputLogin" id="inputLogin" class="form-control" placeholder="Entrer le nom d'utilisateur" autofocus>
+                            <label for="username"><i class="fas fa-language"></i> <fmt:message key = "langue"/></label>
+                            <select class="form-control" id="exampleFormControlSelect1">
+                                <%  ArrayList<String> Langues = (ArrayList<String>)getServletContext().getAttribute("Langues"); 
+                                    for(String Langue : Langues)
+                                    { %>
+                                        <option><fmt:message key = '<%= Langue %>'/></option>
+                                 <% } %>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="password"><i class="fa fa-key"></i> Mot de passe</label>
-                            <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Entrer le mot de passe">  
+                            <label for="name"><i class="fa fa-user"></i> <fmt:message key = "user"/></label>
+                            <input type="text" name="inputLogin" id="inputLogin" class="form-control" placeholder="Entrer le nom" autofocus>
                         </div>
-                        <div class="form-check checkbox">
-                            <label><input id="inputCB" type="checkbox" name="Inscription" onclick="InscriptionAddInfos(this);"> Je suis un nouveau client</label>
+                        <div class="form-group">
+                            <label for="code"><i class="fa fa-key"></i> <fmt:message key = "code"/></label>
+                            <input type="text" name="inputPassword" id="inputPassword" class="form-control" placeholder="Entrer le code de réservation">  
                         </div>
+                        <div class="form-group">
+                            <label for="mail"><i class="fa fa-envelope"></i> <fmt:message key = "mail"/></label>
+                            <input type="email" name="inputPassword" id="inputPassword" class="form-control" placeholder="Entrer l'adresse mail">  
+                        </div>
+                        <!--<div class="form-check checkbox">
+                            <label><input id="inputCB" type="checkbox" name="Inscription" onclick="InscriptionAddInfos(this);"> <fmt:message key = "new"/></label>
+                        </div> -->
                         <input id="inputHidden" type="hidden" name="action" value="Authentification">
-                        <button class="btn btn-lg btn-success btn-block" type="submit" id="submit"><i class="fa fa-power-off"></i> Connexion</button>
+                        <button class="btn btn-lg btn-success btn-block" type="submit" id="submit"><i class="fa fa-power-off"></i> <fmt:message key = "connexion"/></button>
                     </form>
                 </div>
             </div>
         </div> <!-- /container -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
         <script type="text/javascript">
             function InscriptionAddInfos(CheckBox)
             {
@@ -112,5 +159,6 @@
                 }
             }
         </script>
+        </fmt:bundle>
     </body>
 </html>

@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import requetepoolsthreadspayment.ConsoleServeur;
+import requetepoolthreads.ConsoleServeur;
 
 /**
  *
@@ -176,6 +176,7 @@ public class ServerGUI extends javax.swing.JFrame implements ConsoleServeur
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 new ServerGUI().setVisible(true);
@@ -183,6 +184,7 @@ public class ServerGUI extends javax.swing.JFrame implements ConsoleServeur
         });
     }
     
+    @Override
     public void TraceEvenements(String log) 
     {
         ArrayList<String> Ligne = new ArrayList<>();
