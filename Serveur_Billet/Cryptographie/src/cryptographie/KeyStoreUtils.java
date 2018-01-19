@@ -57,6 +57,11 @@ public class KeyStoreUtils
         out.close();        
     }
     
+    public X509Certificate loadCertificate(String alias) throws KeyStoreException
+    {
+        return (X509Certificate) ks.getCertificate(alias);
+    }
+    
     public KeyStore getKs()
     {
         return ks;
