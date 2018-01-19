@@ -12,12 +12,14 @@ import cryptographie.ClientBD;
 import cryptographie.CryptageSymetrique;
 import cryptographie.HMACUtils;
 import database.utilities.Bean_DB_Access;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.Socket;
@@ -64,13 +66,13 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_REGISTRATION_FLY = 5;
     public final static int REQUEST_PAYMENT_REGISTRATION = 6;
     
-    private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
-    private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
-    private static String keyStorePsw = "123Soleil";    
-    private static String aliasKeyStrore = "serveurprivatekey";
-    private static String aliasCertifPublicClientKey = "PublicClientKey";
-    private static String NameFileClientSecretKey = "SecretKeyClient.ser";
-    private static String NameFileClientHMAC = "CleSecreteHMACClient.ser";
+    private final static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
+    private final static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
+    private final static String keyStorePsw = "123Soleil";    
+    private final static String aliasKeyStrore = "serveurprivatekey";
+    private final static String aliasCertifPublicClientKey = "PublicClientKey";
+    private final static String NameFileClientSecretKey = "SecretKeyClient.ser";
+    private final static String NameFileClientHMAC = "CleSecreteHMACClient.ser";
 
     
     private int Type;
@@ -570,19 +572,21 @@ public class RequeteTICKMAP implements Requete, Serializable
         Bean_DB_Access BD_airport;
         ResultSet RS;
         
-        byte[] message = (byte[]) getChargeUtile().get("message");
+        //byte[] message = (byte[]) getChargeUtile().get("message");
         byte[] messageHMACRecu = (byte[]) getChargeUtile().get("messageHmac");
+        byte[] cliByte = (byte[]) getChargeUtile().get("ClientBD");
         
         try
         {
             cleHMACClient = new CleSecrete();
             cleHMAC = cleHMACClient.LoadCle(keyStoreDirPath, NameFileClientHMAC);
             HMACUtils hmac = new HMACUtils(cleHMAC);
-            byte[] messageHMAC = hmac.DoHmac(message);
+            byte[] messageHMAC = hmac.DoHmac(cliByte);
             
             if(MessageDigest.isEqual(messageHMACRecu, messageHMAC))
             {
-                ClientBD clientBD = (ClientBD) getChargeUtile().get("ClientBD");
+                System.out.println("HMAC OK!!!");
+                ClientBD clientBD = ByteToObject(cliByte);
                 System.out.println("Message du client Authentifié !!!");
                 
                 /***************************ENREGISTREMENT DU CLIENT DANS LA BD***************/
@@ -625,5 +629,28 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public ClientBD ByteToObject(byte[] byteArray)
+    {
+        ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+        ObjectInput in = null;
+        ClientBD cli = null;
+        
+        try
+        {
+            in = new ObjectInputStream(bis);
+            cli = (ClientBD) in.readObject(); 
+            in.close();
+            
+            return cli;
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cli;
     }
 }

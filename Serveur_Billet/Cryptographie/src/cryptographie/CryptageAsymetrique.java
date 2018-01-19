@@ -11,6 +11,8 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -26,14 +28,17 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class CryptageAsymetrique
 {
-    private static String codeProvider ="BC";
-    private static String algoCrypt="RSA/ECB/PKCS1Padding";
+    private final static String codeProvider = "BC";
+    private final static String algoCrypt = "RSA/ECB/PKCS1Padding";
+    private final static String algoSignature = "SHA1withRSA";
     private Cipher chiffrement;
+    private Signature signature;
 
     public CryptageAsymetrique() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException
     {
         Security.addProvider(new BouncyCastleProvider());
         setChiffrement(Cipher.getInstance(algoCrypt,codeProvider));
+        setSignature(Signature.getInstance(algoSignature,codeProvider));
     }
 
     public byte[] Crypte(PublicKey cle,byte[] objetACrypte) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException
@@ -56,6 +61,20 @@ public class CryptageAsymetrique
         return objetDecrypte;
     }
     
+    public byte[] Signe(PrivateKey cle , byte[] messageASigne) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException
+    {
+        getSignature().initSign(cle);
+        getSignature().update(messageASigne);
+        return getSignature().sign();
+    }
+    
+    public boolean VerifSignature(PublicKey cle , byte[] message , byte[] messaSigne) throws InvalidKeyException, SignatureException
+    {
+        getSignature().initVerify(cle);
+        getSignature().update(message);
+        return getSignature().verify(messaSigne);
+    }
+    
     public Cipher getChiffrement()
     {
         return chiffrement;
@@ -65,6 +84,17 @@ public class CryptageAsymetrique
     {
         this.chiffrement = chiffrement;
     }
+
+    public Signature getSignature()
+    {
+        return signature;
+    }
+
+    public void setSignature(Signature signature)
+    {
+        this.signature = signature;
+    }
+    
     
     
 }
