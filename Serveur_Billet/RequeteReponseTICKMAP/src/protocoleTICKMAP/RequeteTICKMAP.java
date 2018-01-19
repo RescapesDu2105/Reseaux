@@ -205,7 +205,8 @@ public class RequeteTICKMAP implements Requete, Serializable
 
     public Properties getProp() 
     {
-        return Prop;
+     
+   return Prop;
     }
 
     public void setProp(Properties Prop) 

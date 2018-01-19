@@ -16,6 +16,7 @@ public interface Reponse
     public final static int INTERNAL_SERVER_ERROR = 500;
     public final static String INTERNAL_SERVER_ERROR_MESSAGE = "Erreur interne du serveur !";  
     
+    /**********************************SERVEUR BILLET******************************************/
     public final static int LOG_OUT_OK = 201;
     public final static String LOG_OUT_OK_MESSAGE = "Client déconnecté du serveur";
     public final static int LOGIN_OK = 202;
@@ -35,6 +36,10 @@ public interface Reponse
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
     public final static int REQUEST_REGISTRATION_FLY_KO = 403;
     public final static String REQUEST_REGISTRATION_FLY_KO_MESSAGE = "Il n'y a plus de place disponible pour ce vol";
+    
+    /**********************************SERVEUR PAYMENT******************************************/
+    public final int REQUEST_SEND_CERTIFICATE_OK = 208;
+    public final String REQUEST_SEND_CERTIFICATE_MESSAGE = "Handshake done";
     
     public int getCode();
     public void setCode(int Code);

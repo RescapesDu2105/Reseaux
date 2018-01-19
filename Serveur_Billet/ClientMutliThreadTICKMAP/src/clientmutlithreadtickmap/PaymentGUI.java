@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JLabel;
+import protocolePAYP.ReponsePAYP;
+import protocolePAYP.RequetePAYP;
 import protocoleTICKMAP.ReponseTICKMAP;
 import protocoleTICKMAP.RequeteTICKMAP;
 import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_PAYMENT_REGISTRATION;
@@ -59,8 +61,8 @@ public class PaymentGUI extends javax.swing.JFrame
 
         jLabelMontant = new javax.swing.JLabel();
         jLabelTitre = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonPayment = new javax.swing.JButton();
+        jButtonAnnuler = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,31 +71,25 @@ public class PaymentGUI extends javax.swing.JFrame
         jLabelMontant.setBackground(new java.awt.Color(0, 0, 0));
         jLabelMontant.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabelMontant.setForeground(new java.awt.Color(204, 0, 0));
-        jLabelMontant.addAncestorListener(new javax.swing.event.AncestorListener()
-        {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt)
-            {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt)
-            {
-                jLabelMontantAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt)
-            {
-            }
-        });
 
         jLabelTitre.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabelTitre.setText("Montant a Payé :");
 
-        jButton1.setText("Passer au Payement");
-
-        jButton2.setText("Annuler");
-        jButton2.addActionListener(new java.awt.event.ActionListener()
+        jButtonPayment.setText("Passer au Payement");
+        jButtonPayment.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jButton2ActionPerformed(evt);
+                jButtonPaymentActionPerformed(evt);
+            }
+        });
+
+        jButtonAnnuler.setText("Annuler");
+        jButtonAnnuler.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonAnnulerActionPerformed(evt);
             }
         });
 
@@ -109,9 +105,9 @@ public class PaymentGUI extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jButton1)
+                .addComponent(jButtonPayment)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(jButtonAnnuler)
                 .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
@@ -123,22 +119,22 @@ public class PaymentGUI extends javax.swing.JFrame
                 .addComponent(jLabelMontant, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonPayment)
+                    .addComponent(jButtonAnnuler))
                 .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
-    {//GEN-HEADEREND:event_jButton2ActionPerformed
+    private void jButtonAnnulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAnnulerActionPerformed
+    {//GEN-HEADEREND:event_jButtonAnnulerActionPerformed
         getClient().Deconnexion();
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonAnnulerActionPerformed
 
-    private void jLabelMontantAncestorAdded(javax.swing.event.AncestorEvent evt)//GEN-FIRST:event_jLabelMontantAncestorAdded
-    {//GEN-HEADEREND:event_jLabelMontantAncestorAdded
+    private void jButtonPaymentActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPaymentActionPerformed
+    {//GEN-HEADEREND:event_jButtonPaymentActionPerformed
         RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_PAYMENT_REGISTRATION);
         ReponseTICKMAP Rep = null;
         
@@ -159,7 +155,14 @@ public class PaymentGUI extends javax.swing.JFrame
             
             if(Rep.getCode() == ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK)
             {
-                System.out.println("ok!");
+                getClient().ConnexionPAYP();
+                RequetePAYP ReqPAYP = new RequetePAYP(RequetePAYP.REQUEST_SEND_CERTIFICATE);
+                ReponsePAYP RepPAYP = null;
+                getClient().EnvoyerRequete(ReqPAYP);
+                
+                RepPAYP = getClient().RecevoirReponsePAYP();
+                if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_CERTIFICATE_OK)
+                    System.out.println("Ok");
             }
         } catch (NoSuchAlgorithmException ex)
         {
@@ -170,8 +173,11 @@ public class PaymentGUI extends javax.swing.JFrame
         } catch (InvalidKeyException ex)
         {
             Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jLabelMontantAncestorAdded
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }//GEN-LAST:event_jButtonPaymentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -293,8 +299,8 @@ public class PaymentGUI extends javax.swing.JFrame
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonAnnuler;
+    private javax.swing.JButton jButtonPayment;
     private javax.swing.JLabel jLabelMontant;
     private javax.swing.JLabel jLabelTitre;
     // End of variables declaration//GEN-END:variables

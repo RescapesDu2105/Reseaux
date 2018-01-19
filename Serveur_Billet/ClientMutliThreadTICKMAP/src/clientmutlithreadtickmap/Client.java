@@ -23,6 +23,8 @@ import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import protocolePAYP.ReponsePAYP;
+import protocolePAYP.RequetePAYP;
 import protocoleTICKMAP.ReponseTICKMAP;
 import protocoleTICKMAP.RequeteTICKMAP;
 
@@ -32,17 +34,22 @@ import protocoleTICKMAP.RequeteTICKMAP;
  */
 public class Client
 {
-    private int Port;
+    private int PortBagage;
+    private int PortPayment;
     private InetAddress IP;
     private Socket cliSocket = null;
     
-    private ObjectInputStream ois = null;
-    private ObjectOutputStream oos = null;
+    private ObjectInputStream oisTICKMAP = null;
+    private ObjectOutputStream oosTICKMAP = null;
+    
+    private ObjectInputStream oisPAYP = null;
+    private ObjectOutputStream oosPAYP = null;
     
     private Properties Prop = new Properties();
     
     private String NomUtilisateur;
     private boolean ConnectedToServer;
+    private boolean ConnectedToServerPAYP;
     
     public Client() throws IOException, UnknownHostException
     {
@@ -87,7 +94,7 @@ public class Client
     
     public void Connexion() throws IOException
     {
-        setCliSocket(new Socket(getIP(), getPort()));
+        setCliSocket(new Socket(getIP(), getPortBagage()));
         
         if (getCliSocket().isConnected()) 
         {
@@ -96,8 +103,8 @@ public class Client
             try 
             {        
                 System.out.println("Création des flux");
-                setOos(new ObjectOutputStream(getCliSocket().getOutputStream()));
-                getOos().flush();
+                setOosTICKMAP(new ObjectOutputStream(getCliSocket().getOutputStream()));
+                getOosTICKMAP().flush();
                 System.out.println("Fin de la création des flux");
             }
             catch(IOException ex) 
@@ -107,6 +114,34 @@ public class Client
             System.out.println("Client prêt");
             System.out.println("Connected = " + getCliSocket().isConnected());
             setConnectedToServer(true);
+        }
+        else 
+        {            
+            System.out.println("Client pas prêt !");
+        }
+    }
+    
+    public void ConnexionPAYP() throws IOException
+    {
+        setCliSocket(new Socket(getIP(), getPortPayment()));
+        
+        if (getCliSocket().isConnected()) 
+        {
+            System.out.println("Connexion OK");
+            
+            try 
+            {        
+                System.out.println("Création des flux");
+                setOosPAYP(new ObjectOutputStream(getCliSocket().getOutputStream()));
+                getOosPAYP().flush();
+                System.out.println("Fin de la création des flux");
+            }
+            catch(IOException ex) 
+            {
+                System.out.println(ex.getMessage());
+            }
+            System.out.println("Connected = " + getCliSocket().isConnected());
+            setConnectedToServerPAYP(true);
         }
         else 
         {            
@@ -128,13 +163,18 @@ public class Client
             {
                 try 
                 {
-                    getOis().close();
-                    setOis(null);
-                    getOos().close();
-                    setOos(null);
+                    getOisTICKMAP().close();
+                    setOisTICKMAP(null);
+                    getOosTICKMAP().close();
+                    setOosTICKMAP(null);
                     getCliSocket().close();
                     setCliSocket(null);            
-                    setNomUtilisateur("");                
+                    setNomUtilisateur("");   
+                    
+                    getOosPAYP().close();
+                    setOosPAYP(null);
+                    getOisPAYP().close();
+                    setOisPAYP(null);
                 } 
                 catch (IOException ex) 
                 {
@@ -160,12 +200,25 @@ public class Client
     {
         try 
         {            
-            getOos().writeObject(Req);
-            getOos().flush();
+            getOosTICKMAP().writeObject(Req);
+            getOosTICKMAP().flush();
         } 
         catch (IOException ex) 
         {
             setConnectedToServer(false);
+        }
+    }
+    
+    public void EnvoyerRequete(RequetePAYP Req)
+    {
+        try 
+        {            
+            getOosPAYP().writeObject(Req);
+            getOosPAYP().flush();
+        } 
+        catch (IOException ex) 
+        {
+            setConnectedToServerPAYP(false);
         }
     }
     
@@ -175,14 +228,33 @@ public class Client
         
         try 
         {
-            if (getOis() == null)
-                setOis(new ObjectInputStream(getCliSocket().getInputStream()));
+            if (getOisTICKMAP() == null)
+                setOisTICKMAP(new ObjectInputStream(getCliSocket().getInputStream()));
             
-            Rep = (ReponseTICKMAP) getOis().readObject();
+            Rep = (ReponseTICKMAP) getOisTICKMAP().readObject();
         } 
         catch (IOException | ClassNotFoundException ex) 
         {
             setConnectedToServer(false);
+        }
+        
+        return Rep;
+    }
+    
+    public ReponsePAYP RecevoirReponsePAYP()
+    {
+        ReponsePAYP Rep = null;
+        
+        try 
+        {
+            if (getOisPAYP() == null)
+                setOisPAYP(new ObjectInputStream(getCliSocket().getInputStream()));
+            
+            Rep = (ReponsePAYP) getOisPAYP().readObject();
+        } 
+        catch (IOException | ClassNotFoundException ex) 
+        {
+            setConnectedToServerPAYP(false);
         }
         
         return Rep;
@@ -214,7 +286,8 @@ public class Client
             {       
                 fos = new FileOutputStream(nomFichier);
                 
-                getProp().setProperty("PORT_BAGAGES", Integer.toString(30042));
+                getProp().setProperty("PORT_BAGAGES", Integer.toString(30070));
+                getProp().setProperty("PORT_PAYMENT", Integer.toString(30080));
                 getProp().setProperty("ADRESSEIP", "192.168.0.3");
 
                 getProp().store(fos, null);
@@ -223,22 +296,24 @@ public class Client
         
         if (fis != null || fos != null) 
         {
-            setPort(Integer.parseInt(getProp().getProperty("PORT_BAGAGES")));            
+            setPortBagage(Integer.parseInt(getProp().getProperty("PORT_BAGAGES")));
+            setPortPayment(Integer.parseInt(getProp().getProperty("PORT_PAYMENT")));            
             setIP(InetAddress.getByName(getProp().getProperty("ADRESSEIP")));
             
-            System.out.println("Port : " + getPort());
+            System.out.println("PortBagage : " + getPortBagage());
+            System.out.println("PortPayment : "+getPortPayment());
             System.out.println("IP : " + getIP());
         }
     }
 
-    public int getPort()
+    public int getPortBagage()
     {
-        return Port;
+        return PortBagage;
     }
 
-    public void setPort(int Port)
+    public void setPortBagage(int Port)
     {
-        this.Port = Port;
+        this.PortBagage = Port;
     }
 
     public InetAddress getIP()
@@ -259,26 +334,6 @@ public class Client
     public void setCliSocket(Socket cliSocket)
     {
         this.cliSocket = cliSocket;
-    }
-
-    public ObjectInputStream getOis()
-    {
-        return ois;
-    }
-
-    public void setOis(ObjectInputStream ois)
-    {
-        this.ois = ois;
-    }
-
-    public ObjectOutputStream getOos()
-    {
-        return oos;
-    }
-
-    public void setOos(ObjectOutputStream oos)
-    {
-        this.oos = oos;
     }
 
     public Properties getProp()
@@ -310,6 +365,67 @@ public class Client
     {
         this.ConnectedToServer = ConnectedToServer;
     }
+
+    public int getPortPayment()
+    {
+        return PortPayment;
+    }
+
+    public void setPortPayment(int PortPayment)
+    {
+        this.PortPayment = PortPayment;
+    }
+
+    public boolean isConnectedToServerPAYP()
+    {
+        return ConnectedToServerPAYP;
+    }
+
+    public void setConnectedToServerPAYP(boolean ConnectedToServerPAYP)
+    {
+        this.ConnectedToServerPAYP = ConnectedToServerPAYP;
+    }
+
+    public ObjectInputStream getOisTICKMAP()
+    {
+        return oisTICKMAP;
+    }
+
+    public void setOisTICKMAP(ObjectInputStream oisTICKMAP)
+    {
+        this.oisTICKMAP = oisTICKMAP;
+    }
+
+    public ObjectOutputStream getOosTICKMAP()
+    {
+        return oosTICKMAP;
+    }
+
+    public void setOosTICKMAP(ObjectOutputStream oosTICKMAP)
+    {
+        this.oosTICKMAP = oosTICKMAP;
+    }
+
+    public ObjectInputStream getOisPAYP()
+    {
+        return oisPAYP;
+    }
+
+    public void setOisPAYP(ObjectInputStream oisPAYP)
+    {
+        this.oisPAYP = oisPAYP;
+    }
+
+    public ObjectOutputStream getOosPAYP()
+    {
+        return oosPAYP;
+    }
+
+    public void setOosPAYP(ObjectOutputStream oosPAYP)
+    {
+        this.oosPAYP = oosPAYP;
+    }
+    
     
    
 }
