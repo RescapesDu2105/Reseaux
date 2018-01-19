@@ -197,12 +197,11 @@ public class ClientInformationGUI extends javax.swing.JFrame
                 cleFichier.close();
                 CleSecrete cleClient=new CleSecrete(keyLoad);
                 
-                ClientBD clientbd = new ClientBD(jTextFieldNom.getText(),jTextFieldPrenom.getText(),Integer.parseInt(jTextFieldAccompagnant.getText()));
+                ClientBD clientbd = new ClientBD(jTextFieldNom.getText(),jTextFieldPrenom.getText(),Integer.parseInt(jTextFieldAccompagnant.getText()),idVol);
                 try
                 {
                     System.out.println("cryptage du vol...");
                     CryptageSymetrique cryptage = new CryptageSymetrique();
-                    //byte[] b = (Integer.toString(idVol)).getBytes();
                     byte[] idVolCrypte = cryptage.Crypte(keyLoad,(Integer.toString(idVol)).getBytes());
                     
                     System.out.println("cryptage du client...");

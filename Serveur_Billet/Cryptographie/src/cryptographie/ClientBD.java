@@ -16,12 +16,21 @@ public class ClientBD implements Serializable
     private String Nom;
     private String Prenom;
     private int nbAccompagnant;
+    private int idVol;
 
     public ClientBD(String nom , String prenom, int nbaccompagnant)
     {
         setNom(nom);
         setPrenom(prenom);
         setNbAccompagnant(nbaccompagnant);
+    }
+    
+    public ClientBD(String nom , String prenom, int nbaccompagnant , int idvol)
+    {
+        setNom(nom);
+        setPrenom(prenom);
+        setNbAccompagnant(nbaccompagnant);
+        setIdVol(idvol);
     }
     
     public String getNom()
@@ -52,6 +61,16 @@ public class ClientBD implements Serializable
     public void setNbAccompagnant(int nbAccompagnant)
     {
         this.nbAccompagnant = nbAccompagnant;
+    }
+
+    public int getIdVol()
+    {
+        return idVol;
+    }
+
+    public void setIdVol(int idVol)
+    {
+        this.idVol = idVol;
     }
     
     

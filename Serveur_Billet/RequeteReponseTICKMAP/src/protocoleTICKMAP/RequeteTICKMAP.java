@@ -661,7 +661,19 @@ public class RequeteTICKMAP implements Requete, Serializable
                 HashMap<String, Object> client = new HashMap<>();
                 client.put("Nom", clientBD.getNom());
                 client.put("Prenom", clientBD.getPrenom());
-                client.put("Login" , clientBD.getPrenom().substring(0, 3)+clientBD.getNom().substring(0,3));
+                
+                if(clientBD.getNom().length()<3)
+                {
+                    if(clientBD.getPrenom().length()<3)
+                        client.put("Login" , clientBD.getPrenom()+clientBD.getNom());
+                    else
+                        client.put("Login" , clientBD.getPrenom().substring(0, 3)+clientBD.getNom());
+                }
+                else if(clientBD.getPrenom().length()<3)
+                    client.put("Login" , clientBD.getPrenom()+clientBD.getNom().substring(0, 3));
+                else
+                    client.put("Login" , clientBD.getPrenom().substring(0, 3)+clientBD.getNom().substring(0,3));
+                
                 client.put("Password", "1234");
                 client.put("nbAccompagnant", clientBD.getNbAccompagnant());
                 
