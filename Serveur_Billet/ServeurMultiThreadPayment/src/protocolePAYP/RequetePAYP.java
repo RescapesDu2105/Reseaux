@@ -5,10 +5,20 @@
  */
 package protocolePAYP;
 
+import cryptographie.KeyStoreUtils;
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import requetepoolthreads.Requete;
 
 /**
@@ -19,11 +29,11 @@ public class RequetePAYP implements Requete, Serializable
 {
     public final static int REQUEST_SEND_CERTIFICATE = 0;
     
-    private static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurPaymentKeyStore.jks";
-    private static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
-    private static String keyStorePsw = "123Soleil";    
-    private static String aliasKeyStrore = "serveurprivatekey";
-    private static String aliasCertifPublicClientKey = "PublicClientKey";
+    private final static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurPaymentKeyStore.jks";
+    private final static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
+    private final static String keyStorePsw = "123Soleil";    
+    private final static String aliasKeyStrore = "serverpaymentprivatekey";
+    private final static String aliasCertifPublicClientKey = "CertifClient";
     
     private int Type;
     private HashMap<String, Object> chargeUtile;
@@ -121,8 +131,6 @@ public class RequetePAYP implements Requete, Serializable
     {
         switch(getType()) 
         {
-            /*case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
-            case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER"; */
             case REQUEST_SEND_CERTIFICATE: return "REQUEST_SEND_CERTIFICATE";
             default : return null;
         }
@@ -130,8 +138,38 @@ public class RequetePAYP implements Requete, Serializable
     
     public void traiterSendCertif()
     {
-        System.out.println("Coucou");
+        KeyStoreUtils ks = null;
+        X509Certificate certifClient=(X509Certificate) getChargeUtile().get("Certificate");
+        
+        try
+        {
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            
+            ks.saveCertificate(aliasCertifPublicClientKey, certifClient);
+            ks.SaveKeyStore(keyStorePath, keyStorePsw);
+            
+        } catch (KeyStoreException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnrecoverableKeyException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_CERTIFICATE_OK);
-        Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_CERTIFICATE_MESSAGE);   
+        Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_CERTIFICATE_MESSAGE);
+        Reponse.getChargeUtile().put("Certificate",ks.getCertif());        
     }
 }

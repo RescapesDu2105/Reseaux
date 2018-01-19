@@ -8,7 +8,10 @@ package clientmutlithreadtickmap;
 import cryptographie.CleSecrete;
 import cryptographie.ClientBD;
 import cryptographie.HMACUtils;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -139,30 +142,31 @@ public class PaymentGUI extends javax.swing.JFrame
         ReponseTICKMAP Rep = null;
         
         LoadKeyHmac(keyStoreDirPath , keySecretHmac);
-        byte[] message = "Payment".getBytes();
+        //byte[] message = "Payment".getBytes();
+        byte[] cliByte = ObcjetToByte(getClientBD());
         
         try
         {
             HMACUtils hmac = new HMACUtils(getCleHMAC());
-            byte[] messageHmac = hmac.DoHmac(message);
+            byte[] messageHmac = hmac.DoHmac(cliByte);
             
-            Req.getChargeUtile().put("message" , message);
+            //Req.getChargeUtile().put("message" , message);
             Req.getChargeUtile().put("messageHmac" , messageHmac);
-            Req.getChargeUtile().put("ClientBD", getClientBD());
+            Req.getChargeUtile().put("ClientBD", cliByte);
             getClient().EnvoyerRequete(Req);
             
             Rep = getClient().RecevoirReponse();
             
             if(Rep.getCode() == ReponseTICKMAP.REQUEST_PAYMENT_REGISTRATION_OK)
             {
-                getClient().ConnexionPAYP();
-                RequetePAYP ReqPAYP = new RequetePAYP(RequetePAYP.REQUEST_SEND_CERTIFICATE);
-                ReponsePAYP RepPAYP = null;
-                getClient().EnvoyerRequete(ReqPAYP);
-                
-                RepPAYP = getClient().RecevoirReponsePAYP();
-                if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_CERTIFICATE_OK)
-                    System.out.println("Ok");
+                java.awt.EventQueue.invokeLater(new Runnable()
+                {
+                    public void run()
+                    {
+                        new CreditCardGUI(getClient(),getMontant(),getClientBD()).setVisible(true);
+                    }
+                }); 
+                this.dispose();
             }
         } catch (NoSuchAlgorithmException ex)
         {
@@ -173,10 +177,7 @@ public class PaymentGUI extends javax.swing.JFrame
         } catch (InvalidKeyException ex)
         {
             Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }      
     }//GEN-LAST:event_jButtonPaymentActionPerformed
 
     /**
@@ -295,6 +296,28 @@ public class PaymentGUI extends javax.swing.JFrame
         {
             Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public byte[] ObcjetToByte(Object o)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
+        byte[] byteArray = null;
+        
+        try
+        {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(o);
+            out.flush();
+            byteArray = bos.toByteArray();
+            
+            bos.close();
+            return byteArray;
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return byteArray;
     }
     
 
