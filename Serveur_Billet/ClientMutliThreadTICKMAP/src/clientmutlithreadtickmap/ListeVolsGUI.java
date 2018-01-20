@@ -61,6 +61,7 @@ public class ListeVolsGUI extends javax.swing.JFrame
                 "NumeroVol", "Destination", "Heure de Depart", "Place(s) restante(s)"
             }
         ));
+        jTableVols.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTableVols);
 
         jLabelTitre.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N

@@ -34,7 +34,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Component id="jButtonPayment" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="80" max="32767" attributes="0"/>
+              <EmptySpace pref="84" max="32767" attributes="0"/>
               <Component id="jButtonAnnuler" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
           </Group>
@@ -79,12 +79,12 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="14" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Montant a Pay&#xe9; :"/>
+        <Property name="text" type="java.lang.String" value="Montant &#xe0; payer :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonPayment">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Passer au Payement"/>
+        <Property name="text" type="java.lang.String" value="Passer au paiement"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPaymentActionPerformed"/>

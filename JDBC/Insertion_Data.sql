@@ -7,7 +7,7 @@ INSERT INTO bd_airport.Avions(NomAvion, Modele, NbPlaces, IdCompagnie) VALUES ('
 INSERT INTO bd_airport.Avions(NomAvion, Modele, NbPlaces, IdCompagnie) VALUES ('Anaconda','Douglas DC-3','13','3');
 
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('1','Marshall','Matthers','1972-10-17','Directeur');
-INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('2','Loxley','Swing','1995-09-07','Bagagistes');
+INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('2','Loxley','Swing','1995-09-07','Bagagiste');
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('3','Primero','Isha','1981-08-03','Hotesse');
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('4','Lome','Pall','1976-01-07','Co-Pilote');
 INSERT INTO bd_airport.Agents VALUES ('5','Tusset','Quentin','1995-02-15','Bagagiste','Doublon','123');
@@ -17,6 +17,7 @@ INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('9','Poussin','QuiQui','1978-01-07','Hotesse');
 INSERT INTO bd_airport.Agents(IdAgent, Nom, Prenom, DateNaissance, Poste) VALUES ('10','Sonnerie','DingDong','1977-01-07','Pilote');
 INSERT INTO bd_airport.Agents VALUES ('11','Dimartino','Philippe','1995-02-15','Analyste', 'Zey','123');
+INSERT INTO bd_airport.Agents VALUES ('12','Dimartino','Philippe','1995-02-15','Employe', 'Xyadez','123');
 
 INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('714', 'Sydney', '2017-11-30 17:30:00', '2017-12-01 11:00:00','150','3');
 INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-11-30 18:30:00', '2017-12-01 08:00:00','200','2');

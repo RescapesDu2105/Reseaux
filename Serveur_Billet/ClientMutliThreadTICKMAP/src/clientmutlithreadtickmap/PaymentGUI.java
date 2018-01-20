@@ -76,9 +76,9 @@ public class PaymentGUI extends javax.swing.JFrame
         jLabelMontant.setForeground(new java.awt.Color(204, 0, 0));
 
         jLabelTitre.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabelTitre.setText("Montant a Payé :");
+        jLabelTitre.setText("Montant à payer :");
 
-        jButtonPayment.setText("Passer au Payement");
+        jButtonPayment.setText("Passer au paiement");
         jButtonPayment.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -109,7 +109,7 @@ public class PaymentGUI extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jButtonPayment)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                 .addComponent(jButtonAnnuler)
                 .addGap(56, 56, 56))
         );

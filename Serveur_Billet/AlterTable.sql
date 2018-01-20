@@ -1,2 +1,2 @@
-ALTER TABLE clients ADD nbAccompagnant INT;
+ALTER TABLE bd_airport.clients ADD nbAccompagnant INT;
 commit;

@@ -111,7 +111,7 @@ public class RequeteTICKMAP implements Requete, Serializable
         {
             try 
             {                        
-                RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Login = \"" + user + "\"");
+                RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Employe\" AND Login = \"" + user + "\"");
                 if (RS != null) 
                 {
                     if(RS.next())
@@ -444,7 +444,6 @@ public class RequeteTICKMAP implements Requete, Serializable
             try 
             {                        
                 RS = BD_airport.Select("SELECT * FROM VOLS");
-                //RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Login = \"" + user + "\"");
                 if (RS != null) 
                 {         
                     Reponse = new ReponseTICKMAP(ReponseTICKMAP.LIST_OF_FLY_OK);

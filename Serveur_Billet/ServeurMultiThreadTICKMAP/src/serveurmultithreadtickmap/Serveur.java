@@ -70,6 +70,7 @@ public class Serveur extends Thread
                 System.err.println("Erreur socket ! [" + ex.getMessage() + "]");
             }
         }
+        getThreads().clear();
     }   
 
     public Properties getProp()

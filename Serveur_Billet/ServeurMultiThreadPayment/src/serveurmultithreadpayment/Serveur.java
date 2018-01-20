@@ -23,6 +23,7 @@ public class Serveur extends Thread
     private ServerSocket SSocket_Billet= null;
     private int Port_Billet;
     private int MaxClients;
+    private String IP_Billet;
 
     private ArrayList<ThreadServeur> threads = new ArrayList<>();
 
@@ -31,8 +32,9 @@ public class Serveur extends Thread
         this.GUIApplication = GUIApplication;
         try 
         {
-            this.Prop = (new ServerProperties()).getProp();
-            this.Port_Billet = Integer.parseInt(this.Prop.getProperty("PORT_PAYMENT"));
+            this.Prop = new ServerProperties().getProp();
+            this.Port_Billet = Integer.parseInt(this.Prop.getProperty("PORT_BILLET"));
+            this.IP_Billet = this.Prop.getProperty("IP_BILLET");
             this.MaxClients = Integer.parseInt(this.Prop.getProperty("MAX_CLIENTS"));
         } 
         catch (IOException ex) 
@@ -132,5 +134,4 @@ public class Serveur extends Thread
     {
         this.GUIApplication = GUIApplication;
     }
-
 }

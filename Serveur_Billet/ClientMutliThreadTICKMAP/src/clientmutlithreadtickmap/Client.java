@@ -171,10 +171,17 @@ public class Client
                     setCliSocket(null);            
                     setNomUtilisateur("");   
                     
-                    getOosPAYP().close();
-                    setOosPAYP(null);
-                    getOisPAYP().close();
-                    setOisPAYP(null);
+                    if(getOosPAYP() != null)
+                    {
+                        getOosPAYP().close();
+                        setOosPAYP(null);      
+                    }
+                    
+                    if(getOisPAYP() != null)
+                    {
+                        getOisPAYP().close();
+                        setOisPAYP(null);
+                    }
                 } 
                 catch (IOException ex) 
                 {

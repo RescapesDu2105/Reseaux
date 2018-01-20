@@ -27,9 +27,11 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Properties;
@@ -226,13 +228,22 @@ public class RequetePAYP implements Requete, Serializable
         }
     // Communication        
         try
-        {
-            KeyManagerFactory kmf;
+        {            
+            int Port_Mastercard = Integer.parseInt(Prop.getProperty("PORT_MASTERCARD"));
+            String IP_Mastercard = Prop.getProperty("IP_MASTERCARD");
+            
+            KeyManagerFactory kmf;         
+            
+            FileInputStream fin = new FileInputStream(certificateLocation);
+            CertificateFactory f = CertificateFactory.getInstance("X.509");
+            X509Certificate certificate = (X509Certificate)f.generateCertificate(fin);
+            PublicKey publicKeySSL = certificate.getPublicKey();
+        
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(new FileInputStream(""), "123Soleil".toCharArray());
+            keyStore.load(new FileInputStream(".." + System.getProperty("file.separator") + "ServeurMastercard.jks"), keyStorePsw.toCharArray());
             
             kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(keyStore, "123Soleil".toCharArray());
+            kmf.init(keyStore, keyStorePsw.toCharArray());
         
             TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
             tmf.init(keyStore);
@@ -242,7 +253,7 @@ public class RequetePAYP implements Requete, Serializable
 
             SSLSocketFactory SSLSFactory = sslContext.getSocketFactory();
 
-            SSLSocket CSocket = (SSLSocket) SSLSFactory.createSocket(Ip_Mastercard, Port_Mastercard);
+            SSLSocket CSocket = (SSLSocket) SSLSFactory.createSocket(IP_Mastercard, Port_Mastercard);
             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(CSocket.getOutputStream()));
             oos.flush();
             ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(CSocket.getInputStream()));
@@ -251,6 +262,7 @@ public class RequetePAYP implements Requete, Serializable
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("MASTERCARD");
         
     //
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_PAYMENT_OK);
