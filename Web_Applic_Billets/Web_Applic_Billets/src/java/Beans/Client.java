@@ -20,20 +20,23 @@ public class Client implements Serializable
     private int IdClient;
     private String Nom;
     private String Prenom;
+    private String Mail;
     private ArrayList<Promesse> Panier;
 
     public Client() 
     {
         this.Nom = null;
         this.Prenom = null;
+        this.Mail = null;
         this.Panier = new ArrayList<>();
     }
     
-    public Client(int IdClient, String Nom, String Prenom) 
+    public Client(int IdClient, String Nom, String Prenom, String Mail) 
     {
         this.IdClient = IdClient;
         this.Nom = Nom;
         this.Prenom = Prenom;
+        this.Mail = Mail;
         this.Panier = new ArrayList<>();
     }   
     
@@ -116,5 +119,15 @@ public class Client implements Serializable
 
     public void setIdClient(int IdClient) {
         this.IdClient = IdClient;
+    }
+
+    public String getMail()
+    {
+        return Mail;
+    }
+
+    public void setMail(String Mail)
+    {
+        this.Mail = Mail;
     }
 }

@@ -11,33 +11,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="Langues" scope="session" class="Beans.Langues"/>
 <% 
     if(session.getAttribute("isUserLoggedIn") != null)
         response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPCaddie.jsp");
-    
-    Bean_DB_Access BD_compta = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_compta");
-    BD_compta.Connexion();   
-    try
-    {
-        ArrayList<String> Langues = new ArrayList<>();
-        ResultSet RS = BD_compta.Select("SELECT Nom FROM Langues");
-        while(RS.next())
-        {
-            Langues.add(RS.getString(1));
-        }
-        RS.close();
-        getServletContext().setAttribute("Langues", Langues);
-
-        System.out.println("Langues = " + Langues.size());
-    } 
-    catch (SQLException ex) 
-    {
-        ex.printStackTrace();
-    }  
-    finally 
-    {
-        BD_compta.Deconnexion();
-    }   
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -54,7 +31,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
     </head>
     <body>
-        <fmt:setLocale value="fr_FR" scope="session"/> 
+        <fmt:setLocale value="en_EN" scope="session"/> 
         <fmt:bundle basename = "Resources.">
             
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -75,9 +52,8 @@
                         } %>
                         <div class="form-group">
                             <label for="username"><i class="fas fa-language"></i> <fmt:message key = "langue"/></label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <%  ArrayList<String> Langues = (ArrayList<String>)getServletContext().getAttribute("Langues"); 
-                                    for(String Langue : Langues)
+                            <select class="form-control" name="inputLangue">
+                                <%  for(String Langue : Langues.getLangues())
                                     { %>
                                         <option><fmt:message key = '<%= Langue %>'/></option>
                                  <% } %>
@@ -85,19 +61,15 @@
                         </div>
                         <div class="form-group">
                             <label for="name"><i class="fa fa-user"></i> <fmt:message key = "user"/></label>
-                            <input type="text" name="inputLogin" id="inputLogin" class="form-control" placeholder="Entrer le nom" autofocus>
+                            <input type="text" name="inputLogin" id="inputLogin" class="form-control" placeholder='<fmt:message key = "userI"/>' autofocus>
                         </div>
                         <div class="form-group">
-                            <label for="code"><i class="fa fa-key"></i> <fmt:message key = "code"/></label>
-                            <input type="text" name="inputPassword" id="inputPassword" class="form-control" placeholder="Entrer le code de réservation">  
+                            <label for="pwd"><i class="fa fa-key"></i> <fmt:message key = "pwd"/></label>
+                            <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder='<fmt:message key = "pwdI"/>'>  
                         </div>
-                        <div class="form-group">
-                            <label for="mail"><i class="fa fa-envelope"></i> <fmt:message key = "mail"/></label>
-                            <input type="email" name="inputPassword" id="inputPassword" class="form-control" placeholder="Entrer l'adresse mail">  
+                        <div class="form-check checkbox">
+                            <label><input id="inputCB" type="checkbox" name="Inscription" data-nom='<fmt:message key = "nom"/>' data-nomI='<fmt:message key = "nomI"/>' data-prenom='<fmt:message key = "prenom"/>' data-prenomI='<fmt:message key = "prenomI"/>' data-mail='<fmt:message key = "mail"/>' data-mailI='<fmt:message key = "mailI"/>'> <fmt:message key = "new"/></label>
                         </div>
-                        <!--<div class="form-check checkbox">
-                            <label><input id="inputCB" type="checkbox" name="Inscription" onclick="InscriptionAddInfos(this);"> <fmt:message key = "new"/></label>
-                        </div> -->
                         <input id="inputHidden" type="hidden" name="action" value="Authentification">
                         <button class="btn btn-lg btn-success btn-block" type="submit" id="submit"><i class="fa fa-power-off"></i> <fmt:message key = "connexion"/></button>
                     </form>
@@ -108,56 +80,81 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
         <script type="text/javascript">
-            function InscriptionAddInfos(CheckBox)
-            {
-                if(CheckBox.checked)
-                {                                        
-                    var inputNom = document.createElement("input");                   
-                    inputNom.type = "text";
-                    inputNom.id = "inputNom";
-                    inputNom.name = "inputNom";
-                    inputNom.setAttribute('class', "form-control");
-                    inputNom.placeholder = "Entrer le nom de famille";
-                    
-                    var inputPrenom = document.createElement("input");                   
-                    inputPrenom.type = "text";
-                    inputPrenom.id = "inputPrenom";
-                    inputPrenom.name = "inputPrenom";
-                    inputPrenom.setAttribute('class', "form-control");
-                    inputPrenom.placeholder = "Entrer le prénom";
-                    
-                    
-                    var div1 = document.createElement("div");
-                    div1.setAttribute('class', "form-group");
-                    div1.id = "div_inputNom";
-                    
-                    var div2 = document.createElement("div");
-                    div2.setAttribute('class', "form-group");
-                    div2.id = "div_inputPrenom";
-            
-                    var labelNom = document.createElement("label");
-                    labelNom.for = "name";
-                    labelNom.innerHTML = "Nom de famille";
-                    
-                    var labelPrenom = document.createElement("label");
-                    labelPrenom.for = "surname";
-                    labelPrenom.innerHTML = "Prénom";
-            
-                    div1.appendChild(labelNom);
-                    div1.appendChild(inputNom);
-            
-                    div2.appendChild(labelPrenom);
-                    div2.appendChild(inputPrenom);
-                                        
-                    document.getElementById("loginform").insertBefore(div1, document.getElementById("inputHidden"));
-                    document.getElementById("loginform").insertBefore(div2, document.getElementById("inputHidden"));
-                }
-                else
-                {
-                    document.getElementById("loginform").removeChild(document.getElementById("div_inputNom"));
-                    document.getElementById("loginform").removeChild(document.getElementById("div_inputPrenom"));
-                }
-            }
+            $(document).ready(function ()
+            {  
+                $('#inputCB').click(function(event)            
+                {      
+                    console.log($(event.currentTarget));
+
+                    if(event.currentTarget.checked)
+                    {                                        
+                        var inputNom = document.createElement("input");                   
+                        inputNom.type = "text";
+                        inputNom.id = "inputNom";
+                        inputNom.name = "inputNom";
+                        inputNom.setAttribute('class', "form-control");
+                        inputNom.placeholder = $(event.currentTarget).data('nomi');
+
+                        var inputPrenom = document.createElement("input");                   
+                        inputPrenom.type = "text";
+                        inputPrenom.id = "inputPrenom";
+                        inputPrenom.name = "inputPrenom";
+                        inputPrenom.setAttribute('class', "form-control");
+                        inputPrenom.placeholder = $(event.currentTarget).data('prenomi');
+
+                        var inputMail = document.createElement("input");                   
+                        inputMail.type = "mail";
+                        inputMail.id = "inputMail";
+                        inputMail.name = "inputMail";
+                        inputMail.setAttribute('class', "form-control");
+                        inputMail.placeholder = $(event.currentTarget).data('maili');
+
+
+                        var div1 = document.createElement("div");
+                        div1.setAttribute('class', "form-group");
+                        div1.id = "div_inputNom";
+
+                        var div2 = document.createElement("div");
+                        div2.setAttribute('class', "form-group");
+                        div2.id = "div_inputPrenom";                    
+
+                        var div3 = document.createElement("div");
+                        div3.setAttribute('class', "form-group");
+                        div3.id = "div_inputMail";
+
+                        var labelNom = document.createElement("label");
+                        labelNom.for = "name";
+                        labelNom.innerHTML = $(event.currentTarget).data('nom');
+
+                        var labelPrenom = document.createElement("label");
+                        labelPrenom.for = "surname";
+                        labelPrenom.innerHTML = $(event.currentTarget).data('prenom');            
+
+                        var labelMail = document.createElement("label");
+                        labelMail.for = "mail";
+                        labelMail.innerHTML = $(event.currentTarget).data('mail');
+
+                        div1.appendChild(labelNom);
+                        div1.appendChild(inputNom);
+
+                        div2.appendChild(labelPrenom);
+                        div2.appendChild(inputPrenom);
+
+                        div3.appendChild(labelMail);
+                        div3.appendChild(inputMail);
+
+                        document.getElementById("loginform").insertBefore(div1, document.getElementById("inputHidden"));
+                        document.getElementById("loginform").insertBefore(div2, document.getElementById("inputHidden"));
+                        document.getElementById("loginform").insertBefore(div3, document.getElementById("inputHidden"));
+                    }
+                    else
+                    {
+                        document.getElementById("loginform").removeChild(document.getElementById("div_inputNom"));
+                        document.getElementById("loginform").removeChild(document.getElementById("div_inputPrenom"));
+                        document.getElementById("loginform").removeChild(document.getElementById("div_inputMail"));
+                    }
+                });
+            });
         </script>
         </fmt:bundle>
     </body>

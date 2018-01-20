@@ -43,6 +43,7 @@ CREATE TABLE `bd_airport`.`clients` (
     `Prenom` VARCHAR(50) NOT NULL,
 	`Login` VARCHAR(25) NOT NULL,
 	`Password` VARCHAR(25) NOT NULL,  
+	`Mail` VARCHAR(50) NOT NULL,  
 	CONSTRAINT IdClient_PK PRIMARY KEY (`IdClient`),
 	CONSTRAINT LoginUNIQUE UNIQUE(`Login`)
 );

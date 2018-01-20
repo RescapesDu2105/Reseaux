@@ -15,6 +15,8 @@
 <%@page import="Servlets.ControlDataCenter"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean id="Vols" scope="application" class="Beans.Vols"/>
 <jsp:useBean id="Client" scope="session" class="Beans.Client"/>
 <%  
@@ -37,10 +39,13 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
     </head>
-    <body>
+    <body>        
+        <fmt:setLocale value='<%= session.getAttribute("langue") %>' scope="session"/> 
+        <fmt:bundle basename = "Resources.">
+            
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPCaddie.jsp"><i class="fa fa-plane"></i><strong> Caddie Virtuel de l'InPrES Airport</strong></a>
+                <a class="navbar-brand" href="http://localhost:8084/Web_Applic_Billets/JSPCaddie.jsp"><i class="fa fa-plane"></i><strong> <fmt:message key = "brand"/></strong></a>
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item active">
                         <a class="nav-link"><strong>Client : <%= Client.getPrenom() + " " + Client.getNom() %></strong></a>
@@ -50,13 +55,13 @@
                     <button type="submit" class ="btn btn-info btn-"> 
                         <%= Client.getPanier().size() %>
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        Panier
+                        <fmt:message key = "panier"/>
                         <input type="hidden" name="action" value="VoirPanier">
                     </button>
                 </form>
                 <form class="form-signin" id="Deconnexion" action="ControlDataCenter" method="POST">
                     <input type="hidden" name="action" value="Deconnexion">
-                    <button class="btn btn-danger" type="submit" id="submit"><i class="fa fa-sign-out"></i> Déconnexion</button>
+                    <button class="btn btn-danger" type="submit" id="submit"><i class="fa fa-sign-out"></i> <fmt:message key = "deconnexion"/></button>
                 </form>               
             </div>
         </nav>
@@ -77,13 +82,13 @@
                     <table class ="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>Numéro du vol</th>
-                                <th>Nom compagnie</th>
-                                <th>Destination</th>
-                                <th>Heure de départ</th>
-                                <th>Heure d'arrivée</th>
-                                <th>Places restantes</th>
-                                <th>Nombre d'accompagnants</th>
+                                <th><fmt:message key = "numvol"/></th>
+                                <th><fmt:message key = "nomcomp"/></th>
+                                <th><fmt:message key = "dest"/></th>
+                                <th><fmt:message key = "heuredep"/></th>
+                                <th><fmt:message key = "heurearr"/></th>
+                                <th><fmt:message key = "placesrest"/></th>
+                                <th><fmt:message key = "nbacc"/></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,5 +120,6 @@
                     </table>
                 </div>        
         <%  }   %>
+        </fmt:bundle>
     </body>
 </html>

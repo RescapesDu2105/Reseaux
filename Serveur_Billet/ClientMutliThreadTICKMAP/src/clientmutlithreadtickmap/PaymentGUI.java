@@ -19,11 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JLabel;
-import protocolePAYP.ReponsePAYP;
-import protocolePAYP.RequetePAYP;
 import protocoleTICKMAP.ReponseTICKMAP;
 import protocoleTICKMAP.RequeteTICKMAP;
-import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_PAYMENT_REGISTRATION;
 
 /**
  *

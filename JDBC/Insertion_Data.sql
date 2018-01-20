@@ -29,16 +29,16 @@ INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, P
 INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('362', 'Peshawar', '2017-12-02 16:30:00', '2017-12-03 08:00:00','200','2');
 INSERT INTO bd_airport.Vols(NumeroVol, Destination, HeureDepart, HeureArrivee, PlacesRestantes, IdAvion) VALUES ('152', 'Paris', '2017-12-02 17:20:00', '2017-12-02 18:20:00','13','1');
 
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Zeydax', 'Dimartino', 'Philippe', '1234'); -- 1
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Doublon', 'Tusset', 'Quentin', '1234'); -- 2
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Stocka', 'Verwimp', 'Jim', '1234'); -- 3
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('CharWal', 'Charvilrom', 'Walter', '1234'); -- 4
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('BeauGosse', 'Vilvens', 'Claude', '1234'); -- 5
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('DrHouse', 'Laurie', 'Hugh', '1234'); -- 6
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Daredevil', 'Murdock', 'Matthew', '1234'); -- 7
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('Batman', 'Wayne', 'Bruce', '1234'); -- 8
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('MiyaHay', 'Miyazaki', 'Hayao', '1234'); -- 9
-INSERT INTO bd_airport.clients(Login, Nom, Prenom, Password) VALUES ('ElvisRo', 'Elvis', 'Romeo', '1234'); -- 10
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('Zeydax', 'Dimartino', 'Philippe', 'dimartino@u2.tech.hepl.local', '1234'); -- 1
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('Doublon', 'Tusset', 'Quentin', 'tusset@u2.tech.hepl.local', '1234'); -- 2
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('Stocka', 'Verwimp', 'Jim', 'verwimp@u2.tech.hepl.local', '1234'); -- 3
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('CharWal', 'Charvilrom', 'Walter', 'charvilrom@u2.tech.hepl.local', '1234'); -- 4
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('BeauGosse', 'Vilvens', 'Claude', 'vilvens@u2.tech.hepl.local', '1234'); -- 5
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('DrHouse', 'Laurie', 'Hugh', 'laurie@u2.tech.hepl.local', '1234'); -- 6
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('Daredevil', 'Murdock', 'Matthew', 'murdock@u2.tech.hepl.local', '1234'); -- 7
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('Batman', 'Wayne', 'Bruce', 'wayne@u2.tech.hepl.local', '1234'); -- 8
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('MiyaHay', 'Miyazaki', 'Hayao', 'miyazaki@u2.tech.hepl.local', '1234'); -- 9
+INSERT INTO bd_airport.clients(Login, Nom, Prenom, Mail, Password) VALUES ('ElvisRo', 'Elvis', 'Romeo', 'elvis@u2.tech.hepl.local', '1234'); -- 10
 
 INSERT INTO bd_airport.Billets VALUES ('714-19112017-0001'/*,'000-5902781-01','Economique'*/,'1','1');
 INSERT INTO bd_airport.Billets VALUES ('714-19112017-0002'/*,'000-0709199-01','Premiere'*/,'2','1');

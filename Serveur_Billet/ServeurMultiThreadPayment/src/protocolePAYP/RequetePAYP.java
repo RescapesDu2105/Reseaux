@@ -231,17 +231,15 @@ public class RequetePAYP implements Requete, Serializable
         {            
             int Port_Mastercard = Integer.parseInt(Prop.getProperty("PORT_MASTERCARD"));
             String IP_Mastercard = Prop.getProperty("IP_MASTERCARD");
+             
             
-            KeyManagerFactory kmf;         
-            
-            FileInputStream fin = new FileInputStream(certificateLocation);
-            CertificateFactory f = CertificateFactory.getInstance("X.509");
-            X509Certificate certificate = (X509Certificate)f.generateCertificate(fin);
-            PublicKey publicKeySSL = certificate.getPublicKey();
+            certifClient = ks.loadCertificate(aliasCertifPublicClientKey);
+            PublicKey publicKeySSL = certifClient.getPublicKey();
         
             KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(new FileInputStream(".." + System.getProperty("file.separator") + "ServeurMastercard.jks"), keyStorePsw.toCharArray());
+            keyStore.load(new FileInputStream(keyStorePath), keyStorePsw.toCharArray());
             
+            KeyManagerFactory kmf;        
             kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(keyStore, keyStorePsw.toCharArray());
         

@@ -7,15 +7,25 @@ package Servlets;
  */
 
 import Beans.Client;
+import Beans.Langues;
 import Beans.Vols;
 import Classes.Promesse;
 import Classes.Vol;
+import Resources._en_EN;
 import database.utilities.Bean_DB_Access;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.Security;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +36,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import protocoleTICKMAP.ReponseTICKMAP;
+import protocoleTICKMAP.RequeteTICKMAP;
 
 /**
  *
@@ -35,6 +48,8 @@ public class ControlDataCenter extends HttpServlet
 {
     private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
     private final Bean_DB_Access BD_compta = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_compta");
+    private String IP_Serveur = "127.0.0.1";
+    private int Port_Serveur = "30070";
     private Client Client = null;
     
     /**
@@ -53,11 +68,11 @@ public class ControlDataCenter extends HttpServlet
         sc.log("-- démarrage de la servlet ControlDataCenter");
         System.out.println("Démarrage de la Servlet ControlDataCenter");
         
-        BD_compta.Connexion();   
+        /*BD_compta.Connexion();   
         try
         {
             ArrayList<String> Langues = new ArrayList<>();
-            ResultSet RS = BD_compta.Select("SELECT Nom FROM Langues");
+            ResultSet RS = BD_compta.Select("SELECT Code FROM Langues");
             while(RS.next())
             {
                 Langues.add(RS.getString(1));
@@ -74,7 +89,7 @@ public class ControlDataCenter extends HttpServlet
         finally 
         {
             BD_compta.Deconnexion();
-        }   
+        }   */
     }
     
     @Override
@@ -192,6 +207,8 @@ public class ControlDataCenter extends HttpServlet
                         session.setAttribute("ErrorLogin", "Le champ du nom de famille ne peut être vide !");
                     else if (request.getParameter("inputPrenom").isEmpty())
                         session.setAttribute("ErrorLogin", "Le champ du prénom ne peut être vide !");
+                    else if (request.getParameter("inputMail").isEmpty())
+                        session.setAttribute("ErrorLogin", "Le champ de l'adresse mail ne peut être vide !");
                     else
                     {
                         HashMap<String, Object> hm = new HashMap<>();
@@ -199,12 +216,30 @@ public class ControlDataCenter extends HttpServlet
                         hm.put("Password", request.getParameter("inputPassword"));
                         hm.put("Nom", request.getParameter("inputNom"));
                         hm.put("Prenom", request.getParameter("inputPrenom"));
+                        hm.put("Mail", request.getParameter("inputMail"));                        
 
                         Connected = ConnexionClient(request, session, hm);
                     }                                                
                 }
                 else             
                     Connected = ConnexionClient(request, session);
+                
+                
+                _en_EN bundle = new _en_EN();
+                Langues langues = new Langues();
+                for(String langue : langues.getLangues())
+                {
+                    System.out.println("langue = " + new String(request.getParameter("inputLangue").getBytes("ISO-8859-1"),"UTF-8"));
+                    System.out.println("bundle = " + bundle.getString(langue));
+                    if(bundle.getString(langue).equals(new String(request.getParameter("inputLangue").getBytes("ISO-8859-1"),"UTF-8")))
+                    {
+                        session.setAttribute("langue", langue);
+                        break;
+                    }
+                }   
+                
+                
+                System.out.println("Langue = " + session.getAttribute("langue"));
             }
         }
         else      
@@ -220,11 +255,11 @@ public class ControlDataCenter extends HttpServlet
         try
         {
             BD_airport.Insert("Clients", InscriptionClient);
-            RS = BD_airport.Select("SELECT IdClient, Nom, Prenom FROM Clients WHERE Login = \"" + request.getParameter("inputLogin") + "\" AND Password = \"" + request.getParameter("inputPassword") + "\"");
+            RS = BD_airport.Select("SELECT IdClient, Nom, Prenom, Mail FROM Clients WHERE Login = \"" + request.getParameter("inputLogin") + "\" AND Password = \"" + request.getParameter("inputPassword") + "\"");
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));
+                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"), RS.getString("Mail"));
                 session.setAttribute("Client", Client);                
                 session.setAttribute("isUserLoggedIn", true);
             }
@@ -251,11 +286,11 @@ public class ControlDataCenter extends HttpServlet
         BD_airport.Connexion();
         try
         {
-            RS = BD_airport.Select("SELECT IdClient, Nom, Prenom FROM Clients WHERE Login = \"" + request.getParameter("inputLogin") + "\" AND Password = \"" + request.getParameter("inputPassword") + "\"");
+            RS = BD_airport.Select("SELECT IdClient, Nom, Prenom, Mail FROM Clients WHERE Login = \"" + request.getParameter("inputLogin") + "\" AND Password = \"" + request.getParameter("inputPassword") + "\"");
             boolean isResults = RS.next();
             if (isResults)                        
             {
-                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"));    
+                Client = new Client(RS.getInt("IdClient"), RS.getString("Nom"), RS.getString("Prenom"), RS.getString("Mail"));    
             //System.out.println("IdClient = " + Client.getIdClient());         
                 session.setAttribute("Client", Client);
                 session.setAttribute("isUserLoggedIn", true);
@@ -475,6 +510,65 @@ public class ControlDataCenter extends HttpServlet
             BD_airport.Connexion();
             try 
             {
+                // Serveur_Billet
+                RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_LOGIN_PORTER);
+                ReponseTICKMAP Rep = null;
+
+                System.out.println();
+                ObjectInputStream ois = null;
+                ObjectOutputStream oos = null;
+                Socket socket = new Socket(IP_Serveur, Port_Serveur);
+        
+                if (socket.isConnected()) 
+                {
+                    System.out.println("Connexion OK");
+
+                    try 
+                    {        
+                        System.out.println("Création des flux");
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.flush();
+                        System.out.println("Fin de la création des flux");
+                    }
+                    catch(IOException ex) 
+                    {
+                        System.out.println(ex.getMessage());
+                    }
+                    System.out.println("Client prêt");
+                    System.out.println("Connected = " + socket.isConnected());
+                }
+                else 
+                {            
+                    System.out.println("Client pas prêt !");
+                }        
+
+                Security.addProvider(new BouncyCastleProvider());
+
+                Req.getChargeUtile().put("Login", Login);
+
+                MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");
+
+                md.update(Login.getBytes());
+                md.update(Password.getBytes()); 
+
+                long Temps = (new Date()).getTime();
+                double Random = Math.random();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                DataOutputStream bdos = new DataOutputStream(baos);
+                bdos.writeLong(Temps); bdos.writeDouble(Random);
+                md.update(baos.toByteArray());
+                byte[] msgD = md.digest();
+
+                Req.getChargeUtile().put("Temps", Temps);
+                Req.getChargeUtile().put("Random", Random);
+                Req.getChargeUtile().put("Digest", msgD);         
+
+                EnvoyerRequete(Req);
+                Rep = RecevoirReponse();
+
+                return Rep;
+                
                 ArrayList<Object> Parameters = new ArrayList<>();
                 Parameters.add(Client.getIdClient());
                 BD_airport.doProcedure("Payer", Parameters);
