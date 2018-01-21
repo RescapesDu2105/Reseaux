@@ -46,7 +46,8 @@ public class PaymentGUI extends javax.swing.JFrame
         setLocationRelativeTo(null); 
         setClient(cli);
         setClientBD(clibd);
-        jLabelMontant.setText(Integer.toString(mont)+"€");
+        setMontant(mont);
+        jLabelMontant.setText(Integer.toString(getMontant())+"€");
     }
 
     /**

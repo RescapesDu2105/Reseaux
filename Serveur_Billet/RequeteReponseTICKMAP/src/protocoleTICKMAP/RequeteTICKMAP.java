@@ -11,6 +11,7 @@ import cryptographie.KeyStoreUtils;
 import cryptographie.ClientBD;
 import cryptographie.CryptageSymetrique;
 import cryptographie.HMACUtils;
+import cryptographie.PayementInfo;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,6 +66,7 @@ public class RequeteTICKMAP implements Requete, Serializable
     public final static int REQUEST_SEND_LIST_OF_FLY = 4;
     public final static int REQUEST_REGISTRATION_FLY = 5;
     public final static int REQUEST_PAYMENT_REGISTRATION = 6;
+    public final static int REQUEST_PAYMENT_ACCEPTED = 7;
     
     private final static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private final static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
@@ -281,7 +283,16 @@ public class RequeteTICKMAP implements Requete, Serializable
                     {
                         traiterPaymentReg();
                     }
-                };  
+                };
+
+            case REQUEST_PAYMENT_ACCEPTED :
+                return new Runnable()
+                {
+                    public void run()
+                    {
+                        traiterPaymentAccpeted();
+                    }
+                };                  
                 
             default : return null;
         }
@@ -299,6 +310,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             case REQUEST_SEND_LIST_OF_FLY : return "REQUEST_SEND_LIST_OF_FLY";
             case REQUEST_REGISTRATION_FLY : return "REQUEST_REGISTRATION_FLY";
             case REQUEST_PAYMENT_REGISTRATION : return "REQUEST_PAYMENT_REGISTRATION";
+            case REQUEST_PAYMENT_ACCEPTED : return "REQUEST_PAYMENT_ACCEPTED";
             default : return null;
         }
     }
@@ -655,6 +667,112 @@ public class RequeteTICKMAP implements Requete, Serializable
             Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     
+    public void traiterPaymentAccpeted()
+    {
+        ObjectInputStream cleFichier = null;
+        try
+        {
+            Bean_DB_Access BD_airport;
+            ResultSet RS;
+            CleSecrete cleClient;
+            File f = new File(keyStoreDirPath+NameFileClientSecretKey);
+            
+            if(f.exists())
+            {
+                /**********************************CHARGEMENT DE LA CLE************************************/
+                cleFichier = new ObjectInputStream(new FileInputStream(keyStoreDirPath+NameFileClientSecretKey));
+                SecretKey keyLoad=(SecretKey) cleFichier.readObject();
+                cleFichier.close();
+                cleClient=new CleSecrete(keyLoad);
+                Cipher dechiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
+                dechiffrement.init(DECRYPT_MODE,cleClient.getCle());
+                
+                /*************************************DECRYPTAGE DES OBJETS********************************/
+                SealedObject clientbdCrypte = (SealedObject) getChargeUtile().get("clientbd");
+                SealedObject paymentCrypte = (SealedObject) getChargeUtile().get("payementinfo");
+                boolean paymentAccepted = (boolean) getChargeUtile().get("Ok");
+                
+                ClientBD cli = (ClientBD) clientbdCrypte.getObject(dechiffrement);
+                PayementInfo payement = (PayementInfo) paymentCrypte.getObject(dechiffrement);
+
+                /**********************************ENREGISTREMENT DANS LA BD********************************/                
+                BD_airport = Connexion_DB();
+                if (BD_airport != null)
+                {
+                    RS = BD_airport.Select("SELECT idClient From clients where Nom=\""+cli.getNom()+
+                            "\" AND Prenom = \""+cli.getPrenom()+"\"");
+                    if (RS != null)
+                    {
+                       
+                       int idClient=0; 
+                       while(RS.next())
+                       {
+                           idClient=RS.getInt("IdClient");
+                       }
+                        HashMap<String, Object> Billet = new HashMap<>();
+                        Billet.put("IdClient", idClient);
+                        Billet.put("IdVol", cli.getIdVol());
+                        BD_airport.Insert("billets", Billet);
+                        
+                        HashMap<String, Object> Transaction = new HashMap<>();
+                        Transaction.put("Montant", payement.getMontant());
+                        Transaction.put("NumCarte" , payement.getCreditCard());
+                        if(paymentAccepted)
+                            Transaction.put("Valide", "YES");
+                        else
+                            Transaction.put("Valide", "NO");
+                        Transaction.put("Client",idClient);
+                        BD_airport.Insert("transaction", Transaction);
+                    
+                        Reponse = new ReponseTICKMAP(ReponseTICKMAP.REQUEST_PAYMENT_ACCEPTED_OK);
+                        Reponse.getChargeUtile().put("Message", ReponseTICKMAP.REQUEST_PAYMENT_ACCEPTED_MESSAGE);                        
+                    }                                
+                }
+            }
+            
+               
+        } catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        } finally
+        {
+            try
+            {
+                cleFichier.close();
+            } catch (IOException ex)
+            {
+                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }
     
     public ClientBD ByteToObject(byte[] byteArray)
     {
@@ -679,3 +797,4 @@ public class RequeteTICKMAP implements Requete, Serializable
         return cli;
     }
 }
+

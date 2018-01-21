@@ -31,6 +31,8 @@ public interface Reponse
     public final static String REQUEST_REGISTRATION_FLY_MESSAGE = "Client bien enregistre";
     public final static int REQUEST_PAYMENT_REGISTRATION_OK = 207;
     public final static String REQUEST_PAYMENT_REGISTRATION_MESSAGE = "Demande de paiement";
+    public final static int REQUEST_PAYMENT_ACCEPTED_OK = 208;
+    public final static String REQUEST_PAYMENT_ACCEPTED_MESSAGE = "Info stocker dans la BD !";
     
     public final static int LOGIN_KO = 402;    
     public final static String WRONG_USER_PASSWORD_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect !";
@@ -38,9 +40,9 @@ public interface Reponse
     public final static String REQUEST_REGISTRATION_FLY_KO_MESSAGE = "Il n'y a plus de place disponible pour ce vol";
     
     /**********************************SERVEUR PAYMENT******************************************/
-    public final int REQUEST_SEND_CERTIFICATE_OK = 208;
+    public final int REQUEST_SEND_CERTIFICATE_OK = 209;
     public final String REQUEST_SEND_CERTIFICATE_MESSAGE = "Handshake done";
-    public final int REQUEST_SEND_PAYMENT_OK = 209;
+    public final int REQUEST_SEND_PAYMENT_OK = 210;
     public final String REQUEST_SEND_PAYMENT_MESSAGE = "Payement effectue";
     
     public int getCode();

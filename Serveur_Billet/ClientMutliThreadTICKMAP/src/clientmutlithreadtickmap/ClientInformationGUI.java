@@ -50,8 +50,6 @@ public class ClientInformationGUI extends javax.swing.JFrame
     
     private Client client;
     private HashMap<String, Object> Vols;
-    private KeyStoreUtils ks;
-    private X509Certificate certifServeur;
 
     /**
      * Creates new form ClientInformationGUI

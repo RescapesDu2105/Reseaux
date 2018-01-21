@@ -88,6 +88,14 @@
     <Component class="javax.swing.JTextField" name="jTextFieldCreditCard">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelFeedback">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="14" style="1"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jLabelFeedback.setHorizontalAlignment(JLabel.CENTER);&#xa;jLabelFeedback.setVerticalAlignment(JLabel.CENTER);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

@@ -8,10 +8,15 @@ package clientmutlithreadtickmap;
 import cryptographie.CleSecrete;
 import cryptographie.ClientBD;
 import cryptographie.CryptageAsymetrique;
+import cryptographie.CryptageSymetrique;
 import cryptographie.KeyStoreUtils;
 import cryptographie.PayementInfo;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.security.InvalidKeyException;
@@ -29,11 +34,15 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static org.bouncycastle.pqc.jcajce.provider.util.CipherSpiExt.ENCRYPT_MODE;
 import protocolePAYP.ReponsePAYP;
 import protocolePAYP.RequetePAYP;
 import static protocolePAYP.RequetePAYP.REQUEST_SEND_PAYMENT;
+import protocoleTICKMAP.ReponseTICKMAP;
+import protocoleTICKMAP.RequeteTICKMAP;
+import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_PAYMENT_ACCEPTED;
 
 /**
  *
@@ -46,6 +55,7 @@ public class CreditCardGUI extends javax.swing.JFrame
     private final static String keyStorePsw = "123Soleil";
     private final static String aliasKeyStrore = "clientprivatekey";
     private final static String aliasCertifServPayment = "certifservpayment";
+    private static String keySecretClient = "SecretKeyClient.ser";
     
     private int montant ;
     private Client client;
@@ -63,6 +73,7 @@ public class CreditCardGUI extends javax.swing.JFrame
         setMontant(mont);
         initComponents();
         setLocationRelativeTo(null); 
+        System.out.println("Montant : "+getMontant());
     }
 
     /**
@@ -103,6 +114,10 @@ public class CreditCardGUI extends javax.swing.JFrame
 
         jLabelCreditCard.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabelCreditCard.setText("Carte de crédit du client :");
+
+        jLabelFeedback.setHorizontalAlignment(JLabel.CENTER);
+        jLabelFeedback.setVerticalAlignment(JLabel.CENTER);
+        jLabelFeedback.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,9 +172,24 @@ public class CreditCardGUI extends javax.swing.JFrame
             /******************************HANDSHAKE*****************************/
             setCreditCard(jTextFieldCreditCard.getText());
             getClient().ConnexionPAYP();
+            PayementInfo payement = new PayementInfo(getCreditCard(),getClientBD().getNom(),getMontant());
             
             RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
-            RequestSendPayment();
+            boolean ok = RequestSendPayment(payement);
+            jButtonPayment.setEnabled(false);
+            jButtonAnnuler.setEnabled(false);
+            
+            if(ok)
+            {
+                jLabelFeedback.setForeground(Color.GREEN);
+                jLabelFeedback.setText("Paiement validé !");                
+            }
+            else
+            {
+                jLabelFeedback.setForeground(Color.red);
+                jLabelFeedback.setText("Paiement refusé !");                
+            }
+            RequestPaymentAccepted(ok,getClientBD(),payement);
             
         } catch (IOException ex)
         {
@@ -306,11 +336,11 @@ public class CreditCardGUI extends javax.swing.JFrame
         }    
     }
     
-    public void RequestSendPayment()
+    public boolean RequestSendPayment(PayementInfo payement)
     {
         RequetePAYP ReqPAYP = new RequetePAYP(RequetePAYP.REQUEST_SEND_PAYMENT);
         ReponsePAYP RepPAYP = null;
-        PayementInfo payement = new PayementInfo(getCreditCard(),getClientBD().getNom(),getMontant());
+        
         try
         {  
             /****************************CRYPTAGE DU PAYEMENT**********************/
@@ -353,7 +383,68 @@ public class CreditCardGUI extends javax.swing.JFrame
 
         RepPAYP = getClient().RecevoirReponsePAYP();
         if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_PAYMENT_OK)
-            System.out.println("ok !");
+            return (boolean) RepPAYP.getChargeUtile().get("Ok");
+        return false;
+    }
+    
+    public void RequestPaymentAccepted(boolean accepted , ClientBD clientbd , PayementInfo pay)
+    {
+        RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_PAYMENT_ACCEPTED);
+        ReponseTICKMAP Rep = null;
+        
+        File f = new File(keyStoreDirPath+keySecretClient);
+        if(f.exists())
+        {
+            try
+            {  
+                ObjectInputStream cleFichier =new ObjectInputStream(new FileInputStream(keyStoreDirPath+keySecretClient));
+                SecretKey keyLoad=(SecretKey) cleFichier.readObject();
+                cleFichier.close();
+                CleSecrete cleClient=new CleSecrete(keyLoad);
+                
+                /*********************************CRYPTAGE DES OBJETS****************************************/
+                System.out.println("cryptage des objets...");
+                Cipher chiffrement = Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
+                chiffrement.init(ENCRYPT_MODE, keyLoad);
+                SealedObject clienCrypte = new SealedObject(clientbd, chiffrement);
+                SealedObject paymentCrypte = new SealedObject(pay, chiffrement);
+                
+                Req.getChargeUtile().put("clientbd" , clienCrypte);
+                Req.getChargeUtile().put("payementinfo", paymentCrypte);
+                Req.getChargeUtile().put("Ok", accepted);
+                
+                getClient().EnvoyerRequete(Req);
+                
+                Rep = getClient().RecevoirReponse();
+                if(Rep.getCode() == ReponseTICKMAP.REQUEST_PAYMENT_ACCEPTED_OK)
+                {
+                    System.out.println("Ok!");
+                }
+                
+                
+            } catch (IOException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchProviderException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex)
+            {
+                Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     public byte[] ObcjetToByte(Object o)
