@@ -69,10 +69,12 @@ public class RequeteTICKMAP implements Requete, Serializable
     private final static String keyStorePath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurKeyStore.jks";
     private final static String keyStoreDirPath = System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator");
     private final static String keyStorePsw = "123Soleil";    
-    private final static String aliasKeyStrore = "serveurprivatekey";
+    private final static String aliasKeyStore = "serveurprivatekey";
     private final static String aliasCertifPublicClientKey = "PublicClientKey";
     private final static String NameFileClientSecretKey = "SecretKeyClient.ser";
     private final static String NameFileClientHMAC = "CleSecreteHMACClient.ser";
+    private final static String aliasKeyStoreWeb = "serveurwebprivatekey";
+    private final static String aliasCertifPublicClientKeyWeb = "PublicClientWebKey";
 
     
     private int Type;
@@ -380,7 +382,7 @@ public class RequeteTICKMAP implements Requete, Serializable
        
         try
         {
-            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStore);
             clePriveeServeur= ks.getClePrivee();
             System.out.println("");
             System.out.println("Cle privee du Keystore : "+ks.getClePrivee().toString());
@@ -398,11 +400,47 @@ public class RequeteTICKMAP implements Requete, Serializable
         Reponse.getChargeUtile().put("Certificate",ks.getCertif());
     }
     
+    private void traiterSendCertificateWeb()
+    {
+        System.out.println(keyStorePath);
+        certifClient=(X509Certificate) getChargeUtile().get("Certificate");
+        System.out.println("");
+        System.out.println("Reception du certificat du client");
+        System.out.println("Classe instanciée : " + certifClient.getClass().getName());
+        System.out.println("Type de certificat : " + certifClient.getType());
+        System.out.println("Nom du propriétaire du certificat : " +certifClient.getSubjectDN().getName());
+        System.out.println("Dates limites de validité : [" + certifClient.getNotBefore() + " - " +certifClient.getNotAfter() + "]");   
+        
+        
+        System.out.println("... sa clé publique : " + certifClient.getPublicKey().toString());
+        System.out.println("... la classe instanciée par celle-ci : " +certifClient.getPublicKey().getClass().getName());
+        
+       
+        try
+        {
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStoreWeb);
+            clePriveeServeur= ks.getClePrivee();
+            System.out.println("");
+            System.out.println("Cle privee du Keystore : "+ks.getClePrivee().toString());
+            System.out.println("Cle privee du Keystore : "+clePriveeServeur.toString());
+            
+            ks.saveCertificate(aliasCertifPublicClientKeyWeb, certifClient);
+            ks.SaveKeyStore(keyStorePath, keyStorePsw);
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException ex)
+        {
+            Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Reponse = new ReponseTICKMAP(ReponseTICKMAP.SEND_CERTIFICATE_OK);
+        Reponse.getChargeUtile().put("Message", ReponseTICKMAP.SEND_CERTIFICATE_OK_MESSAGE);
+        Reponse.getChargeUtile().put("Certificate",ks.getCertif());
+    }
+    
     public void traiterSendSymetricKey()
     {
         try
         {
-            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
+            ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStore);
             clePriveeServeur= ks.getClePrivee();
 
             /**********************************CLE HMAC***********************************/
@@ -549,8 +587,6 @@ public class RequeteTICKMAP implements Requete, Serializable
                     }
                 }
                 
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | SQLException ex)
             {
                 Logger.getLogger(RequeteTICKMAP.class.getName()).log(Level.SEVERE, null, ex);

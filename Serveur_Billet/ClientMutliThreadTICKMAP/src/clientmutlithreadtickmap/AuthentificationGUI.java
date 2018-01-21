@@ -6,7 +6,6 @@
 package clientmutlithreadtickmap;
 
 import cryptographie.CleSecrete;
-import cryptographie.ClesPourCryptageAsymetrique;
 import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
 import java.io.File;
@@ -30,8 +29,6 @@ import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import protocoleTICKMAP.ReponseTICKMAP;
 import protocoleTICKMAP.RequeteTICKMAP;
-import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_CERTIFICATE;
-import static protocoleTICKMAP.RequeteTICKMAP.REQUEST_SEND_SYMETRIC_KEY;
 
 /**
  *
@@ -224,22 +221,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
         try
         {
             ks=new KeyStoreUtils(keystorelocation,psw,alias);            
-        } catch (KeyStoreException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException ex)
         {
             Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -254,16 +236,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                              
                 ks.saveCertificate(aliasCertifServeurPublicKey, certifServeur);
                 ks.SaveKeyStore(keyStorePath, keyStorePsw);
-            } catch (KeyStoreException ex) {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex)
-            {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex)
-            {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (CertificateException ex)
-            {
+            } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
                 Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -285,10 +258,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                     SecretKey keyLoad=(SecretKey) cleFichier.readObject();
                     cleFichier.close();
                     cleHMAC=new CleSecrete(keyLoad);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex)
+                } catch (IOException | ClassNotFoundException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -299,13 +269,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                 {
                     cleHMAC=new CleSecrete();
                     cleHMAC.SaveCle(path, nameHMACClient);
-                } catch (NoSuchAlgorithmException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchProviderException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -322,10 +286,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                     SecretKey keyLoadCli=(SecretKey) cleFichierCli.readObject();
                     cleFichierCli.close();
                     cleClient=new CleSecrete(keyLoadCli);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex)
+                } catch (IOException | ClassNotFoundException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -336,13 +297,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
                 {
                     cleClient=new CleSecrete();
                     cleClient.SaveCle(path, nameClientKey);
-                } catch (NoSuchAlgorithmException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchProviderException ex)
-                {
-                    Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex)
                 {
                     Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -360,22 +315,7 @@ if (jTextFieldLogin.getText().isEmpty() || jPasswordFieldPsw.getPassword().lengt
             
             Req.getChargeUtile().put("CleHMAC" , cleCrypteHMAC);
             Req.getChargeUtile().put("CleSECRETE" , cleCrypteSecrete);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex)
-        {
-            Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex)
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex)
         {
             Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
         }

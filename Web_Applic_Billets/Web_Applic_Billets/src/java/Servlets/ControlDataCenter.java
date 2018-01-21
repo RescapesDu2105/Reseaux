@@ -12,20 +12,24 @@ import Beans.Vols;
 import Classes.Promesse;
 import Classes.Vol;
 import Resources._en_EN;
+import cryptographie.KeyStoreUtils;
 import database.utilities.Bean_DB_Access;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.security.MessageDigest;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,8 +52,11 @@ public class ControlDataCenter extends HttpServlet
 {
     private final Bean_DB_Access BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
     private final Bean_DB_Access BD_compta = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_compta");
-    private String IP_Serveur = "127.0.0.1";
-    private int Port_Serveur = "30070";
+    private final String IP_Serveur = "127.0.0.1";
+    private final int Port_Serveur = 30070;
+    private Socket socket = null;
+    private ObjectOutputStream oos = null;
+    private ObjectInputStream ois = null;
     private Client Client = null;
     
     /**
@@ -104,6 +111,16 @@ public class ControlDataCenter extends HttpServlet
         switch (Action) 
         {
             case "Authentification":
+                try 
+                {
+                    Init_Paiement();
+                    Envoi_Certificat();
+                } 
+                catch(IOException | ClassNotFoundException | KeyStoreException | NoSuchAlgorithmException | NoSuchProviderException | UnrecoverableKeyException | CertificateException ex)
+                { 
+                    ex.printStackTrace(); 
+                }
+                
                 boolean Connected = Authentification(request, response, session);
 
                 if(Connected)
@@ -141,7 +158,7 @@ public class ControlDataCenter extends HttpServlet
                 break;
             case "Payer":
             case "ConfirmerPaiement":
-                Payer(request, response, session);
+                Payer(session);
                 response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/Web_Applic_Billets/JSPPay.jsp");
                 break;
             default: System.out.println("DEFAULT");
@@ -229,17 +246,15 @@ public class ControlDataCenter extends HttpServlet
                 Langues langues = new Langues();
                 for(String langue : langues.getLangues())
                 {
-                    System.out.println("langue = " + new String(request.getParameter("inputLangue").getBytes("ISO-8859-1"),"UTF-8"));
-                    System.out.println("bundle = " + bundle.getString(langue));
+                    //System.out.println("langue = " + new String(request.getParameter("inputLangue").getBytes("ISO-8859-1"),"UTF-8"));
+                    //System.out.println("bundle = " + bundle.getString(langue));
                     if(bundle.getString(langue).equals(new String(request.getParameter("inputLangue").getBytes("ISO-8859-1"),"UTF-8")))
                     {
                         session.setAttribute("langue", langue);
                         break;
                     }
                 }   
-                
-                
-                System.out.println("Langue = " + session.getAttribute("langue"));
+                //System.out.println("Langue = " + session.getAttribute("langue"));
             }
         }
         else      
@@ -490,7 +505,7 @@ public class ControlDataCenter extends HttpServlet
         }
     }
 
-    private void Payer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException 
+    private void Payer(HttpSession session) throws IOException 
     {
         ArrayList<Promesse> ArticlesPlusDisponibles = (ArrayList<Promesse>) Client.getPanier().clone();
         
@@ -506,82 +521,81 @@ public class ControlDataCenter extends HttpServlet
         }
         else
         {
-            session.setAttribute("PaiementEffectue", true);
-            BD_airport.Connexion();
+            //session.setAttribute("PaiementEffectue", true);
+            //BD_airport.Connexion();
             try 
             {
                 // Serveur_Billet
-                RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_LOGIN_PORTER);
-                ReponseTICKMAP Rep = null;
-
-                System.out.println();
-                ObjectInputStream ois = null;
-                ObjectOutputStream oos = null;
-                Socket socket = new Socket(IP_Serveur, Port_Serveur);
-        
-                if (socket.isConnected()) 
-                {
-                    System.out.println("Connexion OK");
-
-                    try 
-                    {        
-                        System.out.println("Création des flux");
-                        oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.flush();
-                        System.out.println("Fin de la création des flux");
-                    }
-                    catch(IOException ex) 
-                    {
-                        System.out.println(ex.getMessage());
-                    }
-                    System.out.println("Client prêt");
-                    System.out.println("Connected = " + socket.isConnected());
-                }
-                else 
-                {            
-                    System.out.println("Client pas prêt !");
-                }        
-
-                Security.addProvider(new BouncyCastleProvider());
-
-                Req.getChargeUtile().put("Login", Login);
-
-                MessageDigest md = MessageDigest.getInstance("SHA-256", "BC");
-
-                md.update(Login.getBytes());
-                md.update(Password.getBytes()); 
-
-                long Temps = (new Date()).getTime();
-                double Random = Math.random();
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                DataOutputStream bdos = new DataOutputStream(baos);
-                bdos.writeLong(Temps); bdos.writeDouble(Random);
-                md.update(baos.toByteArray());
-                byte[] msgD = md.digest();
-
-                Req.getChargeUtile().put("Temps", Temps);
-                Req.getChargeUtile().put("Random", Random);
-                Req.getChargeUtile().put("Digest", msgD);         
-
-                EnvoyerRequete(Req);
-                Rep = RecevoirReponse();
-
-                return Rep;
+                Init_Paiement();
+                Envoi_Certificat();
                 
-                ArrayList<Object> Parameters = new ArrayList<>();
+                //
+                /*ArrayList<Object> Parameters = new ArrayList<>();
                 Parameters.add(Client.getIdClient());
                 BD_airport.doProcedure("Payer", Parameters);
-                Client.getPanier().clear();
+                Client.getPanier().clear();*/
             } 
-            catch (SQLException ex) 
+            catch (KeyStoreException | FileNotFoundException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException | ClassNotFoundException ex)
             {
                 Logger.getLogger(ControlDataCenter.class.getName()).log(Level.SEVERE, null, ex);
             }
             finally
             {
-                BD_airport.Deconnexion(); 
+                //BD_airport.Deconnexion(); 
             }            
+        }
+    }
+    
+    private void Init_Paiement() throws IOException
+    {
+        socket = new Socket(IP_Serveur, Port_Serveur);
+        
+        if (socket.isConnected()) 
+        {
+            System.out.println("Connexion OK");
+
+            try 
+            {        
+                System.out.println("Création des flux");
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.flush();
+                ois = new ObjectInputStream(socket.getInputStream());
+                System.out.println("Fin de la création des flux");
+            }
+            catch(IOException ex) 
+            {
+                System.out.println(ex.getMessage());
+            }            
+            System.out.println("Client prêt");
+            System.out.println("Connected = " + socket.isConnected());
+        }
+        else 
+        {            
+            System.out.println("Client pas prêt !");
+        }
+    }
+    private void Envoi_Certificat() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, NoSuchProviderException, ClassNotFoundException
+    {
+        RequeteTICKMAP Req = new RequeteTICKMAP(RequeteTICKMAP.REQUEST_SEND_CERTIFICATE);
+        ReponseTICKMAP Rep = null;
+        
+        Security.addProvider(new BouncyCastleProvider());
+        System.out.println("Path = " + "E:\\Dropbox\\B3\\Reseaux\\2017-2018\\Reseaux\\Web_Applic_Billets\\keystore"+ System.getProperty("file.separator")+"WebAppKeyStore.jks");
+        KeyStoreUtils ks = new KeyStoreUtils("E:\\Dropbox\\B3\\Reseaux\\2017-2018\\Reseaux\\Web_Applic_Billets\\keystore"+ System.getProperty("file.separator")+"WebAppKeyStore.jks", "123Soleil", "webappcle");
+
+        Req.getChargeUtile().put("Certificate" , ks.getCertif());
+        oos.writeObject(Req);
+        oos.flush();
+        
+        Rep = (ReponseTICKMAP) ois.readObject();
+
+        if(Rep.getCode() == ReponseTICKMAP.SEND_CERTIFICATE_OK)
+        {
+            X509Certificate certifServeur = (X509Certificate) Rep.getChargeUtile().get("Certificate");
+
+            ks.saveCertificate("PublicClientWebKey", certifServeur);
+            ks.SaveKeyStore(System.getProperty("user.dir")+ System.getProperty("file.separator")+"keystore"+System.getProperty("file.separator")+"ServeurBilletKeyStore.jks", "123Soleil");
+            System.out.println("OK");
         }
     }
 }
