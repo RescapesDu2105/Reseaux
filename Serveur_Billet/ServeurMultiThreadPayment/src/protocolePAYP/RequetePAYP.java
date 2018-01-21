@@ -205,6 +205,8 @@ public class RequetePAYP implements Requete, Serializable
         X509Certificate certifClient = null;
         byte[] signature = (byte[]) getChargeUtile().get("Signature");
         PayementInfo pay = null;
+        boolean ok = false;
+        
         try
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
@@ -221,14 +223,14 @@ public class RequetePAYP implements Requete, Serializable
             
             /********************************VERIFICATION DE LA SIGNATURE*************************/
             byte[] sealedByte = ObjectToByte(sealed);
-            boolean ok = cryptage.VerifSignature(certifClient.getPublicKey(), sealedByte, signature);            
+            ok = cryptage.VerifSignature(certifClient.getPublicKey(), sealedByte, signature);            
         } 
         catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException | SignatureException | ClassNotFoundException | IllegalBlockSizeException | BadPaddingException ex)
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
     // Communication        
-        try
+        /*try
         {            
             int Port_Mastercard = Integer.parseInt(Prop.getProperty("PORT_MASTERCARD"));
             String IP_Mastercard = Prop.getProperty("IP_MASTERCARD");
@@ -275,11 +277,12 @@ public class RequetePAYP implements Requete, Serializable
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("MASTERCARD");
+        System.out.println("MASTERCARD");*/
         
     //    
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_PAYMENT_OK);
         Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_PAYMENT_MESSAGE);
+        Reponse.getChargeUtile().put("Ok", ok);
     }
     
     public ClientBD ByteToObject(byte[] byteArray)
