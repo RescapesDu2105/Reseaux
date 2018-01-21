@@ -165,13 +165,7 @@ public class PaymentGUI extends javax.swing.JFrame
                 }); 
                 this.dispose();
             }
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException ex)
         {
             Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
         }      

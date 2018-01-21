@@ -14,7 +14,9 @@ import Classes.Vol;
 import Resources._en_EN;
 import cryptographie.KeyStoreUtils;
 import database.utilities.Bean_DB_Access;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,8 +33,20 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -58,6 +72,8 @@ public class ControlDataCenter extends HttpServlet
     private ObjectOutputStream oos = null;
     private ObjectInputStream ois = null;
     private Client Client = null;
+    
+    private Properties mailProperties = null;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -111,7 +127,7 @@ public class ControlDataCenter extends HttpServlet
         switch (Action) 
         {
             case "Authentification":
-                try 
+                /*try 
                 {
                     Init_Paiement();
                     Envoi_Certificat();
@@ -119,7 +135,9 @@ public class ControlDataCenter extends HttpServlet
                 catch(IOException | ClassNotFoundException | KeyStoreException | NoSuchAlgorithmException | NoSuchProviderException | UnrecoverableKeyException | CertificateException ex)
                 { 
                     ex.printStackTrace(); 
-                }
+                }*/
+                
+                //Envoyer_Mail_Confirmation();
                 
                 boolean Connected = Authentification(request, response, session);
 
@@ -521,28 +539,121 @@ public class ControlDataCenter extends HttpServlet
         }
         else
         {
-            //session.setAttribute("PaiementEffectue", true);
-            //BD_airport.Connexion();
+            BD_airport.Connexion();
             try 
             {
                 // Serveur_Billet
-                Init_Paiement();
-                Envoi_Certificat();
+                //Init_Paiement();
+                //Envoi_Certificat();
                 
-                //
-                /*ArrayList<Object> Parameters = new ArrayList<>();
+                ArrayList<Object> Parameters = new ArrayList<>();
                 Parameters.add(Client.getIdClient());
                 BD_airport.doProcedure("Payer", Parameters);
-                Client.getPanier().clear();*/
+                Envoyer_Mail_Confirmation();
+                Client.getPanier().clear();
+                session.setAttribute("PaiementEffectue", true);
+                
+                // Envoi d'un email de confirmation
             } 
-            catch (KeyStoreException | FileNotFoundException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException | ClassNotFoundException ex)
+            catch (SQLException ex)
             {
                 Logger.getLogger(ControlDataCenter.class.getName()).log(Level.SEVERE, null, ex);
             }
             finally
             {
-                //BD_airport.Deconnexion(); 
+                BD_airport.Deconnexion(); 
             }            
+        }
+    }
+    
+    private void Envoyer_Mail_Confirmation()
+    {
+        Store st;
+                
+        if(mailProperties == null)
+            LireProperties();
+        
+        try
+        {
+            Session session = Session.getDefaultInstance(mailProperties);
+            st = session.getStore("pop3");
+            
+            st.connect(mailProperties.getProperty("mail.pop3.host"), "InpresAirport-pay@u2.tech.hepl.local", "123Soleil");
+            //st.connect(user.getMailProperties().getProperty("mail.pop3.host"), User  + "@u2.tech.hepl.local", Pwd);
+            
+            //Mail_Utilities.Envoyer_Mail(session, "InpresAirport-pay@u2.tech.hepl.local", "dimartino@u2.tech.hepl.local", "Confirmation de paiement", "Reçu de paiement pour l'achat de " + Client.getPanier().size() + " articles");
+            
+            try
+            {
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress("InpresAirport-pay@u2.tech.hepl.local"));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress("dimartino@u2.tech.hepl.local"));
+                message.setSubject("Confirmation de paiement");
+                Multipart MP = new MimeMultipart();
+                MimeBodyPart BP = new MimeBodyPart();
+                BP.setText("Reçu de paiement pour l'achat de " + Client.getPanier().size() + " articles");
+                MP.addBodyPart(BP);
+
+                message.setContent(MP);
+                message.saveChanges();
+
+                Transport.send(message);
+            }
+            catch (AddressException ex)
+            {
+
+            }
+            catch (MessagingException ex)
+            {
+
+            }
+        }
+        catch(MessagingException ex) 
+        {
+            ex.printStackTrace();            
+        }
+    }
+    
+    private void LireProperties()
+    {
+        String pathProperties = "E:\\Dropbox\\B3\\Reseaux\\2017-2018\\Reseaux\\Web_Applic_Billets\\Web_Applic_Billets\\src\\java\\Resources\\config.properties";
+
+        try
+        {
+            FileInputStream fis = new FileInputStream(pathProperties);
+            mailProperties = new Properties();
+            mailProperties.load(fis);
+        }
+        catch(FileNotFoundException ex)
+        {
+            try 
+            {
+                FileOutputStream fos = new FileOutputStream(pathProperties);
+                
+                mailProperties.put("mail.pop3.host", "10.59.26.134");
+                mailProperties.put("mail.pop3.port", "110");
+                mailProperties.put("mail.smtp.host", "10.59.26.134");
+                mailProperties.put("mail.smtp.port", "25");
+                mailProperties.put("mail.disable.top", "true");
+                mailProperties.put("store", "pop3");
+                        
+                try 
+                {
+                    mailProperties.store(fos, null);
+                }
+                catch (IOException ex1) 
+                {
+                    System.exit(0);
+                }
+            } 
+            catch (FileNotFoundException ex1) 
+            {
+                System.exit(0);
+            }
+        }
+        catch(IOException ex)
+        {
+            System.exit(0);
         }
     }
     

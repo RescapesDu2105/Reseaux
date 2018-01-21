@@ -5,6 +5,8 @@
  */
 package protocolePAYP;
 
+import ProtocoleSEBATRAP.ReponseSEBATRAP;
+import ProtocoleSEBATRAP.RequeteSEBATRAP;
 import cryptographie.ClientBD;
 import cryptographie.CryptageAsymetrique;
 import cryptographie.KeyStoreUtils;
@@ -31,7 +33,6 @@ import java.security.PublicKey;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Properties;
@@ -203,7 +204,7 @@ public class RequetePAYP implements Requete, Serializable
         KeyStoreUtils ks = null;
         X509Certificate certifClient = null;
         byte[] signature = (byte[]) getChargeUtile().get("Signature");
-        
+        PayementInfo pay = null;
         try
         {
             ks=new KeyStoreUtils(keyStorePath,keyStorePsw,aliasKeyStrore);
@@ -213,7 +214,7 @@ public class RequetePAYP implements Requete, Serializable
             Cipher dechiffrement = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
             dechiffrement.init(DECRYPT_MODE,ks.getClePrivee());
             SealedObject sealed = (SealedObject) getChargeUtile().get("PayementCrypte");
-            PayementInfo pay = (PayementInfo) sealed.getObject(dechiffrement);
+            pay = (PayementInfo) sealed.getObject(dechiffrement);
             System.out.println("Nom : "+pay.getNom());
             System.out.println("Card : "+pay.getCreditCard());
             System.out.println("Montant : "+pay.getMontant());
@@ -255,14 +256,28 @@ public class RequetePAYP implements Requete, Serializable
             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(CSocket.getOutputStream()));
             oos.flush();
             ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(CSocket.getInputStream()));
+            
+            // Envoi 
+            RequeteSEBATRAP Req = new RequeteSEBATRAP(RequeteSEBATRAP.REQUEST_PAYER);
+            ReponseSEBATRAP Rep = null;
+            
+            Req.getChargeUtile().put("IBAN", pay.getCreditCard());
+            Req.getChargeUtile().put("Montant", pay.getMontant());
+            
+            oos.writeObject(Req);
+            oos.flush();
+            
+            Rep = (ReponseSEBATRAP) ois.readObject();
+            
+            //Relayer la reponse au serveur Billets
         }
-        catch (NoSuchAlgorithmException | IOException | KeyStoreException | UnrecoverableKeyException | KeyManagementException | CertificateException ex)
+        catch (NoSuchAlgorithmException | IOException | KeyStoreException | UnrecoverableKeyException | KeyManagementException | CertificateException | ClassNotFoundException ex)
         {
             Logger.getLogger(RequetePAYP.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("MASTERCARD");
         
-    //
+    //    
         Reponse = new ReponsePAYP(ReponsePAYP.REQUEST_SEND_PAYMENT_OK);
         Reponse.getChargeUtile().put("Message", ReponsePAYP.REQUEST_SEND_PAYMENT_MESSAGE);
     }

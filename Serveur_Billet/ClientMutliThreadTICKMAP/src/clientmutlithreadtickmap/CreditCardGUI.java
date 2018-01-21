@@ -153,14 +153,15 @@ public class CreditCardGUI extends javax.swing.JFrame
         {
             if(jTextFieldCreditCard.getText().isEmpty())
                 JOptionPane.showMessageDialog(this, "Le champ est vide", "Erreur", JOptionPane.ERROR_MESSAGE);
-            
-            /******************************HANDSHAKE*****************************/
-            setCreditCard(jTextFieldCreditCard.getText());
-            getClient().ConnexionPAYP();
-            
-            RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
-            RequestSendPayment();
-            
+            else
+            {
+                /******************************HANDSHAKE*****************************/
+                setCreditCard(jTextFieldCreditCard.getText());
+                getClient().ConnexionPAYP();
+
+                RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
+                RequestSendPayment();
+            }            
         } catch (IOException ex)
         {
             Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -260,22 +261,7 @@ public class CreditCardGUI extends javax.swing.JFrame
         try
         {
             ks=new KeyStoreUtils(keystorelocation,psw,alias);
-        } catch (KeyStoreException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | NoSuchProviderException ex)
         {
             Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -284,23 +270,14 @@ public class CreditCardGUI extends javax.swing.JFrame
         getClient().EnvoyerRequete(ReqPAYP);
 
         RepPAYP = getClient().RecevoirReponsePAYP();
-        if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_CERTIFICATE_OK)
+        if(RepPAYP.getCode() == ReponsePAYP.REQUEST_SEND_CERTIFICATE_OK)
         {
             try {
                 certifServeur=(X509Certificate) RepPAYP.getChargeUtile().get("Certificate");
                              
                 ks.saveCertificate(aliasCertifServPayment, certifServeur);
                 ks.SaveKeyStore(keyStorePath, keyStorePsw);
-            } catch (KeyStoreException ex) {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex)
-            {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex)
-            {
-                Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (CertificateException ex)
-            {
+            } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
                 Logger.getLogger(AuthentificationGUI.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }    
@@ -320,31 +297,13 @@ public class CreditCardGUI extends javax.swing.JFrame
             SealedObject sealed = new SealedObject(payement, chiffrement);
             
             /****************************SIGNATURE DU PAYEMENT*********************/
-            byte[] sealedByte = ObcjetToByte(sealed);
+            byte[] sealedByte = ObjectToByte(sealed);
             CryptageAsymetrique cryptage = new CryptageAsymetrique();
             byte[] signature = cryptage.Signe(ks.getClePrivee(), sealedByte);
                     
             ReqPAYP.getChargeUtile().put("PayementCrypte", sealed);
             ReqPAYP.getChargeUtile().put("Signature", signature);
-        } catch (NoSuchAlgorithmException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchProviderException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex)
-        {
-            Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SignatureException ex)
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | IOException | IllegalBlockSizeException | InvalidKeyException | SignatureException ex)
         {
             Logger.getLogger(CreditCardGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -352,11 +311,11 @@ public class CreditCardGUI extends javax.swing.JFrame
         getClient().EnvoyerRequete(ReqPAYP);
 
         RepPAYP = getClient().RecevoirReponsePAYP();
-        if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_PAYMENT_OK)
+        if(RepPAYP.getCode() == ReponsePAYP.REQUEST_SEND_PAYMENT_OK)
             System.out.println("ok !");
     }
     
-    public byte[] ObcjetToByte(Object o)
+    public byte[] ObjectToByte(Object o)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = null;
