@@ -126,19 +126,7 @@ public class ControlDataCenter extends HttpServlet
         
         switch (Action) 
         {
-            case "Authentification":
-                /*try 
-                {
-                    Init_Paiement();
-                    Envoi_Certificat();
-                } 
-                catch(IOException | ClassNotFoundException | KeyStoreException | NoSuchAlgorithmException | NoSuchProviderException | UnrecoverableKeyException | CertificateException ex)
-                { 
-                    ex.printStackTrace(); 
-                }*/
-                
-                //Envoyer_Mail_Confirmation();
-                
+            case "Authentification":                
                 boolean Connected = Authentification(request, response, session);
 
                 if(Connected)
@@ -549,11 +537,11 @@ public class ControlDataCenter extends HttpServlet
                 ArrayList<Object> Parameters = new ArrayList<>();
                 Parameters.add(Client.getIdClient());
                 BD_airport.doProcedure("Payer", Parameters);
+                // Envoi d'un email de confirmation
                 Envoyer_Mail_Confirmation();
                 Client.getPanier().clear();
                 session.setAttribute("PaiementEffectue", true);
                 
-                // Envoi d'un email de confirmation
             } 
             catch (SQLException ex)
             {
@@ -578,8 +566,8 @@ public class ControlDataCenter extends HttpServlet
             Session session = Session.getDefaultInstance(mailProperties);
             st = session.getStore("pop3");
             
-            st.connect(mailProperties.getProperty("mail.pop3.host"), "InpresAirport-pay@u2.tech.hepl.local", "123Soleil");
-            //st.connect(user.getMailProperties().getProperty("mail.pop3.host"), User  + "@u2.tech.hepl.local", Pwd);
+            //st.connect(mailProperties.getProperty("mail.pop3.host"), "InpresAirport-pay@u2.tech.hepl.local", "123Soleil");
+            st.connect(mailProperties.getProperty("mail.pop3.host"), "dimartino", "123Soleil"); // Pour le test à l'ecole
             
             //Mail_Utilities.Envoyer_Mail(session, "InpresAirport-pay@u2.tech.hepl.local", "dimartino@u2.tech.hepl.local", "Confirmation de paiement", "Reçu de paiement pour l'achat de " + Client.getPanier().size() + " articles");
             

@@ -6,8 +6,10 @@
 package clientmutlithreadtickmap;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import protocoleTICKMAP.ReponseTICKMAP;
@@ -194,7 +196,7 @@ public class ListeVolsGUI extends javax.swing.JFrame
                     ligne[0] = Vol.get("NumeroVol");
                     ligne[1] = Vol.get("Destination");
                     Timestamp DateHeureDepart = (Timestamp) Vol.get("DateHeureDepart");
-                    ligne[2] = DateHeureDepart.toLocalDateTime().toLocalTime(); 
+                    ligne[2] = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRENCH).format(DateHeureDepart);
                     ligne[3] = Vol.get("PlacesRestantes");
                     dtm.insertRow(Cpt - 1, ligne);
                 }       

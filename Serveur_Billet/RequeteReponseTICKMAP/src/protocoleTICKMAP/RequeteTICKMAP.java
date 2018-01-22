@@ -493,7 +493,7 @@ public class RequeteTICKMAP implements Requete, Serializable
             int i=1;
             try 
             {                        
-                RS = BD_airport.Select("SELECT * FROM VOLS");
+                RS = BD_airport.Select("SELECT * FROM VOLS WHERE HeureDepart BETWEEN current_time() AND ADDTIME(current_time(), '168:00:00')");
                 if (RS != null) 
                 {         
                     Reponse = new ReponseTICKMAP(ReponseTICKMAP.LIST_OF_FLY_OK);
@@ -649,6 +649,7 @@ public class RequeteTICKMAP implements Requete, Serializable
                 
                 client.put("Password", "1234");
                 client.put("nbAccompagnant", clientBD.getNbAccompagnant());
+                client.put("Mail", client.get("Login").toString() + "u2.tech.hepl.local");
                 
                 BD_airport = Connexion_DB();
                 if (BD_airport != null)

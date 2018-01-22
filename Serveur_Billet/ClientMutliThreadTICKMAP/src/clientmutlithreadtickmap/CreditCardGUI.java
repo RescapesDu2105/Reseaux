@@ -168,28 +168,30 @@ public class CreditCardGUI extends javax.swing.JFrame
         {
             if(jTextFieldCreditCard.getText().isEmpty())
                 JOptionPane.showMessageDialog(this, "Le champ est vide", "Erreur", JOptionPane.ERROR_MESSAGE);
-            
-            /******************************HANDSHAKE*****************************/
-            setCreditCard(jTextFieldCreditCard.getText());
-            getClient().ConnexionPAYP();
-            PayementInfo payement = new PayementInfo(getCreditCard(),getClientBD().getNom(),getMontant());
-            
-            RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
-            boolean ok = RequestSendPayment(payement);
-            jButtonPayment.setEnabled(false);
-            jButtonAnnuler.setEnabled(false);
-            
-            if(ok)
-            {
-                jLabelFeedback.setForeground(Color.GREEN);
-                jLabelFeedback.setText("Paiement validé !");                
-            }
             else
             {
-                jLabelFeedback.setForeground(Color.red);
-                jLabelFeedback.setText("Paiement refusé !");                
+                /******************************HANDSHAKE*****************************/
+                setCreditCard(jTextFieldCreditCard.getText());
+                getClient().ConnexionPAYP();
+                PayementInfo payement = new PayementInfo(getCreditCard(),getClientBD().getNom(),getMontant());
+
+                RequestSendCertificate(keyStorePath,keyStorePsw,aliasKeyStrore);
+                boolean ok = RequestSendPayment(payement);
+                jButtonPayment.setEnabled(false);
+                jButtonAnnuler.setEnabled(false);
+
+                if(ok)
+                {
+                    jLabelFeedback.setForeground(Color.GREEN);
+                    jLabelFeedback.setText("Paiement validé !");                
+                }
+                else
+                {
+                    jLabelFeedback.setForeground(Color.red);
+                    jLabelFeedback.setText("Paiement refusé !");                
+                }
+                RequestPaymentAccepted(ok,getClientBD(),payement);
             }
-            RequestPaymentAccepted(ok,getClientBD(),payement);
             
         } catch (IOException ex)
         {
@@ -340,7 +342,7 @@ public class CreditCardGUI extends javax.swing.JFrame
         getClient().EnvoyerRequete(ReqPAYP);
 
         RepPAYP = getClient().RecevoirReponsePAYP();
-        if(RepPAYP.getCode() == RepPAYP.REQUEST_SEND_PAYMENT_OK)
+        if(RepPAYP.getCode() == ReponsePAYP.REQUEST_SEND_PAYMENT_OK)
             return (boolean) RepPAYP.getChargeUtile().get("Ok");
         return false;
     }

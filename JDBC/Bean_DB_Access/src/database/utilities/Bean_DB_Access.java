@@ -125,7 +125,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         Valeurs = Valeurs.replaceFirst(",$", ")");     
         
         String Requete = "INSERT INTO " + getSchema() + "." + Table + Champs + " VALUES " + Valeurs;
-        //System.out.println("Requete = " + Requete);
+        System.out.println("Requete = " + Requete);
         PreparedStatement PrepStmt = getConnection().prepareStatement(Requete);
         PrepStmt.executeUpdate();
         
