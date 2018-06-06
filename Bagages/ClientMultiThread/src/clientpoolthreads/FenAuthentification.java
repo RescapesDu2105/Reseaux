@@ -23,8 +23,8 @@ public class FenAuthentification extends javax.swing.JFrame {
      */
     public FenAuthentification() 
     {
-        setLocationRelativeTo(null); 
         initComponents();
+        setLocationRelativeTo(null); 
         this.getRootPane().setDefaultButton(jButton_Connexion);
         
         try 
@@ -47,8 +47,7 @@ public class FenAuthentification extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jLabelLogin = new javax.swing.JLabel();
         jLabelPWD = new javax.swing.JLabel();
@@ -65,22 +64,22 @@ public class FenAuthentification extends javax.swing.JFrame {
         jLabelPWD.setText("Mot de passe");
 
         jButton_Connexion.setText("Connexion");
-        jButton_Connexion.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton_Connexion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_ConnexionActionPerformed(evt);
             }
         });
 
         jButton_Effacer.setText("Effacer");
-        jButton_Effacer.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton_Effacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_EffacerActionPerformed(evt);
             }
         });
+
+        jTF_Login.setText("Zeydax");
+
+        jPasswordField.setText("123");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,7 +141,6 @@ public class FenAuthentification extends javax.swing.JFrame {
             try 
             {
                 Rep = getClient().Authenfication(jTF_Login.getText(), String.valueOf(jPasswordField.getPassword()));
-                //ReponseLUGAP Rep = Client.Authenfication("Zeydax", "123");
             } 
             catch (IOException ex) 
             {
@@ -150,8 +148,7 @@ public class FenAuthentification extends javax.swing.JFrame {
             } 
             catch (NoSuchAlgorithmException | NoSuchProviderException ex) 
             {
-                JOptionPane.showMessageDialog(this, "Erreur interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
+                JOptionPane.showMessageDialog(this, "Erreur interne au client !", "Erreur", JOptionPane.ERROR_MESSAGE);                
             }
 
             if (Rep != null) 
@@ -170,7 +167,7 @@ public class FenAuthentification extends javax.swing.JFrame {
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
+                    //JOptionPane.showMessageDialog(this, (String) Rep.getChargeUtile().get("Message"), "Erreur", JOptionPane.ERROR_MESSAGE);
                     jPasswordField.setText("");
                     getClient().Deconnexion();
                 }

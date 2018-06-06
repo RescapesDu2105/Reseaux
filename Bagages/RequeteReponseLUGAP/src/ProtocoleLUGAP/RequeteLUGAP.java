@@ -5,11 +5,11 @@
  */
 package ProtocoleLUGAP;
 
+import abstract_classes.ARequete;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,104 +19,75 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Properties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import requetepoolthreads.Requete;
+import interfaces.ConsoleServeur;
 
 /**
  *
  * @author Philippe
  */
-public class RequeteLUGAP implements Requete, Serializable{
-    
-    public final static int REQUEST_LOG_OUT_PORTER = 0;
-    public final static int REQUEST_LOGIN_PORTER = 1;
+public class RequeteLUGAP extends ARequete {    
     public final static int REQUEST_LOAD_FLIGHTS = 2;
     public final static int REQUEST_LOAD_LUGAGES = 3;
     public final static int REQUEST_SAVE_LUGAGES = 4;
-        
-    private int Type;
-    private HashMap<String, Object> chargeUtile;
-    private Socket SocketClient;
-    
-    private ReponseLUGAP Reponse = null;
-    private Properties Prop = null;
-
-    public RequeteLUGAP(int Type, HashMap chargeUtile) 
+                
+    public RequeteLUGAP(int Type, HashMap chargeUtile)
     {
-        this.Type = Type;
-        this.chargeUtile = chargeUtile;
+        super(Type, chargeUtile);
     }
     
-    public RequeteLUGAP(int Type) 
+    public RequeteLUGAP(int Type)
     {
-        this.Type = Type;
-        this.chargeUtile = new HashMap<>();
+        super(Type);
     }
     
     @Override
-    public Runnable createRunnable(Properties Prop) 
+    public Runnable createRunnable(Socket socket, ConsoleServeur GUI) 
     {
-        setProp(Prop);
+        //setProp(Prop);
+        this.setSocketClient(socket);
+        this.setGUI(GUI);
         
-        switch(getType())
+        return new Runnable() 
         {
-            case REQUEST_LOG_OUT_PORTER:
-                return new Runnable() 
+            @Override        
+            public void run() 
+            {
+                switch(getType())
                 {
-                    public void run() 
-                    {
-                        traiteRequeteLogOutPorter();
-                    }            
-                };
+                    case REQUEST_LOG_OUT:
+                        TraiterRequeteLogOutPorter();
+                        break;
+                    case REQUEST_LOGIN:
+                        TraiterRequeteLoginPorter();
+                        break;
+                    case REQUEST_LOAD_FLIGHTS:
+                        TraiterRequeteLoadFlights();
+                        break;
+                    case REQUEST_LOAD_LUGAGES:
+                        TraiterRequeteLoadLugages();
+                        break;
+                    case REQUEST_SAVE_LUGAGES:
+                        TraiterRequeteSaveLugages();
+                        break;
+                    default : break; // traiterUnknownRequestOrFail()
+                }
                 
-            case REQUEST_LOGIN_PORTER:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteLoginPorter();
-                    }            
-                };
-            
-            case REQUEST_LOAD_FLIGHTS:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteLoadFlights();
-                    }            
-                };
-            
-            case REQUEST_LOAD_LUGAGES:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteLoadLugages();
-                    }            
-                };
-            
-            case REQUEST_SAVE_LUGAGES:
-                return new Runnable() 
-                {
-                    public void run() 
-                    {
-                        traiteRequeteSaveLugages();
-                    }            
-                };                
-            
-            default : return null;
-        }
+                GUI.TraceEvenements(SocketClient.getRemoteSocketAddress().toString() + "#" + Reponse.getChargeUtile().get("Message") + "#" + Thread.currentThread().getName());
+                EnvoyerReponse();
+            }
+        };
     }    
     
-    private void traiteRequeteLogOutPorter() 
+    private void TraiterRequeteLogOutPorter() 
     {
         Reponse = new ReponseLUGAP(ReponseLUGAP.LOG_OUT_OK);
         Reponse.getChargeUtile().put("Message", ReponseLUGAP.LOG_OUT_OK_MESSAGE);
+        
+        EnvoyerReponse();
     }
     
-    private void traiteRequeteLoginPorter() 
+    private void TraiterRequeteLoginPorter() 
     {        
         String user = getChargeUtile().get("Login").toString();
         long Temps = (long) getChargeUtile().get("Temps");
@@ -124,7 +95,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         byte[] msgD = (byte[]) getChargeUtile().get("Digest");
 
         // JBDC
-        String[] Champs = ChercheMotdePasse(user);
+        String[] Champs = ChercherMotdePasse(user);
         if (Champs != null) 
         {
             MessageDigest md;
@@ -147,12 +118,12 @@ public class RequeteLUGAP implements Requete, Serializable{
                     Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_OK);
                     Reponse.getChargeUtile().put("Message", ReponseLUGAP.LOGIN_OK_MESSAGE);
                     Reponse.getChargeUtile().put("Nom", Champs[1]);
-                    Reponse.getChargeUtile().put("Prenom", Champs[2]);
+                    Reponse.getChargeUtile().put("Prenom", Champs[2]);                    
                 }
                 else 
                 {
                     Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
-                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+                    Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);   
                     System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
                 }
             } 
@@ -166,12 +137,12 @@ public class RequeteLUGAP implements Requete, Serializable{
         else
         {
             Reponse = new ReponseLUGAP(ReponseLUGAP.LOGIN_KO);
-            Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);                        
+            Reponse.getChargeUtile().put("Message", ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);  
             System.out.println(ReponseLUGAP.WRONG_USER_PASSWORD_MESSAGE);
-        }               
+        }   
     }
     
-    private String[] ChercheMotdePasse(String user) 
+    private String[] ChercherMotdePasse(String user) 
     {        
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -201,15 +172,15 @@ public class RequeteLUGAP implements Requete, Serializable{
                 Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
                 System.out.println(ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE + " : " + ex.getMessage());
             }
-        }
-        
-        BD_airport.Deconnexion();
+            
+            BD_airport.Deconnexion();
+        }        
                 
         return Champs;
     }
     
     
-    private void traiteRequeteLoadFlights()
+    private void TraiterRequeteLoadFlights() 
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -261,12 +232,17 @@ public class RequeteLUGAP implements Requete, Serializable{
                 
                 Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
             }
+            
+            BD_airport.Deconnexion();
         }
-        
-        BD_airport.Deconnexion();
+        else        
+        {
+            Reponse = new ReponseLUGAP(ReponseLUGAP.INTERNAL_SERVER_ERROR);
+            Reponse.getChargeUtile().put("Message", ReponseLUGAP.INTERNAL_SERVER_ERROR_MESSAGE);
+        }        
     }
     
-    private void traiteRequeteLoadLugages()
+    private void TraiterRequeteLoadLugages() 
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -331,7 +307,7 @@ public class RequeteLUGAP implements Requete, Serializable{
         BD_airport.Deconnexion();
     }
     
-    private void traiteRequeteSaveLugages()
+    private void TraiterRequeteSaveLugages() 
     {
         Bean_DB_Access BD_airport;
         ResultSet RS;
@@ -371,11 +347,18 @@ public class RequeteLUGAP implements Requete, Serializable{
         
     public Bean_DB_Access Connexion_DB()
     {
-        Bean_DB_Access BD_airport;
+        Bean_DB_Access BD_airport = null;
         String Error;
         
-        BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, getProp().getProperty("HOST_BD"), getProp().getProperty("PORT_BD"), "Zeydax", "1234", getProp().getProperty("SCHEMA_BD"));
-        //BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "1234", "bd_airport");
+        try
+        {
+            //BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, getProp().getProperty("HOST_BD"), getProp().getProperty("PORT_BD"), "Zeydax", "1234", getProp().getProperty("SCHEMA_BD"));
+            BD_airport = new Bean_DB_Access(Bean_DB_Access.DRIVER_MYSQL, "localhost", "3306", "Zeydax", "123Soleil-", "bd_airport");
+        }
+        catch(Exception e)
+        {
+            System.out.println("e = " + e.getMessage());
+        }
         
         if (BD_airport != null)
         {
@@ -391,55 +374,14 @@ public class RequeteLUGAP implements Requete, Serializable{
         return BD_airport;
     }
     
-    @Override
-    public ReponseLUGAP getReponse() {
-        return Reponse;
-    }
-
-    public void setReponse(ReponseLUGAP Reponse) {
-        this.Reponse = Reponse;
-    }
+          
     
-    public int getType() {
-        return Type;
-    }
-
-    public void setType(int Type) {
-        this.Type = Type;
-    }
-
-    @Override
-    public HashMap getChargeUtile() {
-        return chargeUtile;
-    }
-
-    public void setChargeUtile(HashMap chargeUtile) {
-        this.chargeUtile = chargeUtile;
-    }
-
-    public Socket getSocketClient() {
-        return SocketClient;
-    }
-
-    public void setSocketClient(Socket SocketClient) {
-        this.SocketClient = SocketClient;
-    }
-
-    public Properties getProp() {
-        return Prop;
-    }
-
-    public void setProp(Properties Prop) {
-        this.Prop = Prop;
-    }
-    
-    @Override
     public String getNomTypeRequete() 
     {
         switch(getType()) 
         {
-            case REQUEST_LOG_OUT_PORTER: return "REQUEST_LOG_OUT_PORTER";
-            case REQUEST_LOGIN_PORTER: return "REQUEST_LOGIN_PORTER";                
+            case REQUEST_LOG_OUT: return "REQUEST_LOG_OUT_PORTER";
+            case REQUEST_LOGIN: return "REQUEST_LOGIN_PORTER";                
             case REQUEST_LOAD_FLIGHTS: return "REQUEST_LOAD_FLIGHTS";
             case REQUEST_LOAD_LUGAGES: return "REQUEST_LOAD_LUGAGES";
             case REQUEST_SAVE_LUGAGES: return "REQUEST_SAVE_LUGAGES";

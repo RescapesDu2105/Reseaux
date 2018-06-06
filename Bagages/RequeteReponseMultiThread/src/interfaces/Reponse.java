@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database.utilities;
+package interfaces;
+
+import java.util.HashMap;
 
 /**
  *
  * @author Philippe
  */
-public interface Drivers {
-    public final static String DRIVER_MYSQL = "com.mysql.cj.jdbc.Driver";
-    public final static String DRIVER_ORACLE = "oracle.jdbc.driver.OracleDriver";
+public interface Reponse {
+    public int getCode();
+    public void setCode(int Code);
+    public HashMap getChargeUtile();
 }

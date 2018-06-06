@@ -278,7 +278,10 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
     {
         switch (getDriver())
         {
-            case DRIVER_MYSQL: return URL_MYSQL + getHost() + ":" + getPort() + "/" + getSchema();
+            case DRIVER_MYSQL: return URL_MYSQL + getHost() + ":" + getPort() + "/" + getSchema() +
+                "?useJDBCCompliantTimezoneShift=true" +
+                "&useLegacyDatetimeCode=false" +
+                "&serverTimezone=UTC";
             case DRIVER_ORACLE: return URL_ORACLE + getHost() + ":" + getPort() + "/" + getSchema();
             default : return null;
         }

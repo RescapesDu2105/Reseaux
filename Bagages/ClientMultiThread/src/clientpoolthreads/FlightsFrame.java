@@ -32,9 +32,7 @@ public class FlightsFrame extends javax.swing.JFrame {
         
         this.setTitle("Bagagiste : " + this.Client.getNomUtilisateur());
         setLocationRelativeTo(null); 
-        initComponents();        
-        
-        ChargerVols();
+        initComponents();
     }
 
     /**
@@ -53,6 +51,9 @@ public class FlightsFrame extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -143,13 +144,19 @@ public class FlightsFrame extends javax.swing.JFrame {
         }      
     }//GEN-LAST:event_jTableVolsMouseClicked
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        System.out.println("Opened");
+        
+        ChargerVols();
+    }//GEN-LAST:event_formWindowOpened
+
     private void ChargerVols() 
     {
         RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOAD_FLIGHTS);
         DefaultTableModel dtm = (DefaultTableModel) jTableVols.getModel();
-        
+                
         getClient().EnvoyerRequete(Req);       
-        ReponseLUGAP Rep = getClient().RecevoirReponse();
+        ReponseLUGAP Rep = getClient().RecevoirReponse();            
         
         if (Rep != null)
         {
@@ -180,6 +187,9 @@ public class FlightsFrame extends javax.swing.JFrame {
         else
         {
             JOptionPane.showMessageDialog(this, "Le serveur s'est déconnecté !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            getFenAuthentification().setVisible(true);
+            getFenAuthentification().getRootPane().setDefaultButton(getFenAuthentification().getjButton_Connexion());
         }
     }
 
