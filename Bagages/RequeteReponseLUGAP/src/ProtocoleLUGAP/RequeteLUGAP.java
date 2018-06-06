@@ -5,7 +5,7 @@
  */
 package ProtocoleLUGAP;
 
-import abstract_classes.ARequete;
+import abstracts.ARequete;
 import database.utilities.Bean_DB_Access;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

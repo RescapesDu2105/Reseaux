@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package abstract_classes;
+package abstracts;
 
-import abstract_classes.AThreadServeur;
+import abstracts.AThreadServeur;
 import thread_client.ThreadClient;
 import interfaces.SourceTaches;
 import java.io.IOException;

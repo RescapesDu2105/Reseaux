@@ -5,7 +5,7 @@
  */
 package ProtocoleLUGAP;
 
-import abstract_classes.AReponse;
+import abstracts.AReponse;
 import java.io.Serializable;
 import java.util.HashMap;
 import interfaces.Reponse;

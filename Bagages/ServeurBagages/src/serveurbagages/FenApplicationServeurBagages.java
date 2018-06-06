@@ -1,9 +1,11 @@
 package serveurbagages;
 
-import abstract_classes.AFenApplicationServeur;
-import abstract_classes.AThreadServeur;
-import abstract_classes.ThreadServeurMultiClients;
+import abstracts.AFenApplicationServeur;
+import abstracts.AThreadServeur;
+import abstracts.ThreadServeurMultiClients;
 import impl.ListeTaches;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,14 +16,16 @@ import java.util.logging.Logger;
  */
 public class FenApplicationServeurBagages extends AFenApplicationServeur
 {
-    private int Port_Bagages, Port_CheckIn;
+    private final int Port_Bagages; //Port_CheckIn;
     private AThreadServeur TS_Bagages, TS_CheckIn;
     /**
      * Creates new form FenApplicationServeurBagages
+     * @throws java.io.IOException
      */
-    public FenApplicationServeurBagages()
+    public FenApplicationServeurBagages() throws IOException
     {
-        //super();  
+        super();          
+        LireProperties();
         this.jButtonStartStop.doClick();
         Port_Bagages = Integer.parseInt(Properties.get("PORT_BAGAGES").toString());
     }
@@ -51,7 +55,7 @@ public class FenApplicationServeurBagages extends AFenApplicationServeur
     @Override
     protected void Start()
     {        
-        ThreadServeurMultiClients ts = new ThreadServeurMultiClients(Port_Bagages, this, new ListeTaches(), Properties);
+        ThreadServeurMultiClients ts = new ThreadServeurMultiClients(Port_Bagages, this, new ListeTaches(), getProperties());
         TS_Bagages = ts;
         ts.start();
     }
@@ -70,60 +74,92 @@ public class FenApplicationServeurBagages extends AFenApplicationServeur
         }
     }
     
+    @Override
+    protected void CreerProperties()
+    {
+        FileOutputStream fos;
+        try 
+        {
+            fos = new FileOutputStream(NomFichierProperties);
+
+            getProperties().setProperty("PORT_CHECKIN", Integer.toString(30041));
+            getProperties().setProperty("PORT_BAGAGES", Integer.toString(30042));
+            getProperties().setProperty("MAX_CLIENTS", Integer.toString(5));
+            getProperties().setProperty("ADRESSEIP", "127.0.0.1"); 
+            getProperties().setProperty("HOST_BD", "localhost");
+            getProperties().setProperty("PORT_BD", "3306");   
+            getProperties().setProperty("SCHEMA_BD", "bd_airport");
+
+            try 
+            {                   
+                getProperties().store(fos, null);
+            } 
+            catch (IOException ex) 
+            {
+                System.exit(1);
+            }
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            System.exit(1);
+        }
+    }
+    
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) 
     {
-        try
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+     * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+     */
+    try
+    {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
         {
-            /* Set the Nimbus look and feel */
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            if ("Nimbus".equals(info.getName()))
             {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
         }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    }
+    catch (ClassNotFoundException ex)
+    {
+        java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    catch (InstantiationException ex)
+    {
+        java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    catch (IllegalAccessException ex)
+    {
+        java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    catch (javax.swing.UnsupportedLookAndFeelException ex)
+    {
+        java.util.logging.Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    //</editor-fold>
 
-            /* Create and display the form */
-           java.awt.EventQueue.invokeLater(new Runnable() {
-                   @Override
-                   public void run() {
-                        FenApplicationServeurBagages Serveur = new FenApplicationServeurBagages();
-                        Serveur.setVisible(true);
-                   }
-           });
-        }
-        catch(Exception e)
-        {
-            System.out.println("e = " + e.getMessage());
-        }
+        /* Create and display the form */
+       java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                 FenApplicationServeurBagages Serveur = null;
+                try
+                {
+                     Serveur = new FenApplicationServeurBagages();
+                     Serveur.setVisible(true);
+                }
+                catch (IOException ex)
+                {
+                    Logger.getLogger(FenApplicationServeurBagages.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+       });        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

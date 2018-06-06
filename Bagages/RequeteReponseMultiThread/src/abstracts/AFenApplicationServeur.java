@@ -1,12 +1,13 @@
-package abstract_classes;
+package abstracts;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import javax.swing.table.DefaultTableModel;
 import interfaces.ConsoleServeur;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
-import properties.ServerProperties;
 
 /**
  *
@@ -14,6 +15,7 @@ import properties.ServerProperties;
  */
 public abstract class AFenApplicationServeur extends javax.swing.JFrame implements ConsoleServeur {
     protected Properties Properties;
+    protected final String NomFichierProperties;
     protected int Status;
     /**
      * Creates new form FenApplicationServeur
@@ -21,16 +23,9 @@ public abstract class AFenApplicationServeur extends javax.swing.JFrame implemen
     public AFenApplicationServeur() {
         initComponents();
         setLocationRelativeTo(null); 
-        TraceEvenements("Serveur#Initialisation#" + Thread.currentThread().getName());
-        Status = STOPPED;        
-        try
-        {
-            Properties = new ServerProperties().getProp();
-        }
-        catch (IOException ex)
-        {
-            TraceEvenements("Serveur#Problème pour lire fichier properties#" + Thread.currentThread().getName());
-        }
+        TraceEvenements("Serveur#Initialisation#Thread Serveur");
+        this.Status = STOPPED;
+        this.NomFichierProperties = System.getProperty("user.dir").split("/dist")[0] + System.getProperty("file.separator")+ "src" + System.getProperty("file.separator") + this.getClass().getPackage().getName()+ System.getProperty("file.separator") + "config.properties";
     }
 
     /**
@@ -114,18 +109,17 @@ public abstract class AFenApplicationServeur extends javax.swing.JFrame implemen
     private void jButtonStartStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartStopActionPerformed
         if (Status == STOPPED) 
         {
-            
-                Start();
+            Start();
 
-                jButtonStartStop.setText("Stop");
-                Status = RUNNING;
-                TraceEvenements("Serveur#Start#" + Thread.currentThread().getName());
+            jButtonStartStop.setText("Stop");
+            Status = RUNNING;
+            TraceEvenements("Serveur#Start#Thread Serveur");
             
         }
         else 
         {       
             Stop();            
-            TraceEvenements("Serveur#Arrêt du serveur#" + Thread.currentThread().getName());
+            TraceEvenements("Serveur#Arrêt du serveur#Thread Serveur");
             jButtonStartStop.setText("Start");
             Status = STOPPED;
         }
@@ -138,6 +132,28 @@ public abstract class AFenApplicationServeur extends javax.swing.JFrame implemen
 
     protected abstract void Start();
     protected abstract void Stop();
+    
+    protected abstract void CreerProperties();
+    protected void LireProperties()
+    {
+        FileInputStream fis = null;
+        setProperties(new Properties());
+        
+        try 
+        {
+            fis = new FileInputStream(NomFichierProperties);
+            getProperties().load(fis);
+            fis.close();
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            CreerProperties();
+        }
+        catch (IOException ex)
+        {
+            TraceEvenements("Serveur#Problème avec les properties#Thread Serveur");
+        }
+    }
     
     @Override
     public void TraceEvenements(String log) {
@@ -155,6 +171,29 @@ public abstract class AFenApplicationServeur extends javax.swing.JFrame implemen
         
         TableauEvenements.setModel(dtm);
     }
+
+    public Properties getProperties()
+    {
+        return Properties;
+    }
+
+    public void setProperties(Properties Properties)
+    {
+        this.Properties = Properties;
+    }
+
+    public int getStatus()
+    {
+        return Status;
+    }
+
+    public void setStatus(int Status)
+    {
+        this.Status = Status;
+    }
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JTable TableauEvenements;
