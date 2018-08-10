@@ -26,7 +26,7 @@ import interfaces.ConsoleServeur;
  *
  * @author Philippe
  */
-public class RequeteLUGAP extends ARequete {    
+public class RequeteLUGAP extends ARequete {
     public final static int REQUEST_LOAD_FLIGHTS = 2;
     public final static int REQUEST_LOAD_LUGAGES = 3;
     public final static int REQUEST_SAVE_LUGAGES = 4;

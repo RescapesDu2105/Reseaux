@@ -26,7 +26,7 @@ public class FenApplicationServeurBagages extends AFenApplicationServeur
     {
         super();          
         LireProperties();
-        this.jButtonStartStop.doClick();
+        //this.jButtonStartStop.doClick();
         Port_Bagages = Integer.parseInt(Properties.get("PORT_BAGAGES").toString());
     }
 

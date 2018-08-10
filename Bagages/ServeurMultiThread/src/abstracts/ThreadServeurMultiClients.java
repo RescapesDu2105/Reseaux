@@ -42,14 +42,14 @@ public class ThreadServeurMultiClients extends AThreadServeur
         Init();
         
         Socket CSocket = null;
-        ObjectInputStream ois = null;          
+        //ObjectInputStream ois = null;          
         try
         { 
             System.out.println("************ Serveur en attente"); 
             CSocket = SSocket.accept(); 
             GUI.TraceEvenements(CSocket.getRemoteSocketAddress().toString() + "#Accept#Thread Serveur"); 
-            ois = new ObjectInputStream(CSocket.getInputStream());
-            System.out.println("ois = " + ois.toString());
+            //ois = new ObjectInputStream(CSocket.getInputStream());
+            //System.out.println("ois = " + ois.toString());
         } 
         catch (IOException e) 
         { 

@@ -7,6 +7,7 @@ package clientpoolthreads;
 
 import ProtocoleLUGAP.ReponseLUGAP;
 import ProtocoleLUGAP.RequeteLUGAP;
+import abstracts.ARequete;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -123,7 +124,7 @@ public class Client {
 
     public String Deconnexion() 
     {
-        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOG_OUT_PORTER);
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOG_OUT);
         ReponseLUGAP Rep;
         
         EnvoyerRequete(Req);
@@ -165,7 +166,7 @@ public class Client {
     
     public ReponseLUGAP Authenfication(String Login, String Password) throws IOException, NoSuchAlgorithmException, NoSuchProviderException 
     {
-        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN_PORTER);
+        RequeteLUGAP Req = new RequeteLUGAP(RequeteLUGAP.REQUEST_LOGIN);
         ReponseLUGAP Rep = null;
         
         Connexion();        
