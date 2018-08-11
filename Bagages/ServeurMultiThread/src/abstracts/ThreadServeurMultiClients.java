@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 import interfaces.ConsoleServeur;
 import interfaces.Requete;
+import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -114,6 +116,7 @@ public class ThreadServeurMultiClients extends AThreadServeur
     {
         try 
         { 
+            Security.addProvider(new BouncyCastleProvider());
             ObjectInputStream ois = new ObjectInputStream(CSocket.getInputStream());
             Requete req = null;
             req = (Requete)ois.readObject();

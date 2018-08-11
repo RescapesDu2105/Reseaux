@@ -154,7 +154,7 @@ public class RequeteLUGAP extends ARequete {
         {
             try 
             {                        
-                RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Login = \"" + user + "\"");
+                RS = BD_airport.Select("SELECT Password, Nom, Prenom FROM bd_airport.agents WHERE Poste = \"Bagagiste\" AND Nom = \"Dimartino\"");
                 if (RS != null) 
                 {
                     if(RS.next())

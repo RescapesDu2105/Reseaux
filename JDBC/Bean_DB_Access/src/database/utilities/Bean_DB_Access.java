@@ -67,6 +67,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
         }
         
         setConnected(true);
+        System.out.println("Connexion à la base effectué");
         
         return null;
     }
@@ -96,6 +97,7 @@ public class Bean_DB_Access implements Serializable, Drivers, URLs_Database {
     {
         try
         {
+            Connection test = getConnection();
             Statement stmt = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             System.out.println("Requete = " + Requete);
             return stmt.executeQuery(Requete);
